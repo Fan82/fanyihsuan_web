@@ -66,6 +66,13 @@
   --project-bg: #0d0a1e;
 }
 
+.theme-runApp {
+  --accent: #05df72;
+  --accent-dim: rgb(5, 223, 114, 0.12);
+  --accent-text: #ffffff;
+  --project-bg: #070707;
+}
+
 /* ─────────────────────────────────────────────
    Base reset & global styles
 ───────────────────────────────────────────── */

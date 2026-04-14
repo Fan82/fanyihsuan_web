@@ -233,6 +233,48 @@ export const projects = [
     ],
     screens: ["Search", "Route List", "Stop Detail", "Arrival Times", "Mobile"],
   },
+  {
+    id: "runApp",
+    theme: "theme-runApp",
+    accent: "#05df72",
+    name: "Running App",
+    tagline: "Real-time data, zero stress.",
+    tags: ["Vue.js", "API Integration"],
+    meta: { client: "Gym", role: "UI + Front-End", year: "2026" },
+    desc: "A real-time bus tracker that transforms a stream of live API data into a clear, intuitive query interface — because nobody should stress about missing their bus.",
+    demoUrl: null,
+    overview: {
+      problem:
+        "How to manage async operations, error states, and multi-component data coordination in Vue — while keeping the interface calm and informative.",
+      solution:
+        "Live filtering as you type, auto-refresh without manual page reload, full responsive design. Complex data made simple.",
+    },
+    inspiration:
+      '"Why should a bus tracker update in real-time? Because a 2-minute-old arrival time is worse than no arrival time at all."',
+    process: [
+      {
+        num: "01",
+        title: "Real-Time Data Integration",
+        desc: "Async JS requests to a live transit API, with automatic update intervals — no manual refresh needed.",
+      },
+      {
+        num: "02",
+        title: "Fluid Interface Interaction",
+        desc: "Real-time keyword filtering — results update as you type, no page reload.",
+      },
+      {
+        num: "03",
+        title: "Responsive Design",
+        desc: "Automatically adapts to any screen size — phone or desktop.",
+      },
+      {
+        num: "04",
+        title: "User-Centric Thinking",
+        desc: "Every technical decision traced back to a real user need.",
+      },
+    ],
+    screens: ["Search", "Route List", "Stop Detail", "Arrival Times", "Mobile"],
+  },
 ];
 
 // Helper — get a single project by id
