@@ -1,0 +1,3264 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      :root {
+        --primary: #1248c7;
+        --primary-light: #e8eeff;
+        --secondary: #6b7280;
+        --bg: #f3f4f6;
+        --white: #ffffff;
+        --dark: #111827;
+        --success: #10b981;
+        --danger: #ef4444;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      }
+      body {
+        background: #092360;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 20px;
+        overflow: hidden;
+      }
+
+      /* ── Phone Shell ── */
+      .phone {
+        width: 375px;
+        height: 812px;
+        background: #f5f5f7;
+        border-radius: 44px;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        box-shadow:
+          0 0 0 2px #444,
+          0 0 0 12px #1c1c1e,
+          0 40px 80px rgba(0, 0, 0, 0.7);
+      }
+      .status-bar {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        padding: 20px 24px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #111;
+        flex-shrink: 0;
+      }
+      .screen {
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+      }
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 20px 12px;
+        background: #fff;
+        border-bottom: 1px solid #f0f0f0;
+        flex-shrink: 0;
+      }
+      .back-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: #f3f4f6;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        font-weight: 700;
+      }
+      .content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px 20px 90px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .content::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* ── Bottom Nav ── */
+      .bottom-nav {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 85px;
+        background: #fff;
+        border-top: 1px solid #f0f0f0;
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+        padding-top: 10px;
+        z-index: 50;
+      }
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        font-size: 10px;
+        color: #9ca3af;
+        cursor: pointer;
+        padding: 4px 12px;
+        border-radius: 12px;
+      }
+      .nav-item.active {
+        color: var(--primary);
+      }
+      .nav-icon {
+        font-size: 20px;
+      }
+
+      /* ── Welcome ── */
+      .welcome {
+        height: 100%;
+        background: #1248c7;
+        /* background: linear-gradient(180deg, #0a0a1a 0%, #1248c7 100%); */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        padding: 80px 28px 50px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .plane-loader {
+        position: relative;
+        width: 280px;
+        height: 280px;
+        /* background-color: #00afdd; */
+        border-radius: 50%;
+        overflow: hidden;
+        z-index: 1;
+        box-shadow: 0 10px 30px rgba(0, 175, 221, 0.3);
+      }
+
+      .plane {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 130px;
+        width: 130px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        z-index: 10;
+      }
+
+      /* 雲朵通用樣式 */
+      .cloud {
+        position: absolute;
+        background-size: contain;
+        background-repeat: no-repeat;
+        opacity: 0.8;
+      }
+
+      /* 氣流粒子樣式 */
+      .steam {
+        height: 120px;
+        width: 10px;
+        /* background: linear-gradient(transparent, #fff); */
+        /* border-radius: 5px; */
+        /* animation: steam 2s ease-in-out infinite; */
+      }
+      .steam div {
+        opacity: 0;
+        position: absolute;
+        height: 120px;
+        width: 10px;
+        background: #fff;
+        border-radius: 5px;
+        animation: steam 0.4s ease-in-out infinite;
+      }
+
+      @keyframes steam {
+        0% {
+          transform: translate(0, 0) scale(0);
+          opacity: 0;
+        }
+        100% {
+          transform: translate(0, 280px) scale(1, 3);
+          opacity: 0.8;
+        }
+      }
+
+      .cloud {
+        position: absolute;
+        font-size: 40px;
+        opacity: 0.12;
+        animation: drift 4s linear infinite;
+      }
+      .cloud:nth-child(2) {
+        top: 12%;
+        animation-delay: 0.5s;
+        font-size: 44px;
+      }
+      .cloud:nth-child(3) {
+        top: 28%;
+        animation-delay: 1.5s;
+        font-size: 46px;
+      }
+      @keyframes drift {
+        0% {
+          left: -60px;
+          opacity: 0.05;
+        }
+        50% {
+          opacity: 0.15;
+        }
+        100% {
+          left: 110%;
+          opacity: 0.05;
+        }
+      }
+
+      /* ── Tabs ── */
+      .tab-bar {
+        display: flex;
+        background: #f3f4f6;
+        border-radius: 14px;
+        padding: 4px;
+        margin-bottom: 20px;
+      }
+      .tab {
+        flex: 1;
+        padding: 9px 4px;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 10px;
+        cursor: pointer;
+        color: var(--secondary);
+        transition: all 0.25s;
+      }
+      .tab.active {
+        background: #fff;
+        color: var(--primary);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      /* ── Field Cards ── */
+      .field-card {
+        background: #fff;
+        border: 1.5px solid #f0f0f0;
+        border-radius: 16px;
+        padding: 13px 16px;
+        margin: 8px 0;
+        cursor: pointer;
+        transition: border-color 0.2s;
+      }
+      .field-card:hover,
+      .field-card:focus-within {
+        border-color: var(--primary);
+        background: #fafbff;
+      }
+      .field-card .lbl {
+        font-size: 10px;
+        font-weight: 700;
+        color: #9ca3af;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 5px;
+      }
+      .field-card input {
+        border: none;
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--dark);
+        width: 100%;
+        outline: none;
+        background: transparent;
+        cursor: pointer;
+      }
+      .field-card input::placeholder {
+        color: #c0c4cc;
+        font-weight: 400;
+      }
+
+      /* ── Swap ── */
+      .swap-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 2px 0;
+      }
+      .swap-line {
+        flex: 1;
+        height: 1px;
+        background: #f0f0f0;
+      }
+      .swap-btn {
+        width: 36px;
+        height: 36px;
+        background: #fff;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s;
+        flex-shrink: 0;
+      }
+      .swap-btn:active {
+        transform: rotate(180deg);
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+      }
+
+      /* ── Buttons ── */
+      .primary-btn {
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        width: 100%;
+        padding: 17px;
+        border-radius: 16px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.15s;
+        letter-spacing: 0.3px;
+      }
+      .primary-btn:active {
+        transform: scale(0.97);
+        opacity: 0.9;
+      }
+      .primary-btn:disabled {
+        background: #9ca3af;
+        cursor: not-allowed;
+      }
+
+      /* ── Date Scroller ── */
+      .date-scroller {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        margin: 0 -20px 20px;
+        padding: 4px 20px 8px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .date-scroller::-webkit-scrollbar {
+        display: none;
+      }
+      .date-item {
+        min-width: 56px;
+        height: 76px;
+        background: #fff;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        flex-shrink: 0;
+      }
+      .date-item.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+        transform: scale(1.05);
+      }
+      .date-item .day {
+        font-size: 9px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        opacity: 0.7;
+        margin-bottom: 3px;
+      }
+      .date-item .num {
+        font-size: 20px;
+        font-weight: 800;
+      }
+      .date-item .price {
+        font-size: 8px;
+        font-weight: 600;
+        opacity: 0.6;
+        margin-top: 2px;
+      }
+
+      /* ── Flight Cards ── */
+      .flight-card {
+        border: 1.5px solid #e5e7eb;
+        border-radius: 20px;
+        padding: 18px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        background: #fff;
+      }
+      .flight-card:active {
+        transform: scale(0.98);
+        border-color: var(--primary);
+      }
+      .airline-logo {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        font-weight: 800;
+        color: #fff;
+        flex-shrink: 0;
+      }
+      .route-line {
+        flex: 1;
+        margin: 0 12px;
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .dashed {
+        width: 100%;
+        border-top: 1.5px dashed #d1d5db;
+      }
+      .plane-ico {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%) rotate(90deg);
+        font-size: 14px;
+        color: var(--primary);
+        top: 0;
+      }
+      .badge {
+        display: inline-block;
+        padding: 3px 9px;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .badge-green {
+        background: #ecfdf5;
+        color: #059669;
+      }
+      .badge-amber {
+        background: #fffbeb;
+        color: #d97706;
+      }
+      .badge-blue {
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      /* ── Class Selection ── */
+      .class-row {
+        border: 1.5px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: flex-start;
+        cursor: pointer;
+        transition: all 0.2s;
+        gap: 12px;
+      }
+      .class-row.active {
+        border-color: var(--primary);
+        background: #fafbff;
+      }
+      .class-row:active {
+        transform: scale(0.98);
+      }
+      .radio-circle {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 2px solid #d1d5db;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .class-row.active .radio-circle {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+      }
+
+      /* ── Seat Map ── */
+      .seat-row {
+        display: grid;
+        grid-template-columns: 44px 44px 28px 44px 44px;
+        gap: 8px;
+        justify-content: center;
+        margin-bottom: 8px;
+      }
+      .seat {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 1.5px solid transparent;
+      }
+      .seat.free {
+        background: #f3f4f6;
+        color: #6b7280;
+        border-color: #e5e7eb;
+      }
+      .seat.free:active {
+        transform: scale(0.9);
+      }
+      .seat.selected {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+        transform: scale(1.06);
+      }
+      .seat.taken {
+        background: #f3f4f6;
+        cursor: not-allowed;
+        position: relative;
+        overflow: hidden;
+      }
+      .seat.taken::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #cbd5e1;
+        transform: rotate(-45deg) scale(1.4);
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: var(--secondary);
+      }
+      .legend-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+      }
+
+      /* ── Toggle ── */
+      .toggle {
+        width: 46px;
+        height: 26px;
+        border-radius: 13px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        flex-shrink: 0;
+      }
+      .toggle.on {
+        background: var(--primary);
+      }
+      .toggle.off {
+        background: #e5e7eb;
+      }
+      .toggle::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #fff;
+        transition: all 0.3s;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+      }
+      .toggle.on::after {
+        left: 23px;
+      }
+      .toggle.off::after {
+        left: 3px;
+      }
+
+      /* ── Boarding Pass ── */
+      .pass-card {
+        background: #fff;
+        border-radius: 28px;
+        padding: 24px;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 16px;
+      }
+      .pass-card::before,
+      .pass-card::after {
+        content: "";
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        background: linear-gradient(135deg, #0a0a2e, var(--primary));
+        border-radius: 50%;
+        top: 62%;
+      }
+      .pass-card::before {
+        left: -12px;
+      }
+      .pass-card::after {
+        right: -12px;
+      }
+
+      /* ── Page enter animation ── */
+      .page-enter {
+        animation: slideIn 0.28s ease-out;
+      }
+      @keyframes slideIn {
+        from {
+          transform: translateX(32px);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      /* ── Airport Picker ── */
+      .airport-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #fff;
+        z-index: 200;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ── Summary rows ── */
+      .sum-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        font-size: 14px;
+      }
+      .sum-row.total {
+        border-top: 1.5px solid #f0f0f0;
+        margin-top: 8px;
+        padding-top: 16px;
+        font-size: 16px;
+        font-weight: 700;
+      }
+
+      /* ── Confirmation ── */
+      .confirm-screen {
+        flex: 1;
+        background: linear-gradient(180deg, #ecfdf5, #d1fae5);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 24px;
+        text-align: center;
+      }
+      .check-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: var(--success);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        margin-bottom: 24px;
+        animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+      @keyframes pop {
+        0% {
+          transform: scale(0);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      /* ── Payment method ── */
+      .payment-method {
+        border: 1.5px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .payment-method.active {
+        border-color: var(--primary);
+        background: #fafbff;
+      }
+      .payment-method:active {
+        transform: scale(0.98);
+      }
+
+      /* ── Debug nav ── */
+      .debug-panel {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 500px;
+        margin-bottom: 16px;
+      }
+      .debug-btn {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: 400;
+      }
+      .debug-btn.active {
+        background: #fff;
+        color: var(--primary);
+        border-color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      /* ── Data ── */
+      const AIRPORTS = [
+        {
+          code: "SYD",
+          city: "Sydney",
+          country: "Australia",
+          name: "Kingsford Smith",
+        },
+        { code: "LCY", city: "London", country: "UK", name: "City Airport" },
+        {
+          code: "JFK",
+          city: "New York",
+          country: "USA",
+          name: "John F. Kennedy",
+        },
+        { code: "NRT", city: "Tokyo", country: "Japan", name: "Narita" },
+        { code: "DXB", city: "Dubai", country: "UAE", name: "International" },
+        {
+          code: "SIN",
+          city: "Singapore",
+          country: "Singapore",
+          name: "Changi",
+        },
+        {
+          code: "CDG",
+          city: "Paris",
+          country: "France",
+          name: "Charles de Gaulle",
+        },
+        {
+          code: "LAX",
+          city: "Los Angeles",
+          country: "USA",
+          name: "International",
+        },
+        {
+          code: "HKG",
+          city: "Hong Kong",
+          country: "HK",
+          name: "International",
+        },
+        { code: "ICN", city: "Seoul", country: "Korea", name: "Incheon" },
+      ];
+
+      const FLIGHTS = [
+        {
+          id: 1,
+          dep: "06:30",
+          arr: "11:45",
+          dur: "22h 15m",
+          stops: "1 stop",
+          airline: "United Airlines",
+          logo: "UA",
+          color: "#003087",
+          price: 580,
+          direct: false,
+        },
+        {
+          id: 2,
+          dep: "09:00",
+          arr: "14:30",
+          dur: "20h 30m",
+          stops: "Direct",
+          airline: "Qantas",
+          logo: "QF",
+          color: "#e8003d",
+          price: 840,
+          direct: true,
+        },
+        {
+          id: 3,
+          dep: "13:20",
+          arr: "18:55",
+          dur: "21h 35m",
+          stops: "1 stop",
+          airline: "Emirates",
+          logo: "EK",
+          color: "#d71921",
+          price: 720,
+          direct: false,
+        },
+        {
+          id: 4,
+          dep: "22:10",
+          arr: "05:30",
+          dur: "20h 20m",
+          stops: "Direct",
+          airline: "Singapore Air",
+          logo: "SQ",
+          color: "#0a2a72",
+          price: 760,
+          direct: true,
+        },
+      ];
+
+      const DATES = [
+        { w: "SAT", n: "21", price: "$640" },
+        { w: "SUN", n: "22", price: "$820" },
+        { w: "MON", n: "23", price: "$580" },
+        { w: "TUE", n: "24", price: "$490" },
+        { w: "WED", n: "25", price: "$610" },
+        { w: "THU", n: "26", price: "$540" },
+      ];
+
+      const CLASSES = [
+        {
+          name: "Economy",
+          price: 400,
+          perks: ["Standard seat", "1 checked bag", "No meals"],
+        },
+        {
+          name: "Business",
+          price: 840,
+          perks: [
+            "Lie-flat seat",
+            "2 checked bags",
+            "Premium meals",
+            "Lounge access",
+          ],
+        },
+        {
+          name: "First Class",
+          price: 1620,
+          perks: [
+            "Private suite",
+            "3 checked bags",
+            "Fine dining",
+            "Spa access",
+          ],
+        },
+      ];
+      const icons = {
+        luggage: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-baggage-claim-icon lucide-baggage-claim"
+          >
+            <path d="M22 18H6a2 2 0 0 1-2-2V7a2 2 0 0 0-2-2" />
+            <path d="M17 14V4a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v10" />
+            <rect width="13" height="8" x="8" y="6" rx="1" />
+            <circle cx="18" cy="20" r="2" />
+            <circle cx="9" cy="20" r="2" />
+          </svg>
+        ),
+        upgrade: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-shield-plus-icon lucide-shield-plus"
+          >
+            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+            <path d="M9 12h6" />
+            <path d="M12 9v6" />
+          </svg>
+        ),
+        wifi: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-wifi-icon lucide-wifi"
+          >
+            <path d="M12 20h.01" />
+            <path d="M2 8.82a15 15 0 0 1 20 0" />
+            <path d="M5 12.859a10 10 0 0 1 14 0" />
+            <path d="M8.5 16.429a5 5 0 0 1 7 0" />
+          </svg>
+        ),
+        insurance: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-shield-check-icon lucide-shield-check"
+          >
+            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+        ),
+        transfer: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-car-taxi-front-icon lucide-car-taxi-front"
+          >
+            <path d="M10 2h4" />
+            <path d="m21 8-2 2-1.5-3.7A2 2 0 0 0 15.646 5H8.4a2 2 0 0 0-1.903 1.257L5 10 3 8" />
+            <path d="M7 14h.01" />
+            <path d="M17 14h.01" />
+            <rect width="18" height="8" x="3" y="10" rx="2" />
+            <path d="M5 18v2" />
+            <path d="M19 18v2" />
+          </svg>
+        ),
+      };
+
+      const SERVICES = [
+        {
+          id: "luggage",
+          name: "Extra Luggage (20kg)",
+          price: 45,
+          on: false,
+          icon: icons.luggage,
+        },
+        {
+          id: "upgrade",
+          name: "Premium Meal Upgrade",
+          price: 28,
+          on: false,
+          icon: icons.upgrade,
+        },
+        {
+          id: "wifi",
+          name: "Full WiFi Access",
+          price: 18,
+          on: false,
+          icon: icons.wifi,
+        },
+        {
+          id: "insurance",
+          name: "Travel Insurance",
+          price: 35,
+          on: true,
+          icon: icons.insurance,
+        },
+        {
+          id: "transfer",
+          name: "Airport Transfer",
+          price: 55,
+          on: false,
+          icon: icons.transfer,
+        },
+      ];
+      const PlaneLoader = () => {
+        // 飛機 SVG
+        const planeSvg = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23fff' d='M448 336v-40L288 192V72a40 40 0 0 0-80 0v120L48 296v40l160-48v112l-48 24v40l88-24 88 24v-40l-48-24V288z'/%3E%3C/svg%3E`;
+        // 雲朵 SVG
+        const cloudSvg = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M17.5,19c-3.037,0-5.5-2.463-5.5-5.5c0-0.007,0-0.013,0-0.02c-0.165,0.013-0.331,0.02-0.5,0.02c-2.485,0-4.5-2.015-4.5-4.5 c0-0.081,0.002-0.161,0.007-0.24C5.795,8.286,5,7.234,5,6c0-1.657,1.343-3,3-3c0.311,0,0.607,0.048,0.885,0.136 C9.602,1.869,11.164,1,12.913,1c2.14,0,3.959,1.306,4.72,3.153C18.107,4.053,18.541,4,19,4c2.209,0,4,1.791,4,4 c0,1.154-0.488,2.193-1.272,2.92C21.895,11.393,22,11.934,22,12.5c0,2.485-2.015,4.5-4.5,4.5c-0.169,0-0.335-0.007-0.5-0.02 c0,0.007,0,0.013,0,0.02C17,17.037,14.537,19.5,11.5,19.5L17.5,19z'/%3E%3C/svg%3E`;
+
+        return (
+          <div className="plane-loader">
+            <div
+              className="cloud"
+              style={{
+                backgroundImage: `url("${cloudSvg}")`,
+                width: 80,
+                height: 80,
+                bottom: 20,
+                left: -20,
+              }}
+            ></div>
+            <div
+              className="cloud"
+              style={{
+                backgroundImage: `url("${cloudSvg}")`,
+                width: 80,
+                height: 80,
+                bottom: 50,
+                left: 20,
+              }}
+            ></div>
+            <div
+              className="cloud"
+              style={{
+                backgroundImage: `url("${cloudSvg}")`,
+                width: 60,
+                height: 60,
+                bottom: 20,
+                right: -10,
+              }}
+            ></div>
+            <div
+              className="plane"
+              style={{ backgroundImage: `url("${planeSvg}")` }}
+            ></div>
+
+            <div
+              style={{
+                position: "absolute",
+                bottom: 45,
+                left: 123,
+                display: "flex",
+                justifyContent: "center",
+                gap: 8,
+              }}
+            >
+              <div className="steam">
+                <div></div>
+              </div>
+              <div className="steam">
+                <div></div>
+              </div>
+            </div>
+          </div>
+        );
+      };
+      /* ── Status Bar (live clock) ── */
+      function StatusBar() {
+        const [t, setT] = useState(new Date());
+        useEffect(() => {
+          const id = setInterval(() => setT(new Date()), 1000);
+          return () => clearInterval(id);
+        }, []);
+        const hh = String(t.getHours()).padStart(2, "0");
+        const mm = String(t.getMinutes()).padStart(2, "0");
+        return (
+          <div className="status-bar">
+            <span>
+              {hh}:{mm}
+            </span>
+            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+              {/* Signal */}
+              <svg
+                width="15"
+                height="11"
+                viewBox="0 0 15 11"
+                fill="currentColor"
+              >
+                <rect x="0" y="5" width="3" height="6" rx="1" opacity="0.4" />
+                <rect x="4" y="3" width="3" height="8" rx="1" opacity="0.7" />
+                <rect x="8" y="1" width="3" height="10" rx="1" />
+                <rect x="12" y="0" width="3" height="11" rx="1" />
+              </svg>
+              {/* WiFi */}
+              <svg
+                width="15"
+                height="11"
+                viewBox="0 0 16 12"
+                fill="currentColor"
+              >
+                <path
+                  d="M8 2C5 2 2.5 3.5 1 5.7L2.5 7.2C3.7 5.4 5.7 4.2 8 4.2C10.3 4.2 12.3 5.4 13.5 7.2L15 5.7C13.5 3.5 11 2 8 2Z"
+                  opacity="0.4"
+                />
+                <path
+                  d="M8 6C6.3 6 4.8 6.8 3.8 8.1L5.3 9.5C6 8.6 6.9 8 8 8C9.1 8 10 8.6 10.7 9.5L12.2 8.1C11.2 6.8 9.7 6 8 6Z"
+                  opacity="0.7"
+                />
+                <circle cx="8" cy="11" r="1.5" />
+              </svg>
+              {/* Battery */}
+              <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+                <rect
+                  x="0.5"
+                  y="0.5"
+                  width="21"
+                  height="11"
+                  rx="3.5"
+                  stroke="currentColor"
+                  strokeOpacity="0.35"
+                />
+                <rect
+                  x="2"
+                  y="2"
+                  width="16"
+                  height="8"
+                  rx="2"
+                  fill="currentColor"
+                />
+                <path
+                  d="M23 4V8C24 7.5 24.5 7 24.5 6S24 4.5 23 4Z"
+                  fill="currentColor"
+                  fillOpacity="0.4"
+                />
+              </svg>
+            </div>
+          </div>
+        );
+      }
+
+      /* ── Airport Picker overlay ── */
+      function AirportPicker({ title, onSelect, onClose }) {
+        const [q, setQ] = useState("");
+        const list = AIRPORTS.filter(
+          (a) =>
+            a.code.toLowerCase().includes(q.toLowerCase()) ||
+            a.city.toLowerCase().includes(q.toLowerCase()),
+        );
+        return (
+          <div className="airport-overlay page-enter">
+            <div className="header">
+              <button className="back-btn" onClick={onClose}>
+                ✕
+              </button>
+              <strong>{title}</strong>
+              <span />
+            </div>
+            <div style={{ padding: "12px 20px 8px" }}>
+              <div
+                style={{
+                  background: "#f5f5f7",
+                  borderRadius: 12,
+                  padding: "10px 14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <span style={{ color: "#9ca3af" }}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-search-icon lucide-search"
+                  >
+                    <path d="m21 21-4.34-4.34" />
+                    <circle cx="11" cy="11" r="8" />
+                  </svg>
+                </span>
+                <input
+                  autoFocus
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  placeholder="City or airport code"
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    fontSize: 15,
+                    outline: "none",
+                    width: "100%",
+                  }}
+                />
+              </div>
+            </div>
+            <div style={{ flex: 1, overflowY: "auto", padding: "0 20px" }}>
+              {list.map((a) => (
+                <div
+                  key={a.code}
+                  onClick={() => {
+                    onSelect(a);
+                    onClose();
+                  }}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 14,
+                    padding: "13px 0",
+                    borderBottom: "1px solid #f5f5f5",
+                    cursor: "pointer",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 44,
+                      height: 44,
+                      background: "#e8eeff",
+                      borderRadius: 12,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: 800,
+                      fontSize: 13,
+                      color: "#1248c7",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {a.code}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 15 }}>
+                      {a.city}
+                    </div>
+                    <div style={{ fontSize: 12, color: "#9ca3af" }}>
+                      {a.name} · {a.country}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      function WelcomePage({ next }) {
+        return (
+          <div
+            className="welcome"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            {/* 1. 飛機動畫直接放在上方作為視覺主體 */}
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <PlaneLoader />
+            </div>
+
+            {/* 2. 下方文字與按鈕區塊 */}
+            <div
+              style={{
+                position: "relative",
+                zIndex: 10,
+                paddingBottom: "40px",
+              }}
+            >
+              <h1
+                style={{
+                  fontSize: 38,
+                  fontWeight: 900,
+                  color: "#fff",
+                  lineHeight: 1.1,
+                  marginBottom: 12,
+                }}
+              >
+                Book your flight,
+                <br />
+                Enjoy your life.
+              </h1>
+              <p
+                style={{
+                  color: "rgba(255,255,255,0.6)",
+                  fontSize: 14,
+                  marginBottom: 36,
+                  lineHeight: 1.6,
+                }}
+              >
+                Search hundreds of flights and book your perfect trip.
+              </p>
+              <button
+                className="primary-btn"
+                onClick={next}
+                style={{
+                  background: "#fff",
+                  color: "#1248c7",
+                  fontSize: 17,
+                  padding: "18px",
+                }}
+              >
+                Start Booking ✈
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      /* ══════════════════════════════════
+         Page 2 — Home Booking
+      ══════════════════════════════════ */
+      function HomeBooking({ next, booking, setBooking }) {
+        const [picker, setPicker] = useState(null); // 'from' | 'to' | null
+
+        const swap = () =>
+          setBooking((b) => ({ ...b, from: b.to, to: b.from }));
+
+        return (
+          <div className="screen page-enter" style={{ position: "relative" }}>
+            <div className="header">
+              <span style={{ color: "#1248c7", fontWeight: 900, fontSize: 22 }}>
+                FLY
+              </span>
+              <div
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: "50%",
+                  background: "#f3f4f6",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 18,
+                  cursor: "pointer",
+                }}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-user-icon lucide-user"
+                >
+                  <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </div>
+            </div>
+
+            <div className="content">
+              <div className="tab-bar">
+                {["One Way", "Round Trip", "Multi-City"].map((t) => (
+                  <div
+                    key={t}
+                    className={`tab ${booking.tripType === t ? "active" : ""}`}
+                    onClick={() => setBooking((b) => ({ ...b, tripType: t }))}
+                  >
+                    {t}
+                  </div>
+                ))}
+              </div>
+
+              {/* From */}
+              <div className="field-card" onClick={() => setPicker("from")}>
+                <div className="lbl">From</div>
+                <input
+                  readOnly
+                  value={
+                    booking.from
+                      ? `${booking.from.code} — ${booking.from.city}`
+                      : ""
+                  }
+                  placeholder="Where are you flying from?"
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+
+              <div className="swap-row">
+                <div className="swap-line" />
+                <button className="swap-btn" onClick={swap}>
+                  ⇅
+                </button>
+                <div className="swap-line" />
+              </div>
+
+              {/* To */}
+              <div
+                className="field-card"
+                style={{ marginTop: 0 }}
+                onClick={() => setPicker("to")}
+              >
+                <div className="lbl">To</div>
+                <input
+                  readOnly
+                  value={
+                    booking.to ? `${booking.to.code} — ${booking.to.city}` : ""
+                  }
+                  placeholder="Where are you going?"
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+
+              {/* Dates */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns:
+                    booking.tripType === "Round Trip" ? "1fr 1fr" : "1fr 1fr",
+                  gap: 10,
+                }}
+              >
+                <div className="field-card">
+                  <div className="lbl">Depart</div>
+                  <input
+                    type="date"
+                    defaultValue="2024-12-23"
+                    style={{
+                      fontSize: 13,
+                      color: "#1248c7",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                    }}
+                  />
+                </div>
+                {booking.tripType === "Round Trip" ? (
+                  <div className="field-card">
+                    <div className="lbl">Return</div>
+                    <input
+                      type="date"
+                      defaultValue="2025-01-02"
+                      style={{
+                        fontSize: 13,
+                        color: "#1248c7",
+                        fontWeight: 700,
+                        cursor: "pointer",
+                      }}
+                    />
+                  </div>
+                ) : (
+                  /* Passenger counter */
+                  <div className="field-card">
+                    <div className="lbl">Passengers</div>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                        marginTop: 4,
+                      }}
+                    >
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setBooking((b) => ({
+                            ...b,
+                            pax: Math.max(1, b.pax - 1),
+                          }));
+                        }}
+                        style={{
+                          background: "#f3f4f6",
+                          border: "none",
+                          width: 26,
+                          height: 26,
+                          borderRadius: "50%",
+                          cursor: "pointer",
+                          fontSize: 16,
+                          fontWeight: 700,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        −
+                      </button>
+                      <span
+                        style={{
+                          fontWeight: 700,
+                          fontSize: 16,
+                          flex: 1,
+                          textAlign: "center",
+                        }}
+                      >
+                        {booking.pax}
+                      </span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setBooking((b) => ({
+                            ...b,
+                            pax: Math.min(9, b.pax + 1),
+                          }));
+                        }}
+                        style={{
+                          background: "#1248c7",
+                          color: "#fff",
+                          border: "none",
+                          width: 26,
+                          height: 26,
+                          borderRadius: "50%",
+                          cursor: "pointer",
+                          fontSize: 16,
+                          fontWeight: 700,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {booking.tripType === "Round Trip" && (
+                <div className="field-card">
+                  <div className="lbl">Passengers</div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      marginTop: 4,
+                    }}
+                  >
+                    <button
+                      onClick={() =>
+                        setBooking((b) => ({
+                          ...b,
+                          pax: Math.max(1, b.pax - 1),
+                        }))
+                      }
+                      style={{
+                        background: "#f3f4f6",
+                        border: "none",
+                        width: 28,
+                        height: 28,
+                        borderRadius: "50%",
+                        cursor: "pointer",
+                        fontSize: 16,
+                        fontWeight: 700,
+                      }}
+                    >
+                      −
+                    </button>
+                    <span
+                      style={{
+                        fontWeight: 700,
+                        fontSize: 16,
+                        flex: 1,
+                        textAlign: "center",
+                      }}
+                    >
+                      {booking.pax} Adult{booking.pax > 1 ? "s" : ""}
+                    </span>
+                    <button
+                      onClick={() =>
+                        setBooking((b) => ({
+                          ...b,
+                          pax: Math.min(9, b.pax + 1),
+                        }))
+                      }
+                      style={{
+                        background: "#1248c7",
+                        color: "#fff",
+                        border: "none",
+                        width: 28,
+                        height: 28,
+                        borderRadius: "50%",
+                        cursor: "pointer",
+                        fontSize: 16,
+                        fontWeight: 700,
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div style={{ height: 12 }} />
+              <button className="primary-btn" onClick={next}>
+                Search Flights
+              </button>
+
+              {/* Popular Routes */}
+              <div style={{ marginTop: 24 }}>
+                <div
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: "#111827",
+                    marginBottom: 12,
+                  }}
+                >
+                  Popular Routes
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 10,
+                    overflowX: "auto",
+                    marginLeft: -20,
+                    paddingLeft: 20,
+                    paddingBottom: 4,
+                  }}
+                >
+                  {[
+                    { from: "SYD", to: "LCY", price: "$580", emoji: "🇬🇧" },
+                    { from: "SYD", to: "NRT", price: "$420", emoji: "🇯🇵" },
+                    { from: "SYD", to: "DXB", price: "$490", emoji: "🇦🇪" },
+                    { from: "SYD", to: "SIN", price: "$320", emoji: "🇸🇬" },
+                  ].map((r) => (
+                    <div
+                      key={r.from + r.to}
+                      onClick={() => {
+                        setBooking((b) => ({
+                          ...b,
+                          from: AIRPORTS.find((a) => a.code === r.from),
+                          to: AIRPORTS.find((a) => a.code === r.to),
+                        }));
+                      }}
+                      style={{
+                        minWidth: 130,
+                        background: "#fff",
+                        border: "1.5px solid #e5e7eb",
+                        borderRadius: 16,
+                        padding: "12px 14px",
+                        cursor: "pointer",
+                        flexShrink: 0,
+                        transition: "all .2s",
+                      }}
+                    >
+                      <div style={{ fontSize: 22, marginBottom: 4 }}>
+                        {r.emoji}
+                      </div>
+                      <div style={{ fontWeight: 700, fontSize: 13 }}>
+                        {r.from} → {r.to}
+                      </div>
+                      <div
+                        style={{
+                          color: "#1248c7",
+                          fontSize: 12,
+                          fontWeight: 600,
+                        }}
+                      >
+                        from {r.price}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="bottom-nav">
+              <div className="nav-item active">
+                <div className="nav-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-tickets-icon lucide-tickets"
+                  >
+                    <path d="m3.173 8.18 11-5a2 2 0 0 1 2.647.993L18.56 8" />
+                    <path d="M6 10V8" />
+                    <path d="M6 14v1" />
+                    <path d="M6 19v2" />
+                    <rect x="2" y="8" width="20" height="13" rx="2" />
+                  </svg>
+                </div>
+                Book
+              </div>
+              <div className="nav-item">
+                <div className="nav-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-bookmark-icon lucide-bookmark"
+                  >
+                    <path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z" />
+                  </svg>
+                </div>
+                Saved
+              </div>
+              <div className="nav-item">
+                <div className="nav-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-plane-icon lucide-plane"
+                  >
+                    <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z" />
+                  </svg>
+                </div>
+                Trips
+              </div>
+              <div className="nav-item">
+                <div className="nav-icon">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-user-icon lucide-user"
+                  >
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+                Profile
+              </div>
+            </div>
+
+            {picker && (
+              <AirportPicker
+                title={picker === "from" ? "Flying From" : "Flying To"}
+                onSelect={(a) => setBooking((b) => ({ ...b, [picker]: a }))}
+                onClose={() => setPicker(null)}
+              />
+            )}
+          </div>
+        );
+      }
+
+      /* ══════════════════════════════════
+         Page 3 — Flight Results
+      ══════════════════════════════════ */
+      function FlightResults({ next, back, booking, setBooking }) {
+        const [activeDate, setActiveDate] = useState(2);
+        const [sortBy, setSortBy] = useState("price");
+        const [filterDirect, setFilterDirect] = useState(false);
+        const from = booking.from?.code || "SYD";
+        const to = booking.to?.code || "LCY";
+
+        let list = [...FLIGHTS];
+        if (filterDirect) list = list.filter((f) => f.direct);
+        if (sortBy === "price") list.sort((a, b) => a.price - b.price);
+        else list.sort((a, b) => a.dep.localeCompare(b.dep));
+
+        return (
+          <div className="screen page-enter">
+            <div className="header">
+              <button className="back-btn" onClick={back}>
+                ←
+              </button>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontWeight: 700, fontSize: 14 }}>
+                  {from} → {to}
+                </div>
+                <div style={{ fontSize: 11, color: "#9ca3af" }}>
+                  Dec 23 · {booking.pax} pax
+                </div>
+              </div>
+              <button
+                onClick={() =>
+                  setSortBy((s) => (s === "price" ? "time" : "price"))
+                }
+                style={{
+                  background: "#f3f4f6",
+                  border: "none",
+                  borderRadius: 10,
+                  padding: "6px 10px",
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: "#1248c7",
+                  cursor: "pointer",
+                }}
+              >
+                {sortBy === "price" ? "⏱ Time" : "💰 Price"}
+              </button>
+            </div>
+
+            <div className="content">
+              {/* Date scroller */}
+              <div className="date-scroller">
+                {DATES.map((d, i) => (
+                  <div
+                    key={i}
+                    className={`date-item ${activeDate === i ? "active" : ""}`}
+                    onClick={() => setActiveDate(i)}
+                  >
+                    <div className="day">{d.w}</div>
+                    <div className="num">{d.n}</div>
+                    <div className="price">{d.price}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Filter row */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: 14,
+                }}
+              >
+                <p style={{ fontSize: 12, color: "#9ca3af" }}>
+                  {list.length} flight{list.length !== 1 ? "s" : ""} · {from} →{" "}
+                  {to}
+                </p>
+                <div style={{ display: "flex", gap: 6 }}>
+                  {["Direct", "All"].map((f) => (
+                    <button
+                      key={f}
+                      onClick={() => setFilterDirect(f === "Direct")}
+                      style={{
+                        background:
+                          (f === "Direct") === filterDirect
+                            ? "#1248c7"
+                            : "#f3f4f6",
+                        color:
+                          (f === "Direct") === filterDirect
+                            ? "#fff"
+                            : "#6b7280",
+                        border: "none",
+                        borderRadius: 8,
+                        padding: "4px 12px",
+                        fontSize: 11,
+                        fontWeight: 600,
+                        cursor: "pointer",
+                      }}
+                    >
+                      {f}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {list.length === 0 && (
+                <div
+                  style={{
+                    textAlign: "center",
+                    padding: "40px 0",
+                    color: "#9ca3af",
+                  }}
+                >
+                  <div style={{ fontSize: 40, marginBottom: 12 }}>✈️</div>
+                  <div style={{ fontWeight: 600 }}>No direct flights found</div>
+                  <div style={{ fontSize: 12, marginTop: 4 }}>
+                    Try removing filters
+                  </div>
+                </div>
+              )}
+
+              {list.map((f) => (
+                <div
+                  key={f.id}
+                  className="flight-card"
+                  onClick={() => {
+                    setBooking((b) => ({ ...b, flight: f }));
+                    next();
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginBottom: 12,
+                    }}
+                  >
+                    <div
+                      style={{ display: "flex", alignItems: "center", gap: 8 }}
+                    >
+                      <div
+                        className="airline-logo"
+                        style={{ background: f.color }}
+                      >
+                        {f.logo}
+                      </div>
+                      <span
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 600,
+                          color: "#6b7280",
+                        }}
+                      >
+                        {f.airline}
+                      </span>
+                    </div>
+                    <span
+                      className={`badge ${f.direct ? "badge-green" : "badge-amber"}`}
+                    >
+                      {f.direct ? "✓ Direct" : "⭬ " + f.stops}
+                    </span>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div>
+                      <div style={{ fontSize: 22, fontWeight: 800 }}>
+                        {f.dep}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 11,
+                          color: "#9ca3af",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {from}
+                      </div>
+                    </div>
+                    <div className="route-line">
+                      <div className="dashed" />
+                      <div className="plane-ico">✈</div>
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: -18,
+                          left: 0,
+                          right: 0,
+                          textAlign: "center",
+                          fontSize: 10,
+                          color: "#c0c4cc",
+                        }}
+                      >
+                        {f.dur}
+                      </div>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <div style={{ fontSize: 22, fontWeight: 800 }}>
+                        {f.arr}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 11,
+                          color: "#9ca3af",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {to}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginTop: 22,
+                      paddingTop: 14,
+                      borderTop: "1px solid #f5f5f5",
+                    }}
+                  >
+                    <div style={{ fontSize: 11, color: "#9ca3af" }}>
+                      ✈ {f.airline}
+                    </div>
+                    <div>
+                      <span
+                        style={{
+                          color: "#1248c7",
+                          fontWeight: 900,
+                          fontSize: 20,
+                        }}
+                      >
+                        ${f.price}
+                      </span>
+                      <span style={{ fontSize: 10, color: "#9ca3af" }}>
+                        /person
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      /* ══════════════════════════════════
+         Page 4 — Choose Class
+      ══════════════════════════════════ */
+      function ClassOptions({ next, back, booking, setBooking }) {
+        const [sel, setSel] = useState(booking.travelClass || "Business");
+        const f = booking.flight || {
+          dep: "09:00",
+          arr: "14:30",
+          airline: "Qantas",
+          price: 840,
+        };
+        return (
+          <div className="screen page-enter">
+            <div className="header">
+              <button className="back-btn" onClick={back}>
+                ←
+              </button>
+              <strong>Choose Class</strong>
+              <span />
+            </div>
+            <div className="content">
+              <div
+                style={{
+                  background: "#f8faff",
+                  borderRadius: 16,
+                  padding: "14px 16px",
+                  marginBottom: 20,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 10,
+                    color: "#9ca3af",
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                    letterSpacing: 1,
+                    marginBottom: 6,
+                  }}
+                >
+                  Selected Flight
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: 15 }}>
+                      {booking.from?.code || "SYD"} →{" "}
+                      {booking.to?.code || "LCY"}
+                    </div>
+                    <div
+                      style={{ fontSize: 12, color: "#9ca3af", marginTop: 2 }}
+                    >
+                      {f.dep} – {f.arr} · {f.airline}
+                    </div>
+                  </div>
+                  <div style={{ fontWeight: 800, color: "#1248c7" }}>
+                    ${f.price}
+                  </div>
+                </div>
+              </div>
+
+              {CLASSES.map((c) => (
+                <div
+                  key={c.name}
+                  className={`class-row ${sel === c.name ? "active" : ""}`}
+                  onClick={() => setSel(c.name)}
+                >
+                  <div className="radio-circle">{sel === c.name && "✓"}</div>
+                  <div style={{ flex: 1 }}>
+                    <div
+                      style={{ fontWeight: 700, fontSize: 15, marginBottom: 6 }}
+                    >
+                      {c.name}
+                    </div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+                      {c.perks.map((p) => (
+                        <span
+                          key={p}
+                          style={{
+                            fontSize: 10,
+                            background: "#f5f5f7",
+                            padding: "2px 8px",
+                            borderRadius: 6,
+                            color: "#6b7280",
+                          }}
+                        >
+                          {p}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      fontWeight: 900,
+                      fontSize: 17,
+                      color: "#1248c7",
+                      flexShrink: 0,
+                    }}
+                  >
+                    ${c.price}
+                  </div>
+                </div>
+              ))}
+
+              <button
+                className="primary-btn"
+                style={{ marginTop: 24 }}
+                onClick={() => {
+                  setBooking((b) => ({ ...b, travelClass: sel }));
+                  next();
+                }}
+              >
+                Confirm Class
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      /* ══════════════════════════════════
+         Page 5 — Seat Selection
+      ══════════════════════════════════ */
+      function SeatSelection({ next, back, booking, setBooking }) {
+        const [sel, setSel] = useState(booking.seat || "12A");
+        const rows = [10, 11, 12, 13, 14, 15];
+        const taken = ["13B", "10D", "11C", "14A"];
+
+        return (
+          <div className="screen page-enter">
+            <div className="header">
+              <button className="back-btn" onClick={back}>
+                ←
+              </button>
+              <strong>Select Seat</strong>
+              <span />
+            </div>
+            <div className="content">
+              <div style={{ textAlign: "center", padding: "14px 0 20px" }}>
+                <div
+                  style={{
+                    fontSize: 11,
+                    color: "#9ca3af",
+                    letterSpacing: 2,
+                    textTransform: "uppercase",
+                    marginBottom: 4,
+                  }}
+                >
+                  {booking.travelClass || "Business"} Class
+                </div>
+                <div style={{ fontSize: 30, fontWeight: 800 }}>{sel}</div>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: taken.includes(sel) ? "#ef4444" : "#10b981",
+                    fontWeight: 600,
+                    marginTop: 2,
+                  }}
+                >
+                  {taken.includes(sel)
+                    ? "⚠ Unavailable — pick another"
+                    : "✓ Available"}
+                </div>
+              </div>
+
+              <div
+                style={{
+                  background: "#f8f8f8",
+                  borderRadius: 20,
+                  padding: "16px 8px",
+                  marginBottom: 20,
+                }}
+              >
+                <div style={{ textAlign: "center", marginBottom: 10 }}>
+                  <div
+                    style={{
+                      display: "inline-block",
+                      background: "#e5e7eb",
+                      borderRadius: 12,
+                      padding: "4px 24px",
+                      fontSize: 11,
+                      fontWeight: 600,
+                      color: "#9ca3af",
+                    }}
+                  >
+                    ✈ FRONT
+                  </div>
+                </div>
+
+                {/* Column headers */}
+                <div
+                  className="seat-row"
+                  style={{
+                    color: "#c0c4cc",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    marginBottom: 4,
+                  }}
+                >
+                  {["A", "B", null, "C", "D"].map((col, ci) => (
+                    <div key={ci} style={{ textAlign: "center" }}>
+                      {col || ""}
+                    </div>
+                  ))}
+                </div>
+
+                {rows.map((r) => (
+                  <div key={r} className="seat-row">
+                    {["A", "B", null, "C", "D"].map((col, ci) => {
+                      if (!col) return <div key={ci} />;
+                      const id = r + col;
+                      const isTaken = taken.includes(id);
+                      const isSelected = sel === id;
+                      return (
+                        <div
+                          key={col}
+                          className={`seat ${isSelected ? "selected" : isTaken ? "taken" : "free"}`}
+                          onClick={() => !isTaken && setSel(id)}
+                        >
+                          {!isTaken && id}
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  gap: 16,
+                  justifyContent: "center",
+                  marginBottom: 24,
+                }}
+              >
+                <div className="legend-item">
+                  <div
+                    className="legend-dot"
+                    style={{
+                      background: "#f3f4f6",
+                      border: "1px solid #e5e7eb",
+                    }}
+                  />{" "}
+                  Available
+                </div>
+                <div className="legend-item">
+                  <div
+                    className="legend-dot"
+                    style={{ background: "#1248c7" }}
+                  />{" "}
+                  Selected
+                </div>
+                <div className="legend-item">
+                  <div
+                    className="legend-dot"
+                    style={{ background: "#e5e7eb" }}
+                  />{" "}
+                  Taken
+                </div>
+              </div>
+
+              <button
+                className="primary-btn"
+                disabled={taken.includes(sel)}
+                onClick={() => {
+                  setBooking((b) => ({ ...b, seat: sel }));
+                  next();
+                }}
+              >
+                {taken.includes(sel)
+                  ? "Choose a Free Seat First"
+                  : `Confirm Seat ${sel}`}
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      function ExtraService({ next, back, booking, setBooking }) {
+        const [toggles, setToggles] = useState(SERVICES.map((s) => s.on));
+        const toggle = (i) =>
+          setToggles((t) => {
+            const n = [...t];
+            n[i] = !n[i];
+            return n;
+          });
+        const extras = SERVICES.reduce(
+          (sum, s, i) => sum + (toggles[i] ? s.price : 0),
+          0,
+        );
+        const cls =
+          CLASSES.find((c) => c.name === (booking.travelClass || "Business")) ||
+          CLASSES[1];
+        const total = cls.price + extras;
+
+        return (
+          <div className="screen page-enter">
+            <div className="header">
+              <button className="back-btn" onClick={back}>
+                ←
+              </button>
+              <strong>Add Extras</strong>
+              <span />
+            </div>
+            <div className="content">
+              <div style={{ fontSize: 13, color: "#9ca3af", marginBottom: 16 }}>
+                Customize your journey
+              </div>
+
+              {SERVICES.map((s, i) => (
+                <div
+                  key={s.name}
+                  className="service-item"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "15px 0",
+                    borderBottom: "1px solid #f5f5f5",
+                    gap: 14,
+                    cursor: "pointer",
+                  }}
+                  onClick={() => toggle(i)}
+                >
+                  <div
+                    style={{
+                      width: 42,
+                      height: 42,
+                      borderRadius: 12,
+                      background: "#e8eeff",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: 20,
+                      flexShrink: 0,
+                    }}
+                  >
+                    {s.icon}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, fontSize: 14 }}>
+                      {s.name}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 12,
+                        color: "#1248c7",
+                        fontWeight: 600,
+                        marginTop: 2,
+                      }}
+                    >
+                      +${s.price}
+                    </div>
+                  </div>
+                  <button
+                    className={`toggle ${toggles[i] ? "on" : "off"}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggle(i);
+                    }}
+                  />
+                </div>
+              ))}
+
+              <div
+                style={{
+                  background: "#fafbff",
+                  border: "1.5px solid #e8eeff",
+                  borderRadius: 16,
+                  padding: "16px",
+                  marginTop: 20,
+                }}
+              >
+                <div className="sum-row">
+                  <span style={{ color: "#9ca3af" }}>
+                    Flight ({booking.travelClass || "Business"})
+                  </span>
+                  <span style={{ fontWeight: 600 }}>${cls.price}</span>
+                </div>
+                <div className="sum-row">
+                  <span style={{ color: "#9ca3af" }}>Extras</span>
+                  <span style={{ fontWeight: 600 }}>+${extras}</span>
+                </div>
+                <div className="sum-row total">
+                  <span>Total</span>
+                  <span style={{ color: "#1248c7" }}>${total}</span>
+                </div>
+              </div>
+
+              <button
+                className="primary-btn"
+                style={{ marginTop: 16 }}
+                onClick={() => {
+                  setBooking((b) => ({ ...b, extrasTotal: extras, total }));
+                  next();
+                }}
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      function PassengerInfo({ next, back, booking, setBooking }) {
+        const [form, setForm] = useState({
+          name: "",
+          passport: "",
+          dob: "",
+          email: "",
+          phone: "",
+        });
+        const up = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+
+        return (
+          <div className="screen page-enter">
+            <div className="header">
+              <button className="back-btn" onClick={back}>
+                ←
+              </button>
+              <strong>Passenger Details</strong>
+              <span />
+            </div>
+            <div className="content">
+              <div style={{ fontSize: 13, color: "#9ca3af", marginBottom: 16 }}>
+                Please verify your info
+              </div>
+
+              {[
+                {
+                  lbl: "Full Name",
+                  key: "name",
+                  type: "text",
+                  ph: "Your full name",
+                },
+                {
+                  lbl: "Passport Number",
+                  key: "passport",
+                  type: "text",
+                  ph: "e.g. E12345678",
+                },
+                { lbl: "Date of Birth", key: "dob", type: "date", ph: "" },
+              ].map(({ lbl, key, type, ph }) => (
+                <div key={key} className="field-card">
+                  <div className="lbl">{lbl}</div>
+                  <input
+                    type={type}
+                    value={form[key]}
+                    onChange={(e) => up(key, e.target.value)}
+                    placeholder={ph}
+                    style={{ fontSize: 14, fontWeight: 600 }}
+                  />
+                </div>
+              ))}
+
+              <div
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: "#9ca3af",
+                  textTransform: "uppercase",
+                  letterSpacing: 1,
+                  margin: "14px 0 8px",
+                }}
+              >
+                Contact
+              </div>
+              {[
+                {
+                  lbl: "Email",
+                  key: "email",
+                  type: "email",
+                  ph: "email@example.com",
+                },
+                {
+                  lbl: "Phone",
+                  key: "phone",
+                  type: "tel",
+                  ph: "+1 234 567 890",
+                },
+              ].map(({ lbl, key, type, ph }) => (
+                <div key={key} className="field-card">
+                  <div className="lbl">{lbl}</div>
+                  <input
+                    type={type}
+                    value={form[key]}
+                    onChange={(e) => up(key, e.target.value)}
+                    placeholder={ph}
+                    style={{ fontSize: 14, fontWeight: 600 }}
+                  />
+                </div>
+              ))}
+
+              <div
+                style={{
+                  background: "#fff9ec",
+                  border: "1.5px solid #fcd34d",
+                  borderRadius: 14,
+                  padding: "12px 14px",
+                  marginTop: 12,
+                  fontSize: 12,
+                  color: "#92400e",
+                  lineHeight: 1.6,
+                }}
+              >
+                ⚠️ Passport details must exactly match your travel document.
+              </div>
+
+              <button
+                className="primary-btn"
+                style={{ marginTop: 20 }}
+                onClick={() => {
+                  setBooking((b) => ({ ...b, passenger: form }));
+                  next();
+                }}
+              >
+                Proceed to Payment →
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      function PaymentPage({ next, back, booking }) {
+        const [method, setMethod] = useState("card");
+        const [processing, setProcessing] = useState(false);
+        const total = booking.total || 878;
+
+        const pay = () => {
+          setProcessing(true);
+          setTimeout(() => {
+            setProcessing(false);
+            next();
+          }, 2200);
+        };
+        const icons = {
+          card: (
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <rect x="2" y="5" width="20" height="14" rx="2" />
+              <line x1="2" y1="10" x2="22" y2="10" />
+            </svg>
+          ),
+          apple: (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-apple-icon lucide-apple"
+            >
+              <path d="M12 6.528V3a1 1 0 0 1 1-1h0" />
+              <path d="M18.237 21A15 15 0 0 0 22 11a6 6 0 0 0-10-4.472A6 6 0 0 0 2 11a15.1 15.1 0 0 0 3.763 10 3 3 0 0 0 3.648.648 5.5 5.5 0 0 1 5.178 0A3 3 0 0 0 18.237 21" />
+            </svg>
+          ),
+          paypal: (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-dock-icon lucide-dock"
+            >
+              <path d="M2 8h20" />
+              <rect width="20" height="16" x="2" y="4" rx="2" />
+              <path d="M6 16h12" />
+            </svg>
+          ),
+        };
+
+        return (
+          <div className="screen page-enter">
+            <div className="header">
+              <button className="back-btn" onClick={back}>
+                ←
+              </button>
+              <strong>Payment</strong>
+              <span />
+            </div>
+            <div className="content">
+              {/* Amount banner */}
+              <div
+                style={{
+                  background: "linear-gradient(135deg,#1248c7,#3b82f6)",
+                  borderRadius: 20,
+                  padding: "20px",
+                  marginBottom: 20,
+                  color: "#fff",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 10,
+                    opacity: 0.7,
+                    marginBottom: 10,
+                    letterSpacing: 2,
+                  }}
+                >
+                  TOTAL AMOUNT
+                </div>
+                <div
+                  style={{ fontSize: 40, fontWeight: 900, letterSpacing: -1 }}
+                >
+                  ${total}
+                </div>
+                <div style={{ fontSize: 12, opacity: 0.7, marginTop: 4 }}>
+                  {booking.from?.code || "SYD"} → {booking.to?.code || "LCY"} ·{" "}
+                  {booking.travelClass || "Business"}
+                </div>
+              </div>
+
+              <div
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: "#9ca3af",
+                  textTransform: "uppercase",
+                  letterSpacing: 1,
+                  marginBottom: 10,
+                }}
+              >
+                Payment Method
+              </div>
+
+              {[
+                { id: "card", label: "Credit / Debit Card", icon: icons.card },
+                { id: "apple", label: "Apple Pay", icon: icons.apple },
+                { id: "paypal", label: "PayPal", icon: icons.paypal },
+              ].map((m) => (
+                <div
+                  key={m.id}
+                  className={`payment-method ${method === m.id ? "active" : ""}`}
+                  onClick={() => setMethod(m.id)}
+                >
+                  <span style={{ fontSize: 24 }}>{m.icon}</span>
+                  <span style={{ fontWeight: 600, fontSize: 14, flex: 1 }}>
+                    {m.label}
+                  </span>
+                  <div className="radio-circle">{method === m.id && "✓"}</div>
+                </div>
+              ))}
+
+              {method === "card" && (
+                <div style={{ marginTop: 4 }}>
+                  <div className="field-card">
+                    <div className="lbl">Card Number</div>
+                    <input
+                      placeholder="1234 5678 9012 3456"
+                      style={{
+                        fontSize: 15,
+                        fontWeight: 600,
+                        letterSpacing: 1,
+                      }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: 10,
+                    }}
+                  >
+                    <div className="field-card">
+                      <div className="lbl">Expiry</div>
+                      <input
+                        placeholder="MM / YY"
+                        style={{ fontWeight: 600 }}
+                      />
+                    </div>
+                    <div className="field-card">
+                      <div className="lbl">CVV</div>
+                      <input
+                        placeholder="•••"
+                        type="password"
+                        style={{ fontWeight: 600 }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <button
+                className="primary-btn"
+                style={{ marginTop: 20 }}
+                onClick={pay}
+                disabled={processing}
+              >
+                {processing ? (
+                  <span>⏳ Processing...</span>
+                ) : (
+                  <span
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      gap: 5,
+                    }}
+                  >
+                    Pay ${total} Securely
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-shield-alert-icon lucide-shield-alert"
+                    >
+                      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                      <path d="M12 8v4" />
+                      <path d="M12 16h.01" />
+                    </svg>
+                  </span>
+                )}
+              </button>
+              <div
+                style={{
+                  textAlign: "center",
+                  fontSize: 11,
+                  color: "#9ca3af",
+                  marginTop: 12,
+                }}
+              >
+                🔒 256-bit SSL encrypted · PCI DSS compliant
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function BookingConfirmed({ next }) {
+        return (
+          <div className="confirm-screen page-enter">
+            <div className="check-circle">✓</div>
+            <h2
+              style={{
+                fontSize: 26,
+                fontWeight: 900,
+                color: "#065f46",
+                marginBottom: 8,
+              }}
+            >
+              Payment Successful!
+            </h2>
+            <p
+              style={{
+                color: "#6b7280",
+                fontSize: 14,
+                marginBottom: 8,
+                lineHeight: 1.6,
+              }}
+            >
+              Your booking is confirmed. A confirmation email has been sent.
+            </p>
+            <div
+              style={{
+                background: "#fff",
+                borderRadius: 14,
+                padding: "12px 20px",
+                marginBottom: 32,
+                width: "100%",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 10,
+                  color: "#9ca3af",
+                  textAlign: "center",
+                  letterSpacing: 1,
+                  textTransform: "uppercase",
+                  marginBottom: 6,
+                }}
+              >
+                Booking Reference
+              </div>
+              <div
+                style={{
+                  fontSize: 22,
+                  fontWeight: 900,
+                  textAlign: "center",
+                  color: "#111827",
+                  letterSpacing: 3,
+                }}
+              >
+                FLY-{Math.floor(Math.random() * 90000 + 10000)}
+              </div>
+            </div>
+            <button
+              className="primary-btn"
+              style={{ background: "#059669" }}
+              onClick={next}
+            >
+              View Boarding Pass ✈
+            </button>
+          </div>
+        );
+      }
+
+      /* ══════════════════════════════════
+         Page 10 — Boarding Pass / Ticket
+      ══════════════════════════════════ */
+      function FinalTicket({ back, booking }) {
+        const p = booking.passenger || { name: "Alex Johnson" };
+        const f = booking.flight || {
+          dep: "09:00",
+          arr: "14:30",
+          airline: "Qantas",
+        };
+        // Generate a random-ish barcode as SVG rects
+        const bars = Array.from({ length: 42 }, (_, i) => {
+          const x = i * 4.5;
+          const h = 20 + Math.floor(Math.random() * 28);
+          const w = 1.5 + Math.floor(Math.random() * 2);
+          return `<rect x="${x}" y="${50 - h}" width="${w}" height="${h}" fill="#111"/>`;
+        }).join("");
+
+        return (
+          <div
+            className="screen page-enter"
+            style={{
+              background: "linear-gradient(160deg,#0a0a2e 0%,#1248c7 100%)",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "12px 20px",
+                flexShrink: 0,
+              }}
+            >
+              <button
+                onClick={back}
+                style={{
+                  background: "rgba(255,255,255,0.15)",
+                  border: "none",
+                  borderRadius: 10,
+                  padding: "8px 12px",
+                  color: "#fff",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  fontSize: 13,
+                }}
+              >
+                ← Home
+              </button>
+              <span style={{ color: "#fff", fontWeight: 700 }}>
+                Boarding Pass
+              </span>
+              <button
+                style={{
+                  background: "rgba(255,255,255,0.15)",
+                  border: "none",
+                  borderRadius: 10,
+                  padding: "8px 12px",
+                  color: "#fff",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  fontSize: 13,
+                }}
+              >
+                Share
+              </button>
+            </div>
+
+            <div className="content">
+              {/* Confirmed banner */}
+              <div
+                style={{
+                  background: "rgba(255,255,255,0.1)",
+                  borderRadius: 14,
+                  padding: "10px 14px",
+                  marginBottom: 16,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                }}
+              >
+                <span style={{ fontSize: 20, color: "#fff" }}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-check-icon lucide-check"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                </span>
+                <div>
+                  <div style={{ color: "#fff", fontWeight: 700, fontSize: 13 }}>
+                    Booking Confirmed
+                  </div>
+                  <div
+                    style={{ color: "rgba(255,255,255,0.55)", fontSize: 11 }}
+                  >
+                    Check-in opens 24h before departure
+                  </div>
+                </div>
+              </div>
+
+              {/* Pass card */}
+              <div className="pass-card">
+                {/* Route header */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    marginBottom: 4,
+                  }}
+                >
+                  <div>
+                    <div
+                      style={{
+                        fontSize: 40,
+                        fontWeight: 900,
+                        letterSpacing: -1,
+                      }}
+                    >
+                      {booking.from?.code || "SYD"}
+                    </div>
+                    <div style={{ fontSize: 12, color: "#9ca3af" }}>
+                      {booking.from?.city || "Sydney"}
+                    </div>
+                  </div>
+                  <div style={{ flex: 1, textAlign: "center", paddingTop: 10 }}>
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: "#1248c7",
+                        fontWeight: 700,
+                        marginBottom: 4,
+                      }}
+                    >
+                      {f.dep} → {f.arr}
+                    </div>
+                    <div style={{ fontSize: 22 }}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-plane-takeoff-icon lucide-plane-takeoff"
+                      >
+                        <path d="M2 22h20" />
+                        <path d="M6.36 17.4 4 17l-2-4 1.1-.55a2 2 0 0 1 1.8 0l.17.1a2 2 0 0 0 1.8 0L8 12 5 6l.9-.45a2 2 0 0 1 2.09.2l4.02 3a2 2 0 0 0 2.1.2l4.19-2.06a2.41 2.41 0 0 1 1.73-.17L21 7a1.4 1.4 0 0 1 .87 1.99l-.38.76c-.23.46-.6.84-1.07 1.08L7.58 17.2a2 2 0 0 1-1.22.18Z" />
+                      </svg>
+                    </div>
+                    <div
+                      style={{ fontSize: 10, color: "#9ca3af", marginTop: 4 }}
+                    >
+                      {booking.travelClass || "Business"}
+                    </div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <div
+                      style={{
+                        fontSize: 40,
+                        fontWeight: 900,
+                        letterSpacing: -1,
+                      }}
+                    >
+                      {booking.to?.code || "LCY"}
+                    </div>
+                    <div style={{ fontSize: 12, color: "#9ca3af" }}>
+                      {booking.to?.city || "London"}
+                    </div>
+                  </div>
+                </div>
+
+                <hr
+                  style={{
+                    border: "none",
+                    borderTop: "1.5px dashed #e5e7eb",
+                    margin: "18px 0",
+                  }}
+                />
+
+                {/* Details grid */}
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: 16,
+                  }}
+                >
+                  {[
+                    { l: "Passenger", v: p.name || "Alex Johnson" },
+                    { l: "Date", v: "Dec 23, 2024" },
+                    { l: "Flight", v: "UA-204" },
+                    { l: "Gate", v: "B2" },
+                    { l: "Class", v: booking.travelClass || "Business" },
+                    { l: "Seat", v: booking.seat || "12A" },
+                  ].map(({ l, v }) => (
+                    <div key={l}>
+                      <div
+                        style={{
+                          fontSize: 9,
+                          color: "#9ca3af",
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          letterSpacing: 0.8,
+                          marginBottom: 3,
+                        }}
+                      >
+                        {l}
+                      </div>
+                      <div style={{ fontWeight: 700, fontSize: 14 }}>{v}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <hr
+                  style={{
+                    border: "none",
+                    borderTop: "1.5px dashed #e5e7eb",
+                    margin: "18px 0",
+                  }}
+                />
+
+                {/* Barcode */}
+                <div style={{ textAlign: "center" }}>
+                  <svg
+                    viewBox="0 0 190 50"
+                    style={{ width: "100%", height: 50 }}
+                    dangerouslySetInnerHTML={{ __html: bars }}
+                  />
+                  <div
+                    style={{
+                      fontSize: 10,
+                      letterSpacing: 3,
+                      color: "#9ca3af",
+                      marginTop: 6,
+                    }}
+                  >
+                    002348576921034
+                  </div>
+                </div>
+              </div>
+
+              <button
+                className="primary-btn"
+                style={{
+                  background: "rgba(255,255,255,0.2)",
+                  border: "1.5px solid rgba(255,255,255,0.4)",
+                  marginBottom: 10,
+                }}
+              >
+                Add to Wallet
+              </button>
+              <button
+                className="primary-btn"
+                style={{
+                  background: "rgba(255,255,255,0.1)",
+                  border: "1.5px solid rgba(255,255,255,0.2)",
+                }}
+              >
+                ⬇ Download PDF
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      const ALL_PAGES = [
+        "welcome",
+        "home",
+        "results",
+        "class",
+        "seat",
+        "extra",
+        "info",
+        "payment",
+        "confirmed",
+        "ticket",
+      ];
+
+      function App() {
+        const [page, setPage] = useState("welcome");
+        const [booking, setBooking] = useState({
+          tripType: "Round Trip",
+          pax: 1,
+          from: null,
+          to: null,
+        });
+
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "20px 0",
+              gap: 16,
+            }}
+          >
+            {/* Debug nav */}
+            <div className="debug-panel">
+              {ALL_PAGES.map((p) => (
+                <button
+                  key={p}
+                  className={`debug-btn ${page === p ? "active" : ""}`}
+                  onClick={() => setPage(p)}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+
+            {/* Phone */}
+            <div className="phone">
+              <StatusBar />
+
+              {page === "welcome" && (
+                <WelcomePage next={() => setPage("home")} />
+              )}
+              {page === "home" && (
+                <HomeBooking
+                  next={() => setPage("results")}
+                  booking={booking}
+                  setBooking={setBooking}
+                />
+              )}
+              {page === "results" && (
+                <FlightResults
+                  next={() => setPage("class")}
+                  back={() => setPage("home")}
+                  booking={booking}
+                  setBooking={setBooking}
+                />
+              )}
+              {page === "class" && (
+                <ClassOptions
+                  next={() => setPage("seat")}
+                  back={() => setPage("results")}
+                  booking={booking}
+                  setBooking={setBooking}
+                />
+              )}
+              {page === "seat" && (
+                <SeatSelection
+                  next={() => setPage("extra")}
+                  back={() => setPage("class")}
+                  booking={booking}
+                  setBooking={setBooking}
+                />
+              )}
+              {page === "extra" && (
+                <ExtraService
+                  next={() => setPage("info")}
+                  back={() => setPage("seat")}
+                  booking={booking}
+                  setBooking={setBooking}
+                />
+              )}
+              {page === "info" && (
+                <PassengerInfo
+                  next={() => setPage("payment")}
+                  back={() => setPage("extra")}
+                  booking={booking}
+                  setBooking={setBooking}
+                />
+              )}
+              {page === "payment" && (
+                <PaymentPage
+                  next={() => setPage("confirmed")}
+                  back={() => setPage("info")}
+                  booking={booking}
+                />
+              )}
+              {page === "confirmed" && (
+                <BookingConfirmed next={() => setPage("ticket")} />
+              )}
+              {page === "ticket" && (
+                <FinalTicket back={() => setPage("home")} booking={booking} />
+              )}
+            </div>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────
+   CSS Custom Properties
+   Per-project accent is set inline on <body>
+   or on the project page wrapper via JS.
+───────────────────────────────────────────── */
+:root {
+  /* Global palette */
+  --color-ink: #050206;
+  --color-chalk: #fafafa;
+  --color-muted: #9d9d9d;
+  --color-border: #05020614;
+
+  --accent: #050206;
+  --accent-dim: #05020614;
+  --accent-text: #fafafa;
+
+  /* Project bg — overridden per-project */
+  --project-bg: #050206;
+}
+
+/* ─────────────────────────────────────────────
+   Per-project colour tokens
+   Apply class="theme-takeTask" on the project
+   page wrapper to activate the right palette.
+───────────────────────────────────────────── */
+.theme-takeTask {
+  --accent: #FFAE00;
+  --accent-dim: rgba(255, 174, 0, 0.12);
+  --accent-text: #0e0f1c;
+  --project-bg: #0e0f1c;
+  --project-mainbg: #161A31;
+}
+
+.theme-bookFlight {
+  --accent: #2563EB;
+  --accent-dim: rgba(37, 99, 235, 0.12);
+  --accent-text: #ffffff;
+  --project-bg: #0a0f1e;
+  --project-mainbg: #092460;
+}
+
+.theme-easyBank {
+  --accent: #16A34A;
+  --accent-dim: rgba(22, 163, 74, 0.12);
+  --accent-text: #ffffff;
+  --project-bg: #071410;
+}
+
+.theme-goTravel {
+  --accent: #EA580C;
+  --accent-dim: rgba(234, 88, 12, 0.12);
+  --accent-text: #ffffff;
+  --project-bg: #1a0d06;
+}
+
+.theme-publicTransp {
+  --accent: #7C3AED;
+  --accent-dim: rgba(124, 58, 237, 0.12);
+  --accent-text: #ffffff;
+  --project-bg: #0d0a1e;
+}
+
+/* ─────────────────────────────────────────────
+   Base reset & global styles
+───────────────────────────────────────────── */
+@layer base {
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0s !important;
+    }
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-chalk text-ink font-sans antialiased;
+    min-height: 100vh;
+  }
+
+  /* Typography scale */
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-sans font-medium leading-tight;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img,
+  video {
+    @apply max-w-full;
+  }
+
+  ul,
+  ol {
+    list-style: none;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   Utility classes (Tailwind @layer components)
+───────────────────────────────────────────── */
+@layer components {
+
+  /* Nav pill button */
+  .nav-pill {
+    @apply relative rounded-full px-4 py-2 text-sm border border-transparent text-chalk;
+  }
+
+  .nav-pill:hover,
+  .nav-pill.active {
+    @apply bg-chalk text-ink;
+  }
+
+  /* Accent-coloured pill — uses CSS var */
+  .accent-pill {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-3.5 py-1 text-xs tracking-widest uppercase;
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .accent-pill::before {
+    content: '';
+    @apply w-1.5 h-1.5 rounded-full;
+    background: var(--accent);
+  }
+
+  .key-title {
+    @apply text-xs uppercase text-muted mb-8;
+  }
+
+  /* CTA button — accent fill */
+  .btn-accent {
+    @apply inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium transition-transform duration-200;
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .btn-accent:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Project page section label */
+  /* .section-label {
+    @apply text-[0.65rem] tracking-[0.14em] uppercase text-muted mb-12;
+  } */
+
+  /* Scroll cue line */
+  .scroll-cue::before {
+    content: '';
+    @apply absolute top-0 w-px bg-muted animate-scroll-cue;
+    height: 28px;
+  }
+
+  /* Mix-blend nav (used on homepage dark slides) */
+  .nav-blend {
+    mix-blend-mode: difference;
+  }
+}
