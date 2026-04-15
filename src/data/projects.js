@@ -82,7 +82,7 @@ export const projects = [
     accent: "#2563EB",
     name: "Flight Booking",
     tagline: "Booking your flight, enjoy your life.",
-    tags: ["Vue.js", "Front-End Dev"],
+    tags: ["React", "Front-End Dev"],
     meta: { client: "Flight Company", role: "UX + Front-End", year: "2024" },
     desc: "Transforming a seemingly simple booking form into an intelligent interface — exploring Vue.js component architecture and reactive data flow.",
     demoUrl: "./public/projects/bookFlight/flight-booking-demo.html",
@@ -121,34 +121,44 @@ export const projects = [
   {
     id: "easyBank",
     theme: "theme-easyBank",
-    accent: "#16A34A",
+    accent: "#2563eb",
     name: "Easy Bank",
-    tagline: "Clean code, trusted brand.",
-    tags: ["HTML/CSS", "Brand Design"],
-    meta: { client: "Easy Bank", role: "Front-End Dev", year: "2023" },
-    desc: "Faithfully reproducing a modern fintech brand's identity through a static website — an exploration of how front-end code communicates brand trust.",
-    demoUrl: null,
+    tagline: "Precision code for a trustworthy banking experience.",
+    tags: ["React/CSS", "UI/UX Implementation", "Fintech Design"],
+    meta: {
+      client: "Personal Project",
+      role: "UI",
+      year: "2025",
+    },
+    desc: "A faithful reproduction of a modern digital banking identity. This project explores how front-end architecture—through meticulous typography, color systems, and micro-interactions—communicates 'Security' and 'Professionalism' to the end-user.",
+    demoUrl: "./public/projects/easyBank/easy_bank_app.html",
     overview: {
       problem:
-        "How to make code not only readable and maintainable but also a vehicle for brand identity and user trust.",
+        "In the digital finance sector, the challenge lies in presenting dense financial information clearly while maintaining a high-fidelity brand identity that fosters user trust.",
       solution:
-        "Careful colour selection, typographic hierarchy, and hover micro-interactions bring the Easybank brand — simple, easy, modern — to life in every detail.",
+        "Utilized a modular React component architecture and a strict CSS variable system to ensure design consistency. Enhanced user engagement through intuitive haptic-like feedback, a clear typographic hierarchy for financial data, and seamless navigation transitions.",
     },
     inspiration:
-      '"A good front-end developer must possess both technical skill and aesthetic sensibility."',
+      "“Exceptional front-end development is the intersection of technical precision and aesthetic sensibility.”",
     process: [
       {
         num: "01",
-        title: "Visualising Brand Identity",
-        desc: "Translated colour, type, and layout into code that communicates simplicity and trust.",
+        title: "Visualizing Brand Authority",
+        desc: "Translated a specific brand palette (e.g., #2563eb) and layout constraints into code that prioritizes readability for balances, exchange rates, and transaction history.",
       },
       {
         num: "02",
-        title: "Design-to-Code",
-        desc: "Converted spacing, typography, and layout from mockup into precise, clean CSS.",
+        title: "Design-to-Code Precision",
+        desc: "Implemented a mobile-first responsive layout featuring custom linear gradients, complex box-shadows, and functional components like currency exchange modules and secure transfer forms.",
       },
     ],
-    screens: ["Hero", "Features", "Articles", "Footer", "Mobile"],
+    screens: [
+      "Asset Overview",
+      "Quick Actions",
+      "Transaction History",
+      "Finance Hub",
+      "Mobile Optimization",
+    ],
   },
   {
     id: "goTravel",
@@ -197,7 +207,7 @@ export const projects = [
     accent: "#7C3AED",
     name: "Public Transportation",
     tagline: "Real-time data, zero stress.",
-    tags: ["Vue.js", "API Integration"],
+    tags: ["React", "API Integration"],
     meta: { client: "Public Transport", role: "UX + Front-End", year: "2024" },
     desc: "A real-time bus tracker that transforms a stream of live API data into a clear, intuitive query interface — because nobody should stress about missing their bus.",
     demoUrl: null,
@@ -238,42 +248,55 @@ export const projects = [
     theme: "theme-runApp",
     accent: "#05df72",
     name: "Running App",
-    tagline: "Real-time data, zero stress.",
-    tags: ["Vue.js", "API Integration"],
-    meta: { client: "Gym", role: "UI + Front-End", year: "2026" },
-    desc: "A real-time bus tracker that transforms a stream of live API data into a clear, intuitive query interface — because nobody should stress about missing their bus.",
+    tagline: "Track your run. Share your pace.",
+    tags: ["React", "API Integration"],
+    meta: { client: "Fitness", role: "UI + Front-End", year: "2026" },
+
+    desc: "More than a running tracker — this app turns every run into a shared experience. Capture your progress, express your moments, and connect with a community that runs alongside you.",
+
     demoUrl: null,
+
     overview: {
       problem:
-        "How to manage async operations, error states, and multi-component data coordination in Vue — while keeping the interface calm and informative.",
+        "Running apps often focus only on numbers. But motivation comes from emotion, connection, and shared experiences.",
+
       solution:
-        "Live filtering as you type, auto-refresh without manual page reload, full responsive design. Complex data made simple.",
+        "A hybrid platform that combines performance tracking with social storytelling. Allowing users to not only measure their runs, but also share them, react, and grow together.",
     },
+
     inspiration:
-      '"Why should a bus tracker update in real-time? Because a 2-minute-old arrival time is worse than no arrival time at all."',
+      '"Running is easier when you are not running alone, every step becomes more meaningful when it’s shared."',
+
     process: [
       {
         num: "01",
-        title: "Real-Time Data Integration",
-        desc: "Async JS requests to a live transit API, with automatic update intervals — no manual refresh needed.",
+        title: "Live Data Tracking",
+        desc: "Capture your distance, pace, and time — every run becomes part of your story.",
       },
       {
         num: "02",
-        title: "Fluid Interface Interaction",
-        desc: "Real-time keyword filtering — results update as you type, no page reload.",
+        title: "Social Feed Experience",
+        desc: "Share runs, post updates, and interact with others through likes, comments, and engagement.",
       },
       {
         num: "03",
-        title: "Responsive Design",
-        desc: "Automatically adapts to any screen size — phone or desktop.",
+        title: "Seamless Interaction",
+        desc: "Smooth transitions between tracking, posting, and browsing — no interruption to the user flow.",
       },
       {
         num: "04",
-        title: "User-Centric Thinking",
-        desc: "Every technical decision traced back to a real user need.",
+        title: "Responsive & Active Lifestyle Design",
+        desc: "Optimized for on-the-go use, adapting effortlessly across mobile and desktop devices.",
       },
     ],
-    screens: ["Search", "Route List", "Stop Detail", "Arrival Times", "Mobile"],
+
+    screens: [
+      "Run Tracking",
+      "Activity Feed",
+      "Post Detail",
+      "User Profile",
+      "Mobile",
+    ],
   },
 ];
 

@@ -32,7 +32,7 @@
 .theme-takeTask {
   --accent: #FFAE00;
   --accent-dim: rgba(255, 174, 0, 0.12);
-  --accent-text: #0e0f1c;
+  --accent-text: #fff;
   --project-bg: #0e0f1c;
   --project-mainbg: #161A31;
 }
@@ -46,10 +46,11 @@
 }
 
 .theme-easyBank {
-  --accent: #16A34A;
-  --accent-dim: rgba(22, 163, 74, 0.12);
-  --accent-text: #ffffff;
-  --project-bg: #071410;
+  --accent: #2563eb;
+  --accent-dim: red;
+  --accent-text: #0f172a;
+  --project-bg: linear-gradient(180deg, #ffffff 0%, #fff5e6 100%);
+  --project-mainbg: #092460;
 }
 
 .theme-goTravel {
@@ -57,6 +58,7 @@
   --accent-dim: rgba(234, 88, 12, 0.12);
   --accent-text: #ffffff;
   --project-bg: #1a0d06;
+  --project-mainbg: #092460;
 }
 
 .theme-publicTransp {
@@ -64,13 +66,17 @@
   --accent-dim: rgba(124, 58, 237, 0.12);
   --accent-text: #ffffff;
   --project-bg: #0d0a1e;
+  --project-mainbg: #092460;
+
 }
 
 .theme-runApp {
   --accent: #05df72;
   --accent-dim: rgb(5, 223, 114, 0.12);
   --accent-text: #ffffff;
-  --project-bg: #070707;
+  --project-bg: #0a1912;
+  --project-mainbg: #0a1912;
+
 }
 
 /* ─────────────────────────────────────────────

@@ -34,7 +34,7 @@ export default {
         project: {
           takeTask: "#FFAE00",
           bookFlight: "#2563EB",
-          easyBank: "#16A34A",
+          easyBank: "#2563eb",
           goTravel: "#EA580C",
           publicTransp: "#7C3AED",
           publicTransp: "#05df72",

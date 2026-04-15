@@ -1,0 +1,2992 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Easy Bank</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      :root {
+        --blue: #2563eb;
+        --blue-light: #eff6ff;
+        --blue-mid: #bfdbfe;
+        --dark: #0f172a;
+        --mid: #334155;
+        --muted: #94a3b8;
+        --bg: #f8fafc;
+        --white: #ffffff;
+        --green: #10b981;
+        --red: #ef4444;
+        --border: #e2e8f0;
+        --gradient: linear-gradient(135deg, #1d4ed8 0%, #11296d 100%);
+        --shadow:
+          0 1px 3px rgba(15, 23, 42, 0.08), 0 4px 16px rgba(37, 99, 235, 0.06);
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: #171a32;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .phone-frame {
+        width: 375px;
+        height: 812px;
+        background: linear-gradient(180deg, #ffffff 0%, #fff5e6 100%);
+        border-radius: 44px;
+        overflow: hidden;
+        position: relative;
+        border: 8px solid #2a2a3e;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+        display: flex;
+        flex-direction: column;
+      }
+      .topnav {
+        background: var(--white);
+        border-bottom: 1px solid var(--border);
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+      }
+      .logo {
+        font-family: "DM Sans", sans-serif;
+        font-size: 22px;
+        color: var(--blue);
+        font-weight: 800;
+      }
+      .logo span {
+        color: var(--dark);
+      }
+      .nav-container {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 560px;
+      }
+      .tab {
+        padding: 5px 10px;
+        font-size: 11px;
+        cursor: pointer;
+        font-weight: 400;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        transition: 0.2s;
+        font-family: "DM Sans", sans-serif;
+      }
+      .tab.active {
+        color: #fff;
+        background: var(--blue);
+        border-color: var(--blue);
+      }
+      .main-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 16px 16px 90px;
+        scrollbar-width: thin;
+        scrollbar-color: var(--blue-mid) transparent;
+      }
+      .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+      .section-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--dark);
+        letter-spacing: 0.04em;
+      }
+      .more-link {
+        font-size: 12px;
+        color: var(--blue);
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .update-badge {
+        font-size: 10px;
+        color: var(--muted);
+      }
+      .currency-header {
+        display: grid;
+        grid-template-columns: 1fr 70px 70px;
+        padding: 0 0 8px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 2px;
+      }
+      .currency-header span {
+        font-size: 11px;
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .currency-header span:last-child,
+      .currency-header span:nth-child(2) {
+        text-align: center;
+      }
+      .currency-row {
+        display: grid;
+        grid-template-columns: 1fr 70px 70px;
+        align-items: center;
+        padding: 9px 8px;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        border-radius: 8px;
+        margin: 0 -8px;
+        transition: background 0.15s;
+      }
+      .currency-row:last-child {
+        border-bottom: none;
+      }
+      .currency-row:hover {
+        background: var(--blue-light);
+      }
+      .currency-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .currency-flag {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+      }
+      .currency-name {
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .currency-rate {
+        font-size: 12px;
+        font-weight: 500;
+        text-align: center;
+        color: var(--mid);
+      }
+      .card {
+        background: var(--white);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        padding: 18px;
+        margin-bottom: 14px;
+      }
+      .card-blue {
+        position: relative;
+        background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 14px;
+        overflow: hidden;
+      }
+      .card-blue::before {
+        content: "";
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .card-blue::after {
+        content: "";
+        position: absolute;
+        bottom: -40px;
+        left: 20px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .sm-arrow {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .balance-label {
+        font-size: 10px;
+        opacity: 0.8;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      .balance-amount {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+      }
+      .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .action-btn {
+        background: none;
+        border: none;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        transition: transform 0.15s;
+      }
+      .action-btn:hover {
+        transform: translateY(-2px);
+      }
+      .action-icon {
+        width: 46px;
+        height: 46px;
+        background: var(--blue-light);
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+        color: var(--blue);
+        transition: background 0.2s;
+      }
+      .action-btn:hover .action-icon {
+        background: var(--blue-mid);
+      }
+      .action-label {
+        font-size: 10px;
+        color: var(--mid);
+        text-align: center;
+        line-height: 1.3;
+      }
+      .form-group {
+        margin-bottom: 14px;
+      }
+      .form-label {
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
+        color: var(--mid);
+      }
+      .form-input {
+        width: 100%;
+        padding: 11px 12px;
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        outline: none;
+        font-size: 14px;
+        font-family: "DM Sans", sans-serif;
+        color: var(--dark);
+        background: white;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .form-input:focus {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      }
+      .form-input::placeholder {
+        color: var(--muted);
+      }
+      .btn-primary {
+        width: 100%;
+        padding: 13px;
+        background: var(--blue);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 8px;
+        font-size: 14px;
+        font-family: "DM Sans", sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition:
+          background 0.2s,
+          transform 0.1s;
+      }
+      .btn-primary:hover {
+        background: #1d4ed8;
+      }
+      .btn-primary:active {
+        transform: scale(0.99);
+      }
+      .btn-outline {
+        flex: 1;
+        padding: 11px;
+        border: 1.5px solid rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: "DM Sans", sans-serif;
+        transition: background 0.2s;
+      }
+      .btn-outline:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+      .bottom-nav {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-top: 1px solid var(--border);
+        display: flex;
+        padding: 8px 0 20px;
+      }
+      .nav-item {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        cursor: pointer;
+        border: none;
+        background: none;
+        color: var(--muted);
+        padding: 4px 0;
+        font-family: "DM Sans", sans-serif;
+        transition: color 0.2s;
+      }
+      .nav-item.active {
+        color: var(--blue);
+      }
+      .animate-fade {
+        animation: fadeIn 0.3s ease;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ===== TX LIST ===== */
+      .tx-group {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin: 14px 0 6px;
+      }
+      .tx-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 8px;
+        border-bottom: 1px solid var(--border);
+        border-radius: 10px;
+        margin: 0 -8px;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .tx-row:last-child {
+        border-bottom: none;
+      }
+      .tx-row:hover {
+        background: var(--blue-light);
+      }
+      .tx-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .tx-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: var(--blue-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+      }
+      .tx-name {
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .tx-date {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 1px;
+      }
+      .tx-amount {
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .debit {
+        color: var(--red);
+      }
+      .credit {
+        color: var(--green);
+      }
+
+      /* ===== DEPOSIT TABS ===== */
+      .deposit-tabs {
+        display: flex;
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1.5px solid var(--blue);
+        margin-bottom: 18px;
+      }
+      .deposit-tab {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        background: transparent;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--blue);
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: "DM Sans", sans-serif;
+      }
+      .deposit-tab.active {
+        background: var(--blue);
+        color: white;
+      }
+
+      /* ===== TRANSFER TABS ===== */
+      .transfer-tabs {
+        display: flex;
+        background: var(--blue-light);
+        border-radius: 10px;
+        padding: 3px;
+        margin-bottom: 18px;
+        gap: 2px;
+      }
+      .transfer-tab {
+        flex: 1;
+        padding: 8px 4px;
+        border: none;
+        background: transparent;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--muted);
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.2s;
+        font-family: "DM Sans", sans-serif;
+      }
+      .transfer-tab.active {
+        background: var(--blue);
+        color: white;
+      }
+
+      /* ===== ACCOUNT CARD ===== */
+      .account-card {
+        border: 1.5px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .account-card:hover {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+      }
+      .account-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 6px;
+      }
+      .account-number {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--mid);
+      }
+      .account-balance {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--dark);
+      }
+      .account-type {
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      /* ===== CREDIT CARD VISUAL ===== */
+      .cc-visual {
+        background: linear-gradient(
+          135deg,
+          #0f172a 0%,
+          #1e3a5f 50%,
+          #1d4ed8 100%
+        );
+        border-radius: 18px;
+        padding: 22px;
+        margin-bottom: 18px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+      .cc-visual::before {
+        content: "";
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .cc-visual::after {
+        content: "";
+        position: absolute;
+        bottom: -35px;
+        left: 10px;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.04);
+      }
+      .cc-pending {
+        font-size: 10px;
+        opacity: 0.6;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 4px;
+      }
+      .cc-amount {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        position: relative;
+        z-index: 1;
+      }
+      .cc-number {
+        font-size: 12px;
+        opacity: 0.65;
+        margin-top: 14px;
+        letter-spacing: 0.12em;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* ===== BILL CARD ===== */
+      .bill-hero {
+        background: var(--gradient);
+        border-radius: 20px;
+        padding: 26px 18px;
+        text-align: center;
+        color: white;
+        margin-bottom: 16px;
+      }
+      .bill-amount {
+        font-size: 38px;
+        font-weight: 800;
+        letter-spacing: -2px;
+        margin: 6px 0 4px;
+      }
+      .bill-unbilled {
+        font-size: 12px;
+        opacity: 0.65;
+      }
+
+      /* ===== FILTER CHIPS ===== */
+      .filter-bar {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 14px;
+        overflow-x: auto;
+        padding-bottom: 2px;
+        scrollbar-width: none;
+      }
+      .filter-bar::-webkit-scrollbar {
+        display: none;
+      }
+      .filter-chip {
+        padding: 5px 12px;
+        border-radius: 20px;
+        border: 1.5px solid var(--border);
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--muted);
+        background: white;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.2s;
+        font-family: "DM Sans", sans-serif;
+      }
+      .filter-chip.active {
+        background: var(--blue);
+        border-color: var(--blue);
+        color: white;
+      }
+
+      /* ===== QR ===== */
+      .qr-box {
+        width: 180px;
+        height: 180px;
+        background: var(--dark);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 90px;
+        margin: 0 auto 16px;
+      }
+
+      /* ===== REGISTER ===== */
+      .register-banner {
+        background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+        border-radius: 20px;
+        padding: 26px 20px;
+        color: white;
+        margin-bottom: 16px;
+        position: relative;
+        overflow: hidden;
+      }
+      .register-banner::before {
+        content: "";
+        position: absolute;
+        top: -40px;
+        right: -40px;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+      }
+      .register-banner h2 {
+        font-size: 19px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      .register-banner p {
+        font-size: 12px;
+        opacity: 0.8;
+        line-height: 1.5;
+      }
+      .register-cta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 14px;
+        position: relative;
+        z-index: 1;
+      }
+      .register-cta span {
+        font-size: 13px;
+        opacity: 0.9;
+        font-weight: 500;
+      }
+      .circle-arrow {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+      }
+      .unlock-banner {
+        background: var(--blue-light);
+        border: 1.5px solid var(--blue-mid);
+        border-radius: 14px;
+        padding: 18px;
+        margin-bottom: 14px;
+      }
+      .unlock-banner h3 {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--blue);
+        margin-bottom: 4px;
+      }
+      .unlock-banner p {
+        font-size: 12px;
+        color: var(--mid);
+        line-height: 1.5;
+      }
+
+      /* ===== TOGGLE ===== */
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 0;
+      }
+      .toggle {
+        width: 38px;
+        height: 21px;
+        background: var(--border);
+        border-radius: 11px;
+        position: relative;
+        cursor: pointer;
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+      .toggle::after {
+        content: "";
+        position: absolute;
+        top: 2.5px;
+        left: 2.5px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: white;
+        transition: transform 0.2s;
+      }
+      .toggle.on {
+        background: var(--blue);
+      }
+      .toggle.on::after {
+        transform: translateX(17px);
+      }
+
+      /* ===== NOTIFY ===== */
+      .notify-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .notify-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--blue);
+        margin-top: 5px;
+        flex-shrink: 0;
+      }
+      .notify-dot.read {
+        background: var(--border);
+      }
+      .notify-title {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 2px;
+      }
+      .notify-body {
+        font-size: 12px;
+        color: var(--mid);
+        line-height: 1.4;
+      }
+      .notify-time {
+        font-size: 10px;
+        color: var(--muted);
+        margin-top: 3px;
+      }
+
+      /* ===== SETTING ===== */
+      .setting-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px 0;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+      }
+      .setting-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .setting-icon {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        background: var(--blue-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--blue);
+      }
+      .setting-label {
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .chevron {
+        color: var(--muted);
+        font-size: 16px;
+      }
+
+      /* ===== EXCHANGE RATE ===== */
+      .rate-input-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+      .rate-badge {
+        font-size: 11px;
+        background: var(--blue-light);
+        color: var(--blue);
+        padding: 3px 8px;
+        border-radius: 6px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      /* ===== INPUT HINT ===== */
+      .input-hint {
+        font-size: 10px;
+        color: var(--muted);
+        text-align: right;
+        margin-top: 3px;
+      }
+
+      /* ===== SUCCESS STATE ===== */
+      .success-ring {
+        width: 72px;
+        height: 72px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #10b981, #059669);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        font-size: 32px;
+        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState } = React;
+
+      /* ========== SVG ICONS ========== */
+      const EyeIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      );
+      const HouseIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+          <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+        </svg>
+      );
+      const LandmarkIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M10 18v-7" />
+          <path d="M11.12 2.198a2 2 0 0 1 1.76.006l7.866 3.847c.476.233.31.949-.22.949H3.474c-.53 0-.695-.716-.22-.949z" />
+          <path d="M14 18v-7" />
+          <path d="M18 18v-7" />
+          <path d="M3 22h18" />
+          <path d="M6 18v-7" />
+        </svg>
+      );
+      const SettingsIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />
+          <circle cx="12" cy="12" r="3" />
+        </svg>
+      );
+      const ScanIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M17 12v4a1 1 0 0 1-1 1h-4" />
+          <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+          <path d="M17 8V7" />
+          <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+          <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+          <path d="M7 17h.01" />
+          <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+          <rect x="7" y="7" width="5" height="5" rx="1" />
+        </svg>
+      );
+      const BellIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+          <path d="M11.68 2.009A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673c-.824-.85-1.678-1.731-2.21-3.348" />
+          <circle cx="18" cy="5" r="3" fill="#ef4444" stroke="none" />
+        </svg>
+      );
+      const TransferIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M12 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5" />
+          <path d="M18 12h.01" />
+          <path d="M19 22v-6" />
+          <path d="m22 19-3-3-3 3" />
+          <path d="M6 12h.01" />
+          <circle cx="12" cy="12" r="2" />
+        </svg>
+      );
+      const ExchangeIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M8 3 4 7l4 4" />
+          <path d="M4 7h16" />
+          <path d="m16 21 4-4-4-4" />
+          <path d="M20 17H4" />
+        </svg>
+      );
+      const ReceiptIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" />
+          <path d="M14 8H8" />
+          <path d="M16 12H8" />
+          <path d="M13 16H8" />
+        </svg>
+      );
+      const CardIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect width="20" height="14" x="2" y="5" rx="2" />
+          <line x1="2" x2="22" y1="10" y2="10" />
+        </svg>
+      );
+      const FaceIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="46"
+          height="46"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+          <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+          <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+          <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+          <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+          <path d="M9 9h.01" />
+          <path d="M15 9h.01" />
+        </svg>
+      );
+      const DepositIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-piggy-bank-icon lucide-piggy-bank"
+        >
+          <path d="M11 17h3v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a3.16 3.16 0 0 0 2-2h1a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-1a5 5 0 0 0-2-4V3a4 4 0 0 0-3.2 1.6l-.3.4H11a6 6 0 0 0-6 6v1a5 5 0 0 0 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1z" />
+          <path d="M16 10h.01" />
+          <path d="M2 8v1a2 2 0 0 0 2 2h1" />
+        </svg>
+      );
+      const CheckIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M20 6 9 17l-5-5" />
+        </svg>
+      );
+
+      const icons = {
+        personal: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        ),
+        // 修正了拼字 scurity -> security
+        security: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M11 22c-3.806-1.45-7-3.966-7-9V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1v4" />
+            <circle cx="17.695" cy="17.695" r="3" />
+          </svg>
+        ),
+        notification: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+            <path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326" />
+          </svg>
+        ),
+        currency: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect width="20" height="12" x="2" y="6" rx="2" />
+            <circle cx="12" cy="12" r="2" />
+            <path d="M6 12h.01M18 12h.01" />
+          </svg>
+        ),
+        statement: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />
+            <path d="M14 2v5a1 1 0 0 0 1 1h5" />
+            <path d="M10 9H8" />
+            <path d="M16 13H8" />
+            <path d="M16 17H8" />
+          </svg>
+        ),
+        language: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M2 12h20" />
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+          </svg>
+        ),
+        appearance: (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M12 2v2" />
+            <path d="M14.837 16.385a6 6 0 1 1-7.223-7.222c.624-.147.97.66.715 1.248a4 4 0 0 0 5.26 5.259c.589-.255 1.396.09 1.248.715" />
+            <path d="M16 12a4 4 0 0 0-4-4" />
+          </svg>
+        ),
+      };
+
+      // 2. 渲染部分
+      const settingsItems = [
+        { icon: icons.personal, label: "Personal Information" },
+        { icon: icons.security, label: "Security Settings" },
+        { icon: icons.notification, label: "Notification Preferences" },
+        { icon: icons.currency, label: "Currency Preferences" },
+        { icon: icons.statement, label: "Statements & Documents" },
+        { icon: icons.language, label: "Language" },
+        { icon: icons.appearance, label: "Appearance" },
+      ];
+
+      /* ========== STATUS BAR ========== */
+      const StatusBar = () => (
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "16px 22px 8px",
+            fontSize: 12,
+            color: "var(--dark)",
+            fontWeight: 600,
+            background: "var(--bg)",
+            flexShrink: 0,
+          }}
+        >
+          <span>9:41</span>
+          <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
+              <rect x="0" y="4" width="3" height="8" rx="1" />
+              <rect x="4.5" y="2.5" width="3" height="9.5" rx="1" />
+              <rect x="9" y="1" width="3" height="11" rx="1" />
+              <rect
+                x="13.5"
+                y="0"
+                width="2.5"
+                height="12"
+                rx="1"
+                opacity="0.35"
+              />
+            </svg>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
+              <path d="M8 2C5 2 2.5 3.5 1 5.7L2.5 7.2C3.7 5.4 5.7 4.2 8 4.2C10.3 4.2 12.3 5.4 13.5 7.2L15 5.7C13.5 3.5 11 2 8 2Z" />
+              <path d="M8 6C6.3 6 4.8 6.8 3.8 8.1L5.3 9.5C6 8.6 6.9 8 8 8C9.1 8 10 8.6 10.7 9.5L12.2 8.1C11.2 6.8 9.7 6 8 6Z" />
+              <circle cx="8" cy="11" r="1.5" />
+            </svg>
+            <svg width="25" height="12" viewBox="0 0 25 12" fill="currentColor">
+              <rect
+                x="0.5"
+                y="0.5"
+                width="21"
+                height="11"
+                rx="3.5"
+                stroke="currentColor"
+                strokeOpacity="0.35"
+                fill="none"
+              />
+              <rect x="2" y="2" width="17" height="8" rx="2" />
+              <path
+                d="M23 4.5V7.5C23.8 7.2 24.5 6.5 24.5 6C24.5 5.5 23.8 4.8 23 4.5Z"
+                opacity="0.4"
+              />
+            </svg>
+          </div>
+        </div>
+      );
+
+      /* ========== NAV TAB BAR (outside phone) ========== */
+      const NavTabBar = ({ currentScreen, setCurrentScreen }) => {
+        const tabs = [
+          { id: "loginPage", label: "Login" },
+          { id: "registerPage", label: "Register" },
+          { id: "homePage", label: "Home" },
+          { id: "depositPage", label: "Deposit" },
+          { id: "foreignPage", label: "Foreign" },
+          { id: "transferPage", label: "Transfer" },
+          { id: "billPage", label: "Bill" },
+          { id: "creditPage", label: "Credit Card" },
+          { id: "exchangePage", label: "Exchange" },
+          { id: "notifyPage", label: "Notify" },
+          { id: "scanPage", label: "Scan" },
+          { id: "settingPage", label: "Setting" },
+        ];
+        return (
+          <div className="nav-container">
+            {tabs.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setCurrentScreen(t.id)}
+                className={`tab ${currentScreen === t.id ? "active" : ""}`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+        );
+      };
+
+      /* ========== TOGGLE COMPONENT ========== */
+      const Toggle = () => {
+        const [on, setOn] = useState(false);
+        return (
+          <div
+            className={`toggle ${on ? "on" : ""}`}
+            onClick={() => setOn(!on)}
+          />
+        );
+      };
+
+      /* ========== APP ========== */
+      function App() {
+        const [screen, setScreen] = useState("loginPage");
+        const [transferTab, setTransferTab] = useState(0);
+        const [depositCurrency, setDepositCurrency] = useState("tw");
+        const [filterChip, setFilterChip] = useState("7d");
+        const [showSuccess, setShowSuccess] = useState(false);
+        const [billPaid, setBillPaid] = useState(false);
+
+        const go = (s) => {
+          setScreen(s);
+          setShowSuccess(false);
+        };
+
+        const handleConfirm = (target) => {
+          setShowSuccess(true);
+          setTimeout(() => {
+            go(target);
+          }, 1800);
+        };
+
+        const showTopNav = ![
+          "loginPage",
+          "registerPage",
+          "notifyPage",
+          "scanPage",
+          "settingPage",
+        ].includes(screen);
+
+        /* ------ SUCCESS OVERLAY ------ */
+        const SuccessView = ({ label, target }) => (
+          <div
+            className="animate-fade"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "60px 20px",
+              textAlign: "center",
+            }}
+          >
+            <div className="success-ring">
+              <CheckIcon />
+            </div>
+            <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
+              {label}
+            </div>
+          </div>
+        );
+
+        /* ------ SCREENS ------ */
+        const screens = {
+          /* ===== LOGIN ===== */
+          loginPage: (
+            <div className="animate-fade">
+              <h3
+                className="logo"
+                style={{ textAlign: "center", marginBottom: 24 }}
+              >
+                Easy<span>Bank</span>
+              </h3>
+              <div className="form-group">
+                <label className="form-label">ID Number</label>
+                <div style={{ position: "relative" }}>
+                  <input
+                    className="form-input"
+                    defaultValue=""
+                    placeholder="A123456789"
+                  />
+                  <span
+                    style={{
+                      position: "absolute",
+                      right: 12,
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      fontSize: 11,
+                      color: "var(--muted)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4,
+                    }}
+                  >
+                    <span
+                      style={{
+                        width: 14,
+                        height: 14,
+                        border: "1.5px solid var(--muted)",
+                        borderRadius: 3,
+                        display: "inline-block",
+                      }}
+                    />{" "}
+                    Remember
+                  </span>
+                </div>
+              </div>
+              <div className="form-group">
+                <label className="form-label">
+                  User Name{" "}
+                  <span
+                    style={{
+                      fontSize: 11,
+                      color: "var(--blue)",
+                      fontWeight: 400,
+                    }}
+                  >
+                    Forgot user name
+                  </span>
+                </label>
+                <input className="form-input" placeholder="Enter user name" />
+              </div>
+              <div className="form-group">
+                <label className="form-label">
+                  Password{" "}
+                  <span
+                    style={{
+                      fontSize: 11,
+                      color: "var(--blue)",
+                      fontWeight: 400,
+                    }}
+                  >
+                    Forgot password
+                  </span>
+                </label>
+                <input
+                  className="form-input"
+                  type="password"
+                  placeholder="••••••••"
+                />
+              </div>
+              <button className="btn-primary" onClick={() => go("homePage")}>
+                Log In
+              </button>
+              <div
+                style={{
+                  textAlign: "center",
+                  marginTop: 16,
+                  fontSize: 12,
+                  color: "var(--muted)",
+                }}
+              >
+                Not yet a member? &nbsp;
+                <span
+                  style={{ color: "var(--blue)", cursor: "pointer" }}
+                  onClick={() => go("registerPage")}
+                >
+                  Create new account
+                </span>
+              </div>
+              <div
+                style={{
+                  textAlign: "center",
+                  margin: "20px 0 6px",
+                  fontSize: 12,
+                  color: "var(--muted)",
+                }}
+              >
+                — or —
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 6,
+                  cursor: "pointer",
+                }}
+              >
+                <FaceIcon />
+                <span style={{ fontSize: 12, color: "var(--muted)" }}>
+                  Face ID
+                </span>
+              </div>
+            </div>
+          ),
+
+          /* ===== REGISTER ===== */
+          registerPage: (
+            <div className="animate-fade">
+              <div className="register-banner">
+                <h2>Create a new account</h2>
+                <p>you can choose create on line on bank</p>
+                <div className="register-cta">
+                  <span>Get Started</span>
+                  <div className="circle-arrow">→</div>
+                </div>
+              </div>
+              <div className="unlock-banner">
+                <h3>Unlock online bank</h3>
+                <p>Reset user name and user password</p>
+                <div style={{ textAlign: "right", marginTop: 10 }}>
+                  <button
+                    className="btn-primary"
+                    style={{ width: "auto", padding: "8px 16px", fontSize: 12 }}
+                  >
+                    →
+                  </button>
+                </div>
+              </div>
+              <div className="card">
+                <div className="section-title" style={{ marginBottom: 12 }}>
+                  Online Account Opening
+                </div>
+                <p
+                  style={{ fontSize: 13, color: "var(--mid)", lineHeight: 1.6 }}
+                >
+                  To apply for online banking services, please prepare a valid
+                  ID and a mobile phone number. After verification you'll enjoy
+                  full digital banking.
+                </p>
+                <button className="btn-primary" onClick={() => go("loginPage")}>
+                  Apply Now
+                </button>
+              </div>
+            </div>
+          ),
+
+          /* ===== HOME ===== */
+          homePage: (
+            <div className="animate-fade" style={{ position: "relative" }}>
+              {/* Credit card layer */}
+              <div
+                className="card-blue"
+                style={{ background: "var(--gradient)", cursor: "pointer" }}
+                onClick={() => go("creditPage")}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <div className="balance-label">CREDIT CARD</div>
+                  <div className="sm-arrow">→</div>
+                </div>
+                <div className="balance-amount">$6,450</div>
+              </div>
+              {/* Balance layer (overlaps) */}
+              <div
+                className="card-blue"
+                style={{
+                  marginTop: -60,
+                  boxShadow: "0 -4px 20px rgba(15,23,42,0.25)",
+                  cursor: "pointer",
+                }}
+                onClick={() => go("depositPage")}
+              >
+                <div className="balance-label">
+                  YOUR BALANCE <EyeIcon />
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div className="balance-amount">$32,238</div>
+                  <div className="sm-arrow">→</div>
+                </div>
+              </div>
+              {/* Quick actions */}
+              <div className="quick-actions">
+                <button
+                  className="action-btn"
+                  onClick={() => go("transferPage")}
+                >
+                  <div className="action-icon">
+                    <TransferIcon />
+                  </div>
+                  <span className="action-label">Transfer Funds</span>
+                </button>
+                <button
+                  className="action-btn"
+                  onClick={() => go("exchangePage")}
+                >
+                  <div className="action-icon">
+                    <ExchangeIcon />
+                  </div>
+                  <span className="action-label">Currency Exchange</span>
+                </button>
+                <button className="action-btn" onClick={() => go("billPage")}>
+                  <div className="action-icon">
+                    <ReceiptIcon />
+                  </div>
+                  <span className="action-label">Pay Bills</span>
+                </button>
+                <button
+                  className="action-btn"
+                  onClick={() => go("transferPage")}
+                >
+                  <div className="action-icon">
+                    <CardIcon />
+                  </div>
+                  <span className="action-label">Cardless Withdrawal</span>
+                </button>
+              </div>
+              {/* Currency table */}
+              <div className="card">
+                <div className="section-header">
+                  <span className="section-title">CURRENCIES</span>
+                  <span className="update-badge">Update 2025/04/11</span>
+                </div>
+                <div className="currency-header">
+                  <span>Currency</span>
+                  <span>Buy</span>
+                  <span>Sell</span>
+                </div>
+                {[
+                  { flag: "🇺🇸", name: "USD", buy: "32.04", sell: "32.10" },
+                  { flag: "🇯🇵", name: "JPY", buy: "0.2099", sell: "0.2129" },
+                  { flag: "🇪🇺", name: "EUR", buy: "34.55", sell: "34.93" },
+                  { flag: "🇨🇳", name: "CNY", buy: "4.392", sell: "4.773" },
+                ].map((r) => (
+                  <div key={r.name} className="currency-row">
+                    <div className="currency-info">
+                      <div className="currency-flag">{r.flag}</div>
+                      <div className="currency-name">{r.name}</div>
+                    </div>
+                    <div className="currency-rate">{r.buy}</div>
+                    <div className="currency-rate">{r.sell}</div>
+                  </div>
+                ))}
+                <div style={{ textAlign: "right", marginTop: 10 }}>
+                  <span
+                    className="more-link"
+                    onClick={() => go("exchangePage")}
+                  >
+                    More
+                  </span>
+                </div>
+              </div>
+            </div>
+          ),
+
+          /* ===== DEPOSIT (台幣 / 外幣 tabs) ===== */
+          depositPage: (
+            <div className="animate-fade">
+              <div className="deposit-tabs">
+                <button
+                  className={`deposit-tab ${depositCurrency === "tw" ? "active" : ""}`}
+                  onClick={() => setDepositCurrency("tw")}
+                >
+                  Taiwanese
+                </button>
+                <button
+                  className={`deposit-tab ${depositCurrency === "fx" ? "active" : ""}`}
+                  onClick={() => setDepositCurrency("fx")}
+                >
+                  Foreign Currency
+                </button>
+              </div>
+              {depositCurrency === "tw" ? (
+                <>
+                  <div
+                    className="card-blue"
+                    style={{ background: "var(--gradient)" }}
+                  >
+                    <div className="balance-label">
+                      YOUR BALANCE <EyeIcon />
+                    </div>
+                    <div className="balance-amount">$12,200</div>
+                  </div>
+                  <div className="quick-actions" style={{ marginTop: 0 }}>
+                    <button
+                      className="action-btn"
+                      onClick={() => go("transferPage")}
+                    >
+                      <div className="action-icon">
+                        <TransferIcon />
+                      </div>
+                      <span className="action-label">Transfer</span>
+                    </button>
+                    <button className="action-btn">
+                      <div className="action-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-activity-icon lucide-activity"
+                        >
+                          <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
+                        </svg>
+                      </div>
+                      <span className="action-label">Open Fixed</span>
+                    </button>
+                    <button
+                      className="action-btn"
+                      onClick={() => go("transferPage")}
+                    >
+                      <div className="action-icon">
+                        <CardIcon />
+                      </div>
+                      <span className="action-label">Cardless Cash</span>
+                    </button>
+                    <button className="action-btn">
+                      <div className="action-icon">
+                        <DepositIcon />
+                      </div>
+                      <span className="action-label">Exchange Saving</span>
+                    </button>
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 600,
+                      color: "var(--muted)",
+                      letterSpacing: "0.06em",
+                      marginBottom: 8,
+                    }}
+                  >
+                    CURRENT ACCOUNT
+                  </div>
+                  <div className="account-card">
+                    <div className="account-card-header">
+                      <span className="account-number">123-456-789</span>
+                      <span
+                        style={{
+                          fontSize: 16,
+                          color: "var(--muted)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        ⋯
+                      </span>
+                    </div>
+                    <div className="account-balance">$12,000</div>
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 600,
+                      color: "var(--muted)",
+                      letterSpacing: "0.06em",
+                      margin: "14px 0 8px",
+                    }}
+                  >
+                    FIXED DEPOSIT
+                  </div>
+                  {[
+                    {
+                      acc: "123-456-789",
+                      period: "2025/01/01 – 2030/12/31",
+                      amt: "$200",
+                    },
+                    {
+                      acc: "123-456-789",
+                      period: "2020/12/01 – 2025/12/31",
+                      amt: "$200",
+                    },
+                  ].map((d, i) => (
+                    <div key={i} className="account-card">
+                      <div className="account-card-header">
+                        <span className="account-number">{d.acc}</span>
+                        <span
+                          style={{
+                            fontSize: 16,
+                            color: "var(--muted)",
+                            cursor: "pointer",
+                          }}
+                        >
+                          ⋯
+                        </span>
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 11,
+                          color: "var(--muted)",
+                          marginBottom: 6,
+                        }}
+                      >
+                        {d.period}
+                      </div>
+                      <div className="account-balance">{d.amt}</div>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <>
+                  <div
+                    className="card-blue"
+                    style={{ background: "var(--gradient)" }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 8,
+                        marginBottom: 6,
+                      }}
+                    >
+                      <span style={{ fontSize: 13, fontWeight: 600 }}>USD</span>
+                      <span style={{ fontSize: 12, opacity: 0.7 }}>–</span>
+                      <EyeIcon />
+                    </div>
+                    <div className="balance-amount">$120</div>
+                  </div>
+                  <div
+                    className="quick-actions"
+                    style={{
+                      marginTop: 0,
+                      gridTemplateColumns: "repeat(3, 31%)",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <button
+                      className="action-btn"
+                      onClick={() => go("exchangePage")}
+                    >
+                      <div className="action-icon">
+                        <ExchangeIcon />
+                      </div>
+                      <span className="action-label">Exchange Rate</span>
+                    </button>
+                    <button
+                      className="action-btn"
+                      onClick={() => go("foreignPage")}
+                    >
+                      <div className="action-icon">
+                        <DepositIcon />
+                      </div>
+                      <span className="action-label">Exchange Saving</span>
+                    </button>
+                    <button className="action-btn">
+                      <div className="action-icon">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-activity-icon lucide-activity"
+                        >
+                          <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
+                        </svg>
+                      </div>
+                      <span className="action-label">Open Fixed Deposit</span>
+                    </button>
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 600,
+                      color: "var(--muted)",
+                      letterSpacing: "0.06em",
+                      marginBottom: 8,
+                    }}
+                  >
+                    CURRENT ACCOUNT
+                  </div>
+                  <div className="account-card">
+                    <div className="account-card-header">
+                      <span className="account-number">123-456-789</span>
+                      <span
+                        style={{
+                          fontSize: 16,
+                          color: "var(--muted)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        ⋯
+                      </span>
+                    </div>
+                    <div className="account-balance">$120</div>
+                  </div>
+                </>
+              )}
+            </div>
+          ),
+
+          /* ===== FOREIGN CURRENCY DEPOSIT ===== */
+          foreignPage: (
+            <div className="animate-fade">
+              <div className="deposit-tabs">
+                <button className="deposit-tab">Taiwanese</button>
+                <button className="deposit-tab active">Foreign Currency</button>
+              </div>
+              <div
+                className="card-blue"
+                style={{ background: "var(--gradient)" }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    marginBottom: 6,
+                  }}
+                >
+                  <span style={{ fontSize: 13, fontWeight: 600 }}>USD</span>
+                  <span style={{ fontSize: 12, opacity: 0.7 }}>–</span>
+                  <EyeIcon />
+                </div>
+                <div className="balance-amount">$120</div>
+              </div>
+              <div className="card">
+                <div className="section-title" style={{ marginBottom: 14 }}>
+                  Foreign Currency Deposit
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Currency</label>
+                  <select className="form-input">
+                    <option>USD — US Dollar</option>
+                    <option>JPY — Japanese Yen</option>
+                    <option>EUR — Euro</option>
+                    <option>CNY — Chinese Yuan</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Amount (TWD)</label>
+                  <input className="form-input" type="number" placeholder="0" />
+                  <div className="input-hint">Reference rate: 32.04</div>
+                </div>
+                <button
+                  className="btn-primary"
+                  onClick={() => handleConfirm("depositPage")}
+                >
+                  {showSuccess ? (
+                    <>
+                      <CheckIcon /> Success
+                    </>
+                  ) : (
+                    "Confirm Deposit"
+                  )}
+                </button>
+              </div>
+            </div>
+          ),
+
+          /* ===== TRANSFER ===== */
+          transferPage: (() => {
+            if (showSuccess)
+              return (
+                <SuccessView label="Transfer Success！" target="homePage" />
+              );
+            return (
+              <div className="animate-fade">
+                <div className="transfer-tabs">
+                  {["Transfer", "Cardless Transfer", "Scan QR Code"].map(
+                    (l, i) => (
+                      <button
+                        key={i}
+                        className={`transfer-tab ${transferTab === i ? "active" : ""}`}
+                        onClick={() => setTransferTab(i)}
+                      >
+                        {l}
+                      </button>
+                    ),
+                  )}
+                </div>
+
+                {/* From account */}
+                <div
+                  className="card-blue"
+                  style={{
+                    background: "var(--gradient)",
+                    padding: "14px 18px",
+                    marginBottom: 14,
+                  }}
+                >
+                  <div style={{ fontSize: 11, opacity: 0.75, marginBottom: 4 }}>
+                    Transfer From Account
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 600 }}>
+                    (123)123-456-789
+                  </div>
+                </div>
+
+                {transferTab === 0 && (
+                  <>
+                    <div className="form-group">
+                      <label className="form-label">
+                        Amount Transferred{" "}
+                        <span style={{ fontWeight: 400 }}>Balance 32,238</span>
+                      </label>
+                      <input
+                        className="form-input"
+                        type="number"
+                        placeholder="0"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Transfer Recipient</label>
+                      <input className="form-input" placeholder="Bank Code" />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        className="form-input"
+                        placeholder="Bank Account"
+                        style={{ marginTop: 6 }}
+                      />
+                    </div>
+                    <div className="toggle-row">
+                      <span
+                        style={{
+                          fontSize: 13,
+                          color: "var(--mid)",
+                          fontWeight: 500,
+                        }}
+                      >
+                        Transfer Reservation
+                      </span>
+                      <Toggle />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Transfer Note</label>
+                      <input
+                        className="form-input"
+                        placeholder="For Yourself"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        className="form-input"
+                        placeholder="For The Recipient"
+                        style={{ marginTop: 6 }}
+                      />
+                      <div className="input-hint">Same</div>
+                    </div>
+                    <button
+                      className="btn-primary"
+                      onClick={() => handleConfirm("homePage")}
+                    >
+                      Confirm Transfer
+                    </button>
+                  </>
+                )}
+
+                {transferTab === 1 && (
+                  <>
+                    <div className="form-group">
+                      <label className="form-label">
+                        Amount Transferred{" "}
+                        <span style={{ fontWeight: 400 }}>Balance 32,238</span>
+                      </label>
+                      <input
+                        className="form-input"
+                        type="number"
+                        placeholder="0"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">
+                        Setting Withdraw Password
+                      </label>
+                      <input
+                        className="form-input"
+                        type="password"
+                        placeholder="Withdraw Password To Recipient"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        className="form-input"
+                        type="password"
+                        placeholder="Enter Again: Withdraw Password"
+                        style={{ marginTop: 6 }}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Transfer Note</label>
+                      <input
+                        className="form-input"
+                        placeholder="For Yourself"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        className="form-input"
+                        placeholder="For The Recipient"
+                        style={{ marginTop: 6 }}
+                      />
+                      <div className="input-hint">Same</div>
+                    </div>
+                    <button
+                      className="btn-primary"
+                      onClick={() => handleConfirm("homePage")}
+                    >
+                      Confirm Transfer
+                    </button>
+                  </>
+                )}
+
+                {transferTab === 2 && (
+                  <>
+                    <div style={{ textAlign: "center", margin: "10px 0 20px" }}>
+                      <div className="qr-box">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="100"
+                          height="100"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="white"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="lucide lucide-camera-icon lucide-camera"
+                        >
+                          <path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z" />
+                          <circle cx="12" cy="13" r="3" />
+                        </svg>
+                      </div>
+                      <p
+                        style={{
+                          fontSize: 12,
+                          color: "var(--muted)",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        Align the QR code within the frame to scan
+                        <br />
+                        Auto-scan to complete the transfer
+                      </p>
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Amount Transferred</label>
+                      <input
+                        className="form-input"
+                        type="number"
+                        placeholder="0"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Transfer Recipient</label>
+                      <input
+                        className="form-input"
+                        defaultValue="(987)223-334-445"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Transfer Note</label>
+                      <input
+                        className="form-input"
+                        placeholder="For Yourself"
+                      />
+                    </div>
+                    <button
+                      className="btn-primary"
+                      onClick={() => handleConfirm("homePage")}
+                    >
+                      Confirm Transfer
+                    </button>
+                  </>
+                )}
+              </div>
+            );
+          })(),
+
+          /* ===== BILL PAYMENT ===== */
+          billPage: (
+            <div className="animate-fade">
+              {billPaid ? (
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    padding: "60px 20px",
+                    textAlign: "center",
+                  }}
+                >
+                  <div className="success-ring">
+                    <CheckIcon />
+                  </div>
+                  <div
+                    style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}
+                  >
+                    Payment Successful!
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 13,
+                      color: "var(--muted)",
+                      marginBottom: 24,
+                    }}
+                  >
+                    Your payment of $290 has been completed
+                  </div>
+                  <button
+                    className="btn-primary"
+                    style={{ maxWidth: 200 }}
+                    onClick={() => setBillPaid(false)}
+                  >
+                    Back
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="bill-hero">
+                    <div
+                      style={{
+                        fontSize: 11,
+                        opacity: 0.7,
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      STATEMENT BALANCE <EyeIcon />
+                    </div>
+                    <div className="bill-amount">$290</div>
+                    <div className="bill-unbilled">
+                      Unbilled amount &nbsp;$1,490
+                    </div>
+                    <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
+                      <button
+                        className="btn-outline"
+                        onClick={() => setBillPaid(true)}
+                      >
+                        Pay By Cash
+                      </button>
+                      <button
+                        className="btn-outline"
+                        onClick={() => setBillPaid(true)}
+                      >
+                        Pay By Online
+                      </button>
+                    </div>
+                  </div>
+                  <div className="card">
+                    <div
+                      style={{
+                        fontSize: 12,
+                        fontWeight: 600,
+                        color: "var(--dark)",
+                        marginBottom: 10,
+                        letterSpacing: "0.04em",
+                      }}
+                    >
+                      CONSUMPTION DETAILS FOR THIS PERIOD
+                    </div>
+                    <div className="tx-group">April</div>
+                    {[
+                      {
+                        icon: "🍟",
+                        name: "mcdonald's",
+                        date: "04/30",
+                        amount: "$10",
+                      },
+                      {
+                        icon: "🚇",
+                        name: "MRT Top Up",
+                        date: "04/29",
+                        amount: "$100",
+                      },
+                      {
+                        icon: "🍽",
+                        name: "Restaurant",
+                        date: "04/29",
+                        amount: "$30",
+                      },
+                      {
+                        icon: "🛍",
+                        name: "Store",
+                        date: "04/28",
+                        amount: "$5",
+                      },
+                      {
+                        icon: "🍟",
+                        name: "mcdonald's",
+                        date: "04/27",
+                        amount: "$10",
+                      },
+                      {
+                        icon: "🚇",
+                        name: "MRT Top Up",
+                        date: "04/26",
+                        amount: "$100",
+                      },
+                      {
+                        icon: "🍽",
+                        name: "Restaurant",
+                        date: "04/25",
+                        amount: "$30",
+                      },
+                      {
+                        icon: "🛍",
+                        name: "Store",
+                        date: "04/24",
+                        amount: "$5",
+                      },
+                    ].map((t, i) => (
+                      <div key={i} className="tx-row">
+                        <div className="tx-left">
+                          <div className="tx-icon">{t.icon}</div>
+                          <div>
+                            <div className="tx-name">{t.name}</div>
+                            <div className="tx-date">{t.date}</div>
+                          </div>
+                        </div>
+                        <div className="tx-amount debit">{t.amount} ›</div>
+                      </div>
+                    ))}
+                    <div className="tx-group" style={{ marginTop: 14 }}>
+                      History
+                    </div>
+                    {["2025/3", "2025/2"].map((m) => (
+                      <div key={m} className="tx-row">
+                        <span style={{ fontSize: 13, fontWeight: 500 }}>
+                          {m}
+                        </span>
+                        <span className="chevron">›</span>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          ),
+
+          /* ===== CREDIT CARD ===== */
+          creditPage: (
+            <div className="animate-fade">
+              <div
+                style={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: "var(--muted)",
+                  letterSpacing: "0.08em",
+                  marginBottom: 10,
+                }}
+              >
+                THE PENDING AMOUNT
+              </div>
+              <div className="cc-visual">
+                <div className="cc-pending">Pending Amount</div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <div className="cc-amount">$12,200 ›</div>
+                </div>
+                <div className="cc-number">123-456-789 ⊙</div>
+              </div>
+              <div className="filter-bar">
+                {[
+                  ["7d", "Last 7 days"],
+                  ["all", "All"],
+                  ["ntd", "NT$"],
+                ].map(([id, label]) => (
+                  <div
+                    key={id}
+                    className={`filter-chip ${filterChip === id ? "active" : ""}`}
+                    onClick={() => setFilterChip(id)}
+                  >
+                    {label}
+                  </div>
+                ))}
+              </div>
+              <div className="card">
+                <div className="tx-group" style={{ marginTop: 0 }}>
+                  April
+                </div>
+                {[
+                  {
+                    icon: "💻",
+                    name: "Electronic transactions",
+                    date: "04/13  XX Shop",
+                    amount: "-$586",
+                    cls: "debit",
+                  },
+                  {
+                    icon: "🏦",
+                    name: "Interbank transfer",
+                    date: "04/12  00012345678901 2",
+                    amount: "$2000",
+                    cls: "credit",
+                  },
+                  {
+                    icon: "💳",
+                    name: "Credit card fees",
+                    date: "04/12  9876543210",
+                    amount: "$2000",
+                    cls: "credit",
+                  },
+                ].map((t, i) => (
+                  <div key={i} className="tx-row">
+                    <div className="tx-left">
+                      <div className="tx-icon">{t.icon}</div>
+                      <div>
+                        <div className="tx-name">{t.name}</div>
+                        <div className="tx-date">{t.date}</div>
+                      </div>
+                    </div>
+                    <div className={`tx-amount ${t.cls}`}>{t.amount} ›</div>
+                  </div>
+                ))}
+                <div className="tx-group">March</div>
+                {[
+                  {
+                    icon: "💻",
+                    name: "Electronic transactions",
+                    date: "03/29  XX Shop",
+                    amount: "-$1286",
+                    cls: "debit",
+                  },
+                  {
+                    icon: "🏦",
+                    name: "Interbank transfer",
+                    date: "03/29  0001234567890 12",
+                    amount: "$200",
+                    cls: "credit",
+                  },
+                  {
+                    icon: "💳",
+                    name: "Credit card fees",
+                    date: "03/29  9876543210",
+                    amount: "$20,000",
+                    cls: "debit",
+                  },
+                ].map((t, i) => (
+                  <div key={i} className="tx-row">
+                    <div className="tx-left">
+                      <div className="tx-icon">{t.icon}</div>
+                      <div>
+                        <div className="tx-name">{t.name}</div>
+                        <div className="tx-date">{t.date}</div>
+                      </div>
+                    </div>
+                    <div className={`tx-amount ${t.cls}`}>{t.amount} ›</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ),
+
+          /* ===== CURRENCY EXCHANGE ===== */
+          exchangePage: (() => {
+            if (showSuccess)
+              return <SuccessView label="Exchange Success" target="homePage" />;
+            return (
+              <div className="animate-fade">
+                <div
+                  className="card-blue"
+                  style={{ background: "var(--gradient)" }}
+                >
+                  <div className="balance-label">
+                    YOUR BALANCE <EyeIcon />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-end",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div className="balance-amount">$32,238</div>
+                    <div className="sm-arrow" style={{ marginBottom: 2 }}>
+                      →
+                    </div>
+                  </div>
+                </div>
+                <div className="card">
+                  <div className="section-title" style={{ marginBottom: 14 }}>
+                    Currency Exchange
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">From Currency</label>
+                    <select className="form-input">
+                      <option>TWD — Taiwan Dollar</option>
+                      <option>USD — US Dollar</option>
+                      <option>JPY — Japanese Yen</option>
+                      <option>EUR — Euro</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Amount</label>
+                    <input
+                      className="form-input"
+                      type="number"
+                      placeholder="0"
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 8,
+                      margin: "6px 0 14px",
+                      color: "var(--blue)",
+                      fontSize: 18,
+                      fontWeight: 700,
+                    }}
+                  >
+                    ↕
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">To Currency</label>
+                    <select className="form-input">
+                      <option>USD — US Dollar</option>
+                      <option>JPY — Japanese Yen</option>
+                      <option>EUR — Euro</option>
+                      <option>CNY — Chinese Yuan</option>
+                    </select>
+                  </div>
+                  <div
+                    style={{
+                      background: "var(--blue-light)",
+                      borderRadius: 10,
+                      padding: "10px 14px",
+                      marginBottom: 14,
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: "var(--muted)",
+                        marginBottom: 4,
+                      }}
+                    >
+                      Reference Rate
+                    </div>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "1fr 60px 60px",
+                        fontSize: 12,
+                        fontWeight: 600,
+                      }}
+                    >
+                      <span>Currency</span>
+                      <span style={{ textAlign: "center" }}>Buy</span>
+                      <span style={{ textAlign: "center" }}>Sell</span>
+                    </div>
+                    {[
+                      { flag: "🇺🇸", name: "USD", buy: "32.04", sell: "32.10" },
+                      {
+                        flag: "🇯🇵",
+                        name: "JPY",
+                        buy: "0.2099",
+                        sell: "0.2129",
+                      },
+                      { flag: "🇪🇺", name: "EUR", buy: "34.55", sell: "34.93" },
+                      { flag: "🇨🇳", name: "CNY", buy: "4.392", sell: "4.773" },
+                    ].map((r) => (
+                      <div
+                        key={r.name}
+                        style={{
+                          display: "grid",
+                          gridTemplateColumns: "1fr 60px 60px",
+                          alignItems: "center",
+                          padding: "6px 0",
+                          borderTop: "1px solid var(--border)",
+                          fontSize: 12,
+                        }}
+                      >
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                          }}
+                        >
+                          <span>{r.flag}</span>
+                          <span style={{ fontWeight: 600 }}>{r.name}</span>
+                        </div>
+                        <span
+                          style={{ textAlign: "center", color: "var(--mid)" }}
+                        >
+                          {r.buy}
+                        </span>
+                        <span
+                          style={{ textAlign: "center", color: "var(--mid)" }}
+                        >
+                          {r.sell}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    className="btn-primary"
+                    onClick={() => handleConfirm("homePage")}
+                  >
+                    Confirm Exchange
+                  </button>
+                </div>
+              </div>
+            );
+          })(),
+
+          /* ===== NOTIFICATION ===== */
+          notifyPage: (
+            <div className="animate-fade">
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: 16,
+                }}
+              >
+                <h3 style={{ fontSize: 18, fontWeight: 700 }}>Notifications</h3>
+                <span
+                  style={{
+                    fontSize: 12,
+                    color: "var(--blue)",
+                    cursor: "pointer",
+                  }}
+                >
+                  Mark all read
+                </span>
+              </div>
+              {[
+                {
+                  read: false,
+                  title: "Transfer Successful",
+                  body: "You transferred $2,000 to account 00012345678901. The recipient has received the funds.",
+                  time: "5 mins ago",
+                },
+                {
+                  read: false,
+                  title: "Bill Payment Reminder",
+                  body: "Your credit card statement is due on 04/25. Unpaid amount: $290.",
+                  time: "2 hours ago",
+                },
+                {
+                  read: true,
+                  title: "Currency Rate Alert",
+                  body: "USD/TWD has reached your target rate of 32.10. You can proceed with exchange now.",
+                  time: "Yesterday",
+                },
+                {
+                  read: true,
+                  title: "Login Notification",
+                  body: "New login detected from iPhone in Taipei at 09:41 AM. If this was not you, please contact us.",
+                  time: "2 days ago",
+                },
+                {
+                  read: true,
+                  title: "Fixed Deposit Matured",
+                  body: "Your fixed deposit (123-456-789) has matured. Funds have been transferred to your current account.",
+                  time: "3 days ago",
+                },
+              ].map((n, i) => (
+                <div key={i} className="notify-row">
+                  <div className={`notify-dot ${n.read ? "read" : ""}`} />
+                  <div style={{ flex: 1 }}>
+                    <div className="notify-title">{n.title}</div>
+                    <div className="notify-body">{n.body}</div>
+                    <div className="notify-time">{n.time}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ),
+
+          /* ===== SCAN QR ===== */
+          scanPage: (
+            <div className="animate-fade">
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  marginBottom: 20,
+                }}
+              >
+                <h3 style={{ fontSize: 18, fontWeight: 700 }}>Scan QR Code</h3>
+              </div>
+              <div
+                style={{
+                  background: "#0f172a",
+                  borderRadius: 24,
+                  padding: 24,
+                  marginBottom: 20,
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    width: "100%",
+                    aspectRatio: "1",
+                    background: "rgba(255,255,255,0.05)",
+                    borderRadius: 16,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    gap: 12,
+                  }}
+                >
+                  <div style={{ fontSize: 60 }}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="100"
+                      height="100"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="white"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-camera-icon lucide-camera"
+                    >
+                      <path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z" />
+                      <circle cx="12" cy="13" r="3" />
+                    </svg>
+                  </div>
+                  <p
+                    style={{
+                      fontSize: 13,
+                      color: "rgba(255,255,255,0.5)",
+                      textAlign: "center",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Align the QR code within the frame to scan
+                    <br />
+                    Supports transfers and bill payments
+                  </p>
+                </div>
+                {/* Corner guides */}
+                {[
+                  { top: 12, left: 12 },
+                  { top: 12, right: 12 },
+                  { bottom: 12, left: 12 },
+                  { bottom: 12, right: 12 },
+                ].map((s, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      position: "absolute",
+                      width: 24,
+                      height: 24,
+                      borderColor: "rgba(37,99,235,0.8)",
+                      borderStyle: "solid",
+                      borderRadius: 3,
+                      borderWidth: 0,
+                      ...Object.fromEntries(
+                        Object.entries(s).map(([k, v]) => [k, v]),
+                      ),
+                      borderTopWidth: s.top !== undefined ? 3 : 0,
+                      borderLeftWidth: s.left !== undefined ? 3 : 0,
+                      borderBottomWidth: s.bottom !== undefined ? 3 : 0,
+                      borderRightWidth: s.right !== undefined ? 3 : 0,
+                    }}
+                  />
+                ))}
+              </div>
+              <div className="card">
+                <div className="section-title" style={{ marginBottom: 12 }}>
+                  Or enter manually
+                </div>
+                <div className="form-group">
+                  <label className="form-label">Account / QR Code</label>
+                  <input
+                    className="form-input"
+                    placeholder="Paste or type account number"
+                  />
+                </div>
+                <button
+                  className="btn-primary"
+                  onClick={() => go("transferPage")}
+                >
+                  Proceed to Transfer
+                </button>
+              </div>
+            </div>
+          ),
+
+          /* ===== SETTING ===== */
+          settingPage: (
+            <div className="animate-fade">
+              {/* Profile */}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  paddingBottom: 20,
+                  borderBottom: "1px solid var(--border)",
+                  marginBottom: 16,
+                }}
+              >
+                <div
+                  style={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: "50%",
+                    background: "var(--gradient)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 26,
+                    marginBottom: 10,
+                    color: "white",
+                    fontWeight: 700,
+                  }}
+                >
+                  JY
+                </div>
+                <div style={{ fontSize: 16, fontWeight: 700 }}>Jerry Yang</div>
+                <div
+                  style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}
+                >
+                  123-456-789
+                </div>
+              </div>
+              {settingsItems.map((item, i) => (
+                <div key={i} className="setting-row">
+                  <div className="setting-left">
+                    <div
+                      className="setting-icon"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        color: "var(--blue)",
+                      }}
+                    >
+                      {item.icon}
+                    </div>
+                    <span className="setting-label">{item.label}</span>
+                  </div>
+                  <span className="chevron">›</span>
+                </div>
+              ))}
+              <button
+                className="btn-primary"
+                style={{ background: "var(--red)", marginTop: 8 }}
+                onClick={() => go("loginPage")}
+              >
+                Log Out
+              </button>
+            </div>
+          ),
+        };
+
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 16,
+              padding: "20px 0",
+            }}
+          >
+            <NavTabBar currentScreen={screen} setCurrentScreen={go} />
+            <div className="phone-frame">
+              <StatusBar />
+              {showTopNav && (
+                <nav className="topnav">
+                  <div className="logo">
+                    Easy<span>Bank</span>
+                  </div>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <button
+                      onClick={() => go("scanPage")}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        color: "var(--dark)",
+                      }}
+                    >
+                      <ScanIcon />
+                    </button>
+                    <button
+                      onClick={() => go("notifyPage")}
+                      style={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        color: "var(--dark)",
+                        position: "relative",
+                      }}
+                    >
+                      <BellIcon />
+                    </button>
+                  </div>
+                </nav>
+              )}
+              <main className="main-content">
+                {screens[screen] || (
+                  <div style={{ padding: 20, color: "var(--muted)" }}>
+                    Page loading…
+                  </div>
+                )}
+              </main>
+              <nav className="bottom-nav">
+                {[
+                  { id: "homePage", icon: <HouseIcon />, label: "Home" },
+                  {
+                    id: "depositPage",
+                    icon: <LandmarkIcon />,
+                    label: "Finance",
+                  },
+                  {
+                    id: "settingPage",
+                    icon: <SettingsIcon />,
+                    label: "Setting",
+                  },
+                ].map((n) => (
+                  <button
+                    key={n.id}
+                    className={`nav-item ${screen === n.id ? "active" : ""}`}
+                    onClick={() => go(n.id)}
+                  >
+                    <span>{n.icon}</span>
+                    <span style={{ fontSize: 10 }}>{n.label}</span>
+                  </button>
+                ))}
+              </nav>
+            </div>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>

@@ -25,7 +25,7 @@ export default function Nav() {
           about
         </Link>
         <Link
-          to="/project"
+          to="/"
           className={`nav-pill  ${pathname === "/ProjectDetail" ? "active" : ""}`}
         >
           project

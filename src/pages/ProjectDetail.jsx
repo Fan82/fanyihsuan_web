@@ -22,7 +22,7 @@ function HeroSection({ project }) {
           style={{
             fontSize: "clamp(3rem, 6vw, 5rem)",
             lineHeight: 1.25,
-            color: "var(--color-chalk)",
+            color: "var(--accent-text)",
           }}
         >
           {project.name}
@@ -90,13 +90,13 @@ function OverviewSection({ project }) {
         <p className="key-title">PROBLEM</p>
         <h2
           className="text-xl font-medium leading-snug mb-5"
-          style={{ color: "var(--color-chalk)" }}
+          style={{ color: "var(--accent-text)" }}
         >
           {project.overview.problem.split(".")[0]}.
         </h2>
         <p
-          className="text-base font-light leading-relaxed"
-          style={{ color: "rgba(250,250,250,0.5)" }}
+          className="text-base font-light leading-relaxed opacity-60"
+          style={{ color: "var(--accent-text)" }}
         >
           {project.overview.problem}
         </p>
@@ -105,13 +105,13 @@ function OverviewSection({ project }) {
         <p className="key-title">SOLUTION</p>
         <h2
           className="text-xl font-medium leading-snug mb-5"
-          style={{ color: "var(--color-chalk)" }}
+          style={{ color: "var(--accent-text)" }}
         >
           {project.overview.solution.split(".")[0]}.
         </h2>
         <p
-          className="text-base font-light leading-relaxed"
-          style={{ color: "rgba(250,250,250,0.5)" }}
+          className="text-base font-light leading-relaxed opacity-60"
+          style={{ color: "var(--accent-text)" }}
         >
           {project.overview.solution}
         </p>
@@ -128,7 +128,7 @@ function InspirationSection({ project }) {
         className="font-serif italic text-2xl leading-relaxed pl-6 lg:text-4xl lg:leading-relaxed"
         style={{
           borderLeft: `2px solid var(--accent)`,
-          color: "var(--color-chalk)",
+          color: "var(--accent-text)",
         }}
       >
         {project.inspiration}
@@ -165,13 +165,13 @@ function ProcessSection({ project }) {
             </p>
             <h3
               className="text-base font-medium mb-2"
-              style={{ color: "var(--color-chalk)" }}
+              style={{ color: "var(--accent-text)" }}
             >
               {step.title}
             </h3>
             <p
-              className="text-sm font-light leading-relaxed"
-              style={{ color: "rgba(250,250,250,0.45)" }}
+              className="text-sm font-light leading-relaxed opacity-60"
+              style={{ color: "var(--accent-text)" }}
             >
               {step.desc}
             </p>
@@ -254,7 +254,10 @@ export default function ProjectDetail() {
     <div
       ref={pageRef}
       className={project.theme}
-      style={{ background: "var(--project-bg)", color: "var(--color-chalk)" }}
+      style={{
+        background: "var(--project-bg)",
+        color: "var(--accent-text)",
+      }}
     >
       <HeroSection project={project} />
       <OverviewSection project={project} />
@@ -300,7 +303,7 @@ function NextProject({ currentId }) {
         </svg>
         <span className="text-sm inline">Back</span>
       </Link>
-      <Link to={`./public/projects/${next.id}`} className="text-sm group">
+      <Link to={`./${next.id}`} className="text-sm group">
         <span className="text-sm inline">Next project</span>
         <svg
           width="16"
