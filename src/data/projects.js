@@ -23,6 +23,59 @@
 
 export const projects = [
   {
+    id: "runApp",
+    theme: "theme-runApp",
+    accent: "#05df72",
+    name: "Running App",
+    tagline: "Track your run. Share your pace.",
+    tags: ["React", "API Integration"],
+    meta: { client: "Fitness", role: "UI + Front-End", year: "2026" },
+    desc: "More than a running tracker — this app turns every run into a shared experience. Capture your progress, express your moments, and connect with a community that runs alongside you.",
+    demoUrl: null,
+
+    overview: {
+      problem:
+        "Running apps often focus only on numbers. But motivation comes from emotion, connection, and shared experiences.",
+
+      solution:
+        "A hybrid platform that combines performance tracking with social storytelling. Allowing users to not only measure their runs, but also share them, react, and grow together.",
+    },
+
+    inspiration:
+      '"Running is easier when you are not running alone, every step becomes more meaningful when it’s shared."',
+
+    process: [
+      {
+        num: "01",
+        title: "Live Data Tracking",
+        desc: "Capture your distance, pace, and time — every run becomes part of your story.",
+      },
+      {
+        num: "02",
+        title: "Social Feed Experience",
+        desc: "Share runs, post updates, and interact with others through likes, comments, and engagement.",
+      },
+      {
+        num: "03",
+        title: "Seamless Interaction",
+        desc: "Smooth transitions between tracking, posting, and browsing — no interruption to the user flow.",
+      },
+      {
+        num: "04",
+        title: "Responsive & Active Lifestyle Design",
+        desc: "Optimized for on-the-go use, adapting effortlessly across mobile and desktop devices.",
+      },
+    ],
+
+    screens: [
+      "Run Tracking",
+      "Activity Feed",
+      "Post Detail",
+      "User Profile",
+      "Mobile",
+    ],
+  },
+  {
     id: "takeTask",
     theme: "theme-takeTask",
     accent: "#FFAE00",
@@ -76,6 +129,50 @@ export const projects = [
       "Notifications",
     ],
   },
+
+  {
+    id: "easyBank",
+    theme: "theme-easyBank",
+    accent: "#2563eb",
+    name: "Easy Bank",
+    tagline: "Precision code for a trustworthy banking experience.",
+    tags: ["React/CSS", "UI/UX Implementation", "Fintech Design"],
+    demoUrl: "./public/projects/easyBank/easy_bank_app.html",
+    meta: {
+      client: "Personal Project",
+      role: "UI",
+      year: "2025",
+    },
+    desc: "A faithful reproduction of a modern digital banking identity. This project explores how front-end architecture—through meticulous typography, color systems, and micro-interactions—communicates 'Security' and 'Professionalism' to the end-user.",
+    demoUrl: "./public/projects/easyBank/easy_bank_app.html",
+    overview: {
+      problem:
+        "In the digital finance sector, the challenge lies in presenting dense financial information clearly while maintaining a high-fidelity brand identity that fosters user trust.",
+      solution:
+        "Utilized a modular React component architecture and a strict CSS variable system to ensure design consistency. Enhanced user engagement through intuitive haptic-like feedback, a clear typographic hierarchy for financial data, and seamless navigation transitions.",
+    },
+    inspiration:
+      "“Exceptional front-end development is the intersection of technical precision and aesthetic sensibility.”",
+    process: [
+      {
+        num: "01",
+        title: "Visualizing Brand Authority",
+        desc: "Translated a specific brand palette (e.g., #2563eb) and layout constraints into code that prioritizes readability for balances, exchange rates, and transaction history.",
+      },
+      {
+        num: "02",
+        title: "Design-to-Code Precision",
+        desc: "Implemented a mobile-first responsive layout featuring custom linear gradients, complex box-shadows, and functional components like currency exchange modules and secure transfer forms.",
+      },
+    ],
+    screens: [
+      "Asset Overview",
+      "Quick Actions",
+      "Transaction History",
+      "Finance Hub",
+      "Mobile Optimization",
+    ],
+  },
   {
     id: "bookFlight",
     theme: "theme-bookFlight",
@@ -119,61 +216,19 @@ export const projects = [
     screens: ["Search", "Date Picker", "Passenger", "Results", "Confirm"],
   },
   {
-    id: "easyBank",
-    theme: "theme-easyBank",
-    accent: "#2563eb",
-    name: "Easy Bank",
-    tagline: "Precision code for a trustworthy banking experience.",
-    tags: ["React/CSS", "UI/UX Implementation", "Fintech Design"],
-    meta: {
-      client: "Personal Project",
-      role: "UI",
-      year: "2025",
-    },
-    desc: "A faithful reproduction of a modern digital banking identity. This project explores how front-end architecture—through meticulous typography, color systems, and micro-interactions—communicates 'Security' and 'Professionalism' to the end-user.",
-    demoUrl: "./public/projects/easyBank/easy_bank_app.html",
-    overview: {
-      problem:
-        "In the digital finance sector, the challenge lies in presenting dense financial information clearly while maintaining a high-fidelity brand identity that fosters user trust.",
-      solution:
-        "Utilized a modular React component architecture and a strict CSS variable system to ensure design consistency. Enhanced user engagement through intuitive haptic-like feedback, a clear typographic hierarchy for financial data, and seamless navigation transitions.",
-    },
-    inspiration:
-      "“Exceptional front-end development is the intersection of technical precision and aesthetic sensibility.”",
-    process: [
-      {
-        num: "01",
-        title: "Visualizing Brand Authority",
-        desc: "Translated a specific brand palette (e.g., #2563eb) and layout constraints into code that prioritizes readability for balances, exchange rates, and transaction history.",
-      },
-      {
-        num: "02",
-        title: "Design-to-Code Precision",
-        desc: "Implemented a mobile-first responsive layout featuring custom linear gradients, complex box-shadows, and functional components like currency exchange modules and secure transfer forms.",
-      },
-    ],
-    screens: [
-      "Asset Overview",
-      "Quick Actions",
-      "Transaction History",
-      "Finance Hub",
-      "Mobile Optimization",
-    ],
-  },
-  {
     id: "goTravel",
     theme: "theme-goTravel",
-    accent: "#EA580C",
+    accent: "#ff6000",
     name: "Let's Travel",
     tagline: "Visual storytelling for explorers.",
     tags: ["HTML/CSS", "CSS Grid"],
     meta: {
       client: "Travel Website",
-      role: "Design + Front-End",
-      year: "2023",
+      role: "UI Design",
+      year: "2024",
     },
     desc: "A travel site that uses captivating imagery and fluid layout to ignite the desire to explore — built with CSS Grid and a component-based mindset.",
-    demoUrl: null,
+    demoUrl: "./public/projects/goTravel/goTravel-demo.html",
     overview: {
       problem:
         "Travel sites drown users in information. The design challenge: make large amounts of content feel light, digestible, inspiring.",
@@ -205,98 +260,55 @@ export const projects = [
     id: "publicTransp",
     theme: "theme-publicTransp",
     accent: "#7C3AED",
-    name: "Public Transportation",
-    tagline: "Real-time data, zero stress.",
-    tags: ["React", "API Integration"],
-    meta: { client: "Public Transport", role: "UX + Front-End", year: "2024" },
-    desc: "A real-time bus tracker that transforms a stream of live API data into a clear, intuitive query interface — because nobody should stress about missing their bus.",
-    demoUrl: null,
+    name: "Zei Qia",
+    tagline: "Navigate the city.",
+    tags: ["UI Design", "Figma", "Mobile App"],
+    meta: { client: "Public Transport", role: "UI + UX", year: "2025" },
+
+    desc: "A real-time transportation app that brings together buses, trains, metro, high-speed rail, and bike systems into one seamless search experience — turning complex live data into calm, reliable information for everyday travel.",
+
+    demoUrl: "./public/projects/publicTransp/public-transport-demo.html",
+
     overview: {
       problem:
-        "How to manage async operations, error states, and multi-component data coordination in Vue — while keeping the interface calm and informative.",
+        "How to handle real-time data, asynchronous states, and multiple transport systems. While keeping the experience simple, fast, and stress-free for users on the move.",
+
       solution:
-        "Live filtering as you type, auto-refresh without manual page reload, full responsive design. Complex data made simple.",
+        "Rather than displaying all available data, the approach focused on filtering and prioritising information. Through clear hierarchy, real-time updates, and responsive search, complex transport data is distilled into a calm, easy-to-navigate experience.",
     },
+
     inspiration:
-      '"Why should a bus tracker update in real-time? Because a 2-minute-old arrival time is worse than no arrival time at all."',
+      '"Good transit design is not about showing more data — it’s about showing the right data at the right moment."',
+
     process: [
       {
         num: "01",
-        title: "Real-Time Data Integration",
-        desc: "Async JS requests to a live transit API, with automatic update intervals — no manual refresh needed.",
+        title: "Framing the Problem",
+        desc: "Defined the core challenge as managing a large volume of real-time transport data without overwhelming users, focusing on clarity and usability over completeness.",
       },
       {
         num: "02",
-        title: "Fluid Interface Interaction",
-        desc: "Real-time keyword filtering — results update as you type, no page reload.",
+        title: "Information Architecture",
+        desc: "Structured multiple transport systems — bus, rail, metro, high-speed rail, and bike — into a clear and consistent hierarchy to support quick scanning and understanding.",
       },
       {
         num: "03",
-        title: "Responsive Design",
-        desc: "Automatically adapts to any screen size — phone or desktop.",
+        title: "Designing for Real-Time Behaviour",
+        desc: "Mapped how live data should behave in the interface, ensuring updates feel natural and reliable rather than disruptive or confusing.",
       },
       {
         num: "04",
-        title: "User-Centric Thinking",
-        desc: "Every technical decision traced back to a real user need.",
+        title: "Interaction & Feedback",
+        desc: "Designed instant search and filtering interactions that respond immediately to user input, reducing friction and supporting fast decision-making.",
+      },
+      {
+        num: "05",
+        title: "Clarity in Complexity",
+        desc: "Refined layouts, spacing, and visual hierarchy to transform dense information into a calm, readable interface suitable for on-the-go use.",
       },
     ],
+
     screens: ["Search", "Route List", "Stop Detail", "Arrival Times", "Mobile"],
-  },
-  {
-    id: "runApp",
-    theme: "theme-runApp",
-    accent: "#05df72",
-    name: "Running App",
-    tagline: "Track your run. Share your pace.",
-    tags: ["React", "API Integration"],
-    meta: { client: "Fitness", role: "UI + Front-End", year: "2026" },
-
-    desc: "More than a running tracker — this app turns every run into a shared experience. Capture your progress, express your moments, and connect with a community that runs alongside you.",
-
-    demoUrl: null,
-
-    overview: {
-      problem:
-        "Running apps often focus only on numbers. But motivation comes from emotion, connection, and shared experiences.",
-
-      solution:
-        "A hybrid platform that combines performance tracking with social storytelling. Allowing users to not only measure their runs, but also share them, react, and grow together.",
-    },
-
-    inspiration:
-      '"Running is easier when you are not running alone, every step becomes more meaningful when it’s shared."',
-
-    process: [
-      {
-        num: "01",
-        title: "Live Data Tracking",
-        desc: "Capture your distance, pace, and time — every run becomes part of your story.",
-      },
-      {
-        num: "02",
-        title: "Social Feed Experience",
-        desc: "Share runs, post updates, and interact with others through likes, comments, and engagement.",
-      },
-      {
-        num: "03",
-        title: "Seamless Interaction",
-        desc: "Smooth transitions between tracking, posting, and browsing — no interruption to the user flow.",
-      },
-      {
-        num: "04",
-        title: "Responsive & Active Lifestyle Design",
-        desc: "Optimized for on-the-go use, adapting effortlessly across mobile and desktop devices.",
-      },
-    ],
-
-    screens: [
-      "Run Tracking",
-      "Activity Feed",
-      "Post Detail",
-      "User Profile",
-      "Mobile",
-    ],
   },
 ];
 

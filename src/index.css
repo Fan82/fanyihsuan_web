@@ -31,6 +31,7 @@
 ───────────────────────────────────────────── */
 .theme-takeTask {
   --accent: #FFAE00;
+  --accent-btn: #0e0f1c;
   --accent-dim: rgba(255, 174, 0, 0.12);
   --accent-text: #fff;
   --project-bg: #0e0f1c;
@@ -39,6 +40,7 @@
 
 .theme-bookFlight {
   --accent: #2563EB;
+  --accent-btn: #f0f0f0;
   --accent-dim: rgba(37, 99, 235, 0.12);
   --accent-text: #ffffff;
   --project-bg: #0a0f1e;
@@ -47,31 +49,35 @@
 
 .theme-easyBank {
   --accent: #2563eb;
+  --accent-btn: #f0f0f0;
   --accent-dim: red;
   --accent-text: #0f172a;
   --project-bg: linear-gradient(180deg, #ffffff 0%, #fff5e6 100%);
-  --project-mainbg: #092460;
+  --project-mainbg: #fffefc;
 }
 
 .theme-goTravel {
-  --accent: #EA580C;
-  --accent-dim: rgba(234, 88, 12, 0.12);
-  --accent-text: #ffffff;
-  --project-bg: #1a0d06;
-  --project-mainbg: #092460;
+  --accent: #ff6000;
+  --accent-btn: #f0f0f0;
+  --accent-dim: rgba(255, 98, 0, 0.37);
+  --accent-text: #170f06;
+  --project-bg: #f0f0f0;
+  --project-mainbg: #f0f0f0;
 }
 
 .theme-publicTransp {
-  --accent: #7C3AED;
+  --accent: #dc2626;
+  --accent-btn: #f0f0f0;
   --accent-dim: rgba(124, 58, 237, 0.12);
-  --accent-text: #ffffff;
-  --project-bg: #0d0a1e;
-  --project-mainbg: #092460;
+  --accent-text: #18181b;
+  --project-bg: #f2f1ee;
+  --project-mainbg: #f2f1ee;
 
 }
 
 .theme-runApp {
   --accent: #05df72;
+  --accent-btn: #f0f0f0;
   --accent-dim: rgb(5, 223, 114, 0.12);
   --accent-text: #ffffff;
   --project-bg: #0a1912;
@@ -173,7 +179,7 @@
   .btn-accent {
     @apply inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium transition-transform duration-200;
     background: var(--accent);
-    color: var(--accent-text);
+    color: var(--accent-btn);
   }
 
   .btn-accent:hover {

@@ -266,7 +266,6 @@ export default function ProjectDetail() {
       <ProcessSection project={project} />
       <UserFlowSection project={project} />
       {/* <VideoSection project={project} /> */}
-
       {/* Bottom nav — next project */}
       <NextProject currentId={id} />
     </div>

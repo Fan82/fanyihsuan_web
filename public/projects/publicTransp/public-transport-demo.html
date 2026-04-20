@@ -1,0 +1,3969 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      :root {
+        --bg: #f2f1ee;
+        --white: #ffffff;
+        --dark: #18181b;
+        --mid: #71717a;
+        --light: #e4e4e7;
+        --accent: #2563eb;
+        --accent-soft: #eff6ff;
+        --green: #059669;
+        --green-soft: #ecfdf5;
+        --orange: #ea580c;
+        --orange-soft: #fff7ed;
+        --red: #dc2626;
+        --red-soft: #fef2f2;
+        --yellow: #d97706;
+        --yellow-soft: #fffbeb;
+        --radius: 20px;
+        --radius-sm: 12px;
+        --shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        background: var(--bg);
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        padding: 32px 20px;
+        font-family: "Sora", sans-serif;
+      }
+
+      .phone-frame {
+        width: 375px;
+        height: 812px;
+        background: #f8f8f6;
+        border-radius: 50px;
+        overflow: hidden;
+        box-shadow:
+          0 40px 80px -20px rgba(0, 0, 0, 0.28),
+          0 0 0 1.5px rgba(0, 0, 0, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        position: relative;
+        border: 10px solid #1a1a1f;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .status-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 22px 6px;
+        font-size: 12px;
+        color: var(--dark);
+        font-weight: 700;
+        font-family: "JetBrains Mono", monospace;
+        background: #f8f8f6;
+        flex-shrink: 0;
+      }
+
+      .scroll-area {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+      }
+      .scroll-area::-webkit-scrollbar {
+        display: none;
+      }
+
+      .page {
+        padding: 20px 18px 100px;
+      }
+
+      .clickable {
+        transition:
+          transform 0.12s ease,
+          opacity 0.12s ease;
+        cursor: pointer;
+        user-select: none;
+      }
+      .clickable:active {
+        transform: scale(0.96);
+        opacity: 0.75;
+      }
+
+      .card {
+        background: var(--white);
+        border-radius: var(--radius);
+        padding: 16px;
+        margin-bottom: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .tab-bar {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 90px;
+        background: rgba(248, 248, 246, 0.92);
+        backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(0, 0, 0, 0.06);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0 8px 24px;
+        z-index: 50;
+      }
+
+      .tab-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        padding: 8px 12px;
+        border-radius: 14px;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .tab-item.active {
+        background: rgba(37, 99, 235, 0.08);
+      }
+      .tab-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      /* Pill button */
+      .pill-btn {
+        padding: 8px 16px;
+        border-radius: 100px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.15s;
+        border: 1.5px solid transparent;
+      }
+      .pill-btn.active {
+        background: var(--dark);
+        color: white;
+      }
+      .pill-btn.inactive {
+        background: var(--white);
+        color: var(--mid);
+        border-color: var(--light);
+      }
+
+      /* Input */
+      .input-box {
+        background: var(--white);
+        border-radius: var(--radius-sm);
+        padding: 13px 16px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        color: var(--mid);
+        box-shadow: var(--shadow);
+        cursor: text;
+        font-family: "Sora", sans-serif;
+      }
+
+      /* Timeline dot */
+      .timeline-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border: 2px solid;
+        background: white;
+        flex-shrink: 0;
+      }
+      .timeline-dot.filled {
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+
+      /* Switch */
+      .switch {
+        width: 46px;
+        height: 26px;
+        border-radius: 13px;
+        position: relative;
+        transition: 0.25s;
+        cursor: pointer;
+      }
+      .switch-handle {
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        position: absolute;
+        top: 3px;
+        transition: 0.25s;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Fade-in animation */
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-up {
+        animation: fadeUp 0.3s ease both;
+      }
+
+      /* Map placeholder */
+      .map-bg {
+        background: #e8eddf;
+        border-radius: var(--radius-sm);
+        position: relative;
+        overflow: hidden;
+      }
+      .map-grid-lines {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+        background-size: 28px 28px;
+      }
+      .map-road {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.75);
+      }
+
+      /* Nav controller */
+      .nav-controller {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 420px;
+        margin-bottom: 20px;
+      }
+      .nav-btn {
+        background: white;
+        border: none;
+        border-radius: 8px;
+        padding: 6px 13px;
+        font-size: 11px;
+        font-family: "Sora", sans-serif;
+        font-weight: 600;
+        cursor: pointer;
+        color: #64748b;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+        transition: all 0.12s;
+      }
+      .nav-btn.active {
+        background: #18181b;
+        color: white;
+      }
+
+      .outer-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState, useEffect } = React;
+
+      /* ══════════════════════════════════════
+         ICONS
+      ══════════════════════════════════════ */
+      const I = {
+        Bus: (c = "#475569", s = 22) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="3" y="5" width="18" height="13" rx="2" />
+            <path d="M3 10h18M8 5V3M16 5V3M5 18v2M19 18v2" />
+            <circle cx="7.5" cy="14" r="1" />
+            <circle cx="16.5" cy="14" r="1" />
+          </svg>
+        ),
+        MRT: (c = "#475569", s = 22) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="4" y="3" width="16" height="14" rx="2" />
+            <path d="M4 10h16M8 19l-2 2M16 19l2 2M8 19h8" />
+            <circle cx="9" cy="14" r="1.2" />
+            <circle cx="15" cy="14" r="1.2" />
+          </svg>
+        ),
+        Train: (c = "#475569", s = 22) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M7 17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-2M7 17l-2 4M17 17l2 4M12 3v4" />
+            <rect x="7" y="9" width="10" height="6" rx="1" />
+          </svg>
+        ),
+        HSR: (c = "#475569", s = 22) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M3 17h3l5-13 5 13h3M5 13h14" />
+          </svg>
+        ),
+        Bike: (c = "#475569", s = 22) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="5.5" cy="17.5" r="3.5" />
+            <circle cx="18.5" cy="17.5" r="3.5" />
+            <path d="M15 6h-4l-2 5.5M8 11l4-5h2l3 6M15 6l3 6" />
+          </svg>
+        ),
+        Home: (c = "#475569", s = 22) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+        ),
+        Search: (c = "#475569", s = 22) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2.2"
+            strokeLinecap="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
+        ),
+        Ticket: (c = "#475569", s = 22) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M2 9a3 3 0 1 0 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 1 0 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+            <path d="M13 5v14" strokeDasharray="2 2" />
+          </svg>
+        ),
+        Bell: (c = "#475569", s = 22) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+        ),
+        User: (c = "#475569", s = 22) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="7" r="4" />
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          </svg>
+        ),
+        Map: (c = "#475569", s = 22) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+            <line x1="8" y1="2" x2="8" y2="18" />
+            <line x1="16" y1="6" x2="16" y2="22" />
+          </svg>
+        ),
+        Back: (c = "#18181B", s = 20) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          >
+            <path d="M19 12H5M12 5l-7 7 7 7" />
+          </svg>
+        ),
+        Star: (filled, c = "#F59E0B", s = 16) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill={filled ? c : "none"}
+            stroke={c}
+            strokeWidth="2"
+          >
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+          </svg>
+        ),
+        Location: (c = "#475569", s = 16) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+          >
+            <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 1 1 18 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+        ),
+        Clock: (c = "#475569", s = 14) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 6v6l4 2" />
+          </svg>
+        ),
+        Arrow: (c = "#94A3B8", s = 14) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          >
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        ),
+        Settings: (c = "#475569", s = 20) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+          >
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        ),
+        Swap: (c = "#475569", s = 18) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            class="lucide lucide-arrow-left-right-icon lucide-arrow-left-right"
+          >
+            <path d="M8 3 4 7l4 4" />
+            <path d="M4 7h16" />
+            <path d="m16 21 4-4-4-4" />
+            <path d="M20 17H4" />
+          </svg>
+        ),
+        Check: (c = "#059669", s = 16) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2.5"
+            strokeLinecap="round"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        ),
+        Info: (c = "#2563EB", s = 16) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4M12 8h.01" />
+          </svg>
+        ),
+        Warning: (c = "#D97706", s = 16) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke={c}
+            strokeWidth="2"
+            strokeLinecap="round"
+          >
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <path d="M12 9v4M12 17h.01" />
+          </svg>
+        ),
+        Heart: (filled, c = "#EF4444", s = 16) => (
+          <svg
+            width={s}
+            height={s}
+            viewBox="0 0 24 24"
+            fill={filled ? c : "none"}
+            stroke={c}
+            strokeWidth="2"
+          >
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          </svg>
+        ),
+      };
+
+      /* ══════════════════════════════════════
+         SHARED COMPONENTS
+      ══════════════════════════════════════ */
+      const StatusBar = () => (
+        <div className="status-bar">
+          <span>9:41</span>
+          <div
+            style={{
+              width: 100,
+              height: 26,
+              background: "#18181B",
+              borderRadius: 20,
+              margin: "0 auto",
+            }}
+          />
+          <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+            <svg width="15" height="11" viewBox="0 0 15 11" fill="#18181B">
+              <rect x="0" y="4" width="3" height="7" rx="1" />
+              <rect x="4" y="2.5" width="3" height="8.5" rx="1" />
+              <rect x="8" y="1" width="3" height="10" rx="1" />
+              <rect x="12" y="0" width="3" height="11" rx="1" opacity=".3" />
+            </svg>
+            <svg width="15" height="11" viewBox="0 0 15 11" fill="#18181B">
+              <path
+                d="M7.5 2C5 2 2.8 3.2 1.3 5.1L2.7 6.4C3.9 4.9 5.6 4 7.5 4C9.4 4 11.1 4.9 12.3 6.4L13.7 5.1C12.2 3.2 10 2 7.5 2Z"
+                opacity=".4"
+              />
+              <path d="M7.5 5C6 5 4.7 5.7 3.8 6.8L5.2 8C5.8 7.2 6.6 6.7 7.5 6.7C8.4 6.7 9.2 7.2 9.8 8L11.2 6.8C10.3 5.7 9 5 7.5 5Z" />
+              <circle cx="7.5" cy="10" r="1.5" />
+            </svg>
+            <svg width="24" height="12" viewBox="0 0 24 12" fill="none">
+              <rect
+                x=".5"
+                y=".5"
+                width="20"
+                height="11"
+                rx="3.5"
+                stroke="#18181B"
+                strokeOpacity=".35"
+              />
+              <rect x="2" y="2" width="15" height="8" rx="2" fill="#18181B" />
+              <path
+                d="M22 4v4c.8-.3 1.5-1 1.5-2s-.7-1.7-1.5-2z"
+                fill="#18181B"
+                opacity=".4"
+              />
+            </svg>
+          </div>
+        </div>
+      );
+
+      const PageHeader = ({ title, onBack, action }) => (
+        <div
+          style={{
+            marginBottom: 22,
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            {onBack && (
+              <button
+                onClick={onBack}
+                className="clickable"
+                style={{
+                  background: "white",
+                  border: "none",
+                  width: 36,
+                  height: 36,
+                  borderRadius: 10,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                  cursor: "pointer",
+                  flexShrink: 0,
+                  marginTop: 4,
+                }}
+              >
+                {I.Back()}
+              </button>
+            )}
+            <h1
+              style={{
+                fontSize: onBack ? 22 : 28,
+                fontWeight: 800,
+                color: "#18181B",
+                letterSpacing: "-0.4px",
+                lineHeight: 1.15,
+              }}
+            >
+              {title}
+            </h1>
+          </div>
+          {action}
+        </div>
+      );
+
+      const SearchBar = ({ placeholder = "Search…", value, onChange }) => (
+        <div
+          style={{
+            background: "white",
+            borderRadius: 14,
+            padding: "11px 14px",
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            marginBottom: 16,
+            boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+          }}
+        >
+          {I.Search("#94A3B8", 18)}
+          <span
+            style={{
+              fontSize: 13,
+              color: "#94A3B8",
+              fontWeight: 500,
+              fontFamily: "'Sora',sans-serif",
+            }}
+          >
+            {placeholder}
+          </span>
+        </div>
+      );
+
+      const TabBar = ({ active, onTab }) => {
+        const tabs = [
+          { key: "home", label: "Home", icon: I.Home },
+          { key: "search", label: "Search", icon: I.Search },
+          { key: "tickets", label: "Tickets", icon: I.Ticket },
+          { key: "alerts", label: "Alerts", icon: I.Bell },
+          { key: "profile", label: "Me", icon: I.User },
+        ];
+        return (
+          <div className="tab-bar">
+            {tabs.map((t) => {
+              const isActive = active === t.key;
+              return (
+                <div
+                  key={t.key}
+                  className={`tab-item clickable ${isActive ? "active" : ""}`}
+                  onClick={() => onTab(t.key)}
+                >
+                  {t.icon(isActive ? "#2563EB" : "#94A3B8", 22)}
+                  <span
+                    className="tab-label"
+                    style={{ color: isActive ? "#2563EB" : "#94A3B8" }}
+                  >
+                    {t.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        );
+      };
+
+      const ArrivalBadge = ({ text, type }) => {
+        const styles = {
+          soon: { bg: "#FEF2F2", color: "#DC2626" },
+          mid: { bg: "#FFF7ED", color: "#EA580C" },
+          far: { bg: "#F0FDF4", color: "#16A34A" },
+          delay: { bg: "#FEF2F2", color: "#DC2626" },
+          ontime: { bg: "#F0FDF4", color: "#16A34A" },
+        };
+        const s = styles[type] || styles.far;
+        return (
+          <span
+            style={{
+              background: s.bg,
+              color: s.color,
+              fontSize: 10,
+              fontWeight: 800,
+              padding: "3px 8px",
+              borderRadius: 7,
+              letterSpacing: "0.02em",
+            }}
+          >
+            {text}
+          </span>
+        );
+      };
+
+      /* ══════════════════════════════════════
+         HOME / EXPLORE PAGE
+      ══════════════════════════════════════ */
+      const HomePage = ({ onNav }) => {
+        const cards = [
+          {
+            key: "bus",
+            label: "Bus",
+            Icon: I.Bus,
+            bg: "#EEF2FF",
+            color: "#3B5FDB",
+          },
+          {
+            key: "mrt",
+            label: "MRT",
+            Icon: I.MRT,
+            bg: "#ECFDF5",
+            color: "#059669",
+          },
+          {
+            key: "tra",
+            label: "Train",
+            Icon: I.Train,
+            bg: "#FFF7ED",
+            color: "#EA580C",
+          },
+          {
+            key: "hsr",
+            label: "HSR",
+            Icon: I.HSR,
+            bg: "#FEF2F2",
+            color: "#DC2626",
+          },
+          {
+            key: "bike",
+            label: "Bike",
+            Icon: I.Bike,
+            bg: "#F0FDF4",
+            color: "#16A34A",
+          },
+          {
+            key: "map",
+            label: "Map",
+            Icon: I.Map,
+            bg: "#FFFBEB",
+            color: "#B45309",
+          },
+        ];
+        return (
+          <div className="scroll-area">
+            <div className="page fade-up">
+              {/* Greeting */}
+              <div style={{ marginBottom: 20 }}>
+                <div
+                  style={{
+                    fontSize: 12,
+                    color: "#94A3B8",
+                    fontWeight: 600,
+                    letterSpacing: "0.06em",
+                    marginBottom: 4,
+                  }}
+                >
+                  GOOD MORNING 🌞
+                </div>
+                <h1
+                  style={{
+                    fontSize: 30,
+                    fontWeight: 800,
+                    color: "#18181B",
+                    letterSpacing: "-0.5px",
+                    lineHeight: 1.1,
+                  }}
+                >
+                  Where are you
+                  <br />
+                  going today?
+                </h1>
+              </div>
+
+              <div
+                onClick={() => onNav("search")}
+                className="clickable"
+                style={{
+                  background: "#f2f1ee",
+                  borderRadius: 16,
+                  padding: "14px 16px",
+                  marginBottom: 20,
+                  display: "flex",
+                  alignItems: "center",
+                  color: "#18181b",
+                  gap: 12,
+                }}
+              >
+                {I.Search("#18181b", 18)}
+                <span
+                  style={{
+                    fontSize: 14,
+                    color: "#18181b",
+                    fontWeight: 500,
+                  }}
+                >
+                  Search routes or stops…
+                </span>
+              </div>
+
+              {/* Transport grid */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr 1fr",
+                  gap: 10,
+                  marginBottom: 22,
+                }}
+              >
+                {cards.map((c) => (
+                  <div
+                    key={c.key}
+                    onClick={() => onNav(c.key)}
+                    className="clickable"
+                    style={{
+                      background: c.bg,
+                      borderRadius: 18,
+                      padding: "18px 14px",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                      gap: 8,
+                    }}
+                  >
+                    {c.Icon(c.color, 22)}
+                    <div
+                      style={{ fontSize: 12, fontWeight: 700, color: c.color }}
+                    >
+                      {c.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Notification strip */}
+              <div
+                style={{
+                  background: "#FFFBEB",
+                  border: "1.5px solid #FDE68A",
+                  borderRadius: 14,
+                  padding: "10px 14px",
+                  marginBottom: 16,
+                  display: "flex",
+                  gap: 10,
+                  alignItems: "flex-start",
+                }}
+              >
+                {I.Warning("#D97706", 14)}
+                <div>
+                  <div
+                    style={{ fontSize: 11, fontWeight: 700, color: "#92400E" }}
+                  >
+                    Route 230 — Minor delay
+                  </div>
+                  <div style={{ fontSize: 11, color: "#B45309", marginTop: 1 }}>
+                    Road works near Main Station · 10 min behind
+                  </div>
+                </div>
+              </div>
+
+              {/* Nearby stops */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 12,
+                }}
+              >
+                <div
+                  style={{ fontSize: 13, fontWeight: 700, color: "#18181B" }}
+                >
+                  Nearby Stops
+                </div>
+                <span
+                  onClick={() => onNav("map")}
+                  style={{
+                    fontSize: 11,
+                    color: "#2563EB",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                  }}
+                >
+                  See map →
+                </span>
+              </div>
+
+              {[
+                {
+                  name: "Taipei Main Station",
+                  lines: "230 · BL23 · R10",
+                  badge: "ON TIME",
+                  type: "ontime",
+                  icon: I.Bus,
+                  bg: "#EEF2FF",
+                  c: "#3B5FDB",
+                },
+                {
+                  name: "Zhongshan MRT",
+                  lines: "Red Line · R14",
+                  badge: "2 min",
+                  type: "soon",
+                  icon: I.MRT,
+                  bg: "#ECFDF5",
+                  c: "#059669",
+                },
+                {
+                  name: "Taipei HSR",
+                  lines: "HSR North-South",
+                  badge: "15 min",
+                  type: "far",
+                  icon: I.HSR,
+                  bg: "#FEF2F2",
+                  c: "#DC2626",
+                },
+              ].map((s, i) => (
+                <div
+                  key={i}
+                  className="card clickable"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    padding: "13px 14px",
+                  }}
+                  onClick={() => {}}
+                >
+                  <div
+                    style={{
+                      width: 38,
+                      height: 38,
+                      background: s.bg,
+                      borderRadius: 10,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {s.icon(s.c, 18)}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: "#18181B",
+                      }}
+                    >
+                      {s.name}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: "#94A3B8",
+                        marginTop: 2,
+                        fontFamily: "'JetBrains Mono',monospace",
+                      }}
+                    >
+                      {s.lines}
+                    </div>
+                  </div>
+                  <ArrivalBadge text={s.badge} type={s.type} />
+                </div>
+              ))}
+
+              {/* Recent */}
+              <div
+                style={{
+                  fontSize: 13,
+                  fontWeight: 700,
+                  color: "#18181B",
+                  marginTop: 20,
+                  marginBottom: 12,
+                }}
+              >
+                Recent
+              </div>
+              {[
+                {
+                  route: "BL 230",
+                  dest: "Elementary → Downtown",
+                  time: "Today 08:30",
+                },
+                { route: "R10", dest: "Zhongshan → Ximen", time: "Yesterday" },
+              ].map((r, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    padding: "10px 0",
+                    borderBottom: "1px solid #F1F5F9",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 34,
+                      height: 34,
+                      background: "#F1F5F9",
+                      borderRadius: 9,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {I.Clock("#94A3B8", 14)}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: "#18181B",
+                        fontFamily: "'JetBrains Mono',monospace",
+                      }}
+                    >
+                      {r.route}
+                    </div>
+                    <div
+                      style={{ fontSize: 11, color: "#94A3B8", marginTop: 1 }}
+                    >
+                      {r.dest}
+                    </div>
+                  </div>
+                  <div
+                    style={{ fontSize: 10, color: "#CBD5E1", fontWeight: 600 }}
+                  >
+                    {r.time}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
+      /* ══════════════════════════════════════
+         BUS PAGE
+      ══════════════════════════════════════ */
+      const BusPage = ({ onBack }) => {
+        const [dir, setDir] = useState("inbound");
+        const [fav, setFav] = useState(false);
+        const stops = {
+          inbound: [
+            {
+              name: "Beimen",
+              arrive: "Arriving",
+              type: "soon",
+              note: "Platform A",
+            },
+            {
+              name: "Taipei Main",
+              arrive: "4 min",
+              type: "mid",
+              note: "Platform B",
+            },
+            { name: "Ximen", arrive: "8 min", type: "far", note: "" },
+            { name: "City Hall", arrive: "14 min", type: "far", note: "" },
+            { name: "Zhongshan", arrive: "19 min", type: "far", note: "" },
+            { name: "Nanjing E.", arrive: "25 min", type: "far", note: "" },
+          ],
+          outbound: [
+            {
+              name: "Nanjing E.",
+              arrive: "Arriving",
+              type: "soon",
+              note: "Platform C",
+            },
+            { name: "Zhongshan", arrive: "5 min", type: "mid", note: "" },
+            { name: "City Hall", arrive: "10 min", type: "far", note: "" },
+            { name: "Ximen", arrive: "16 min", type: "far", note: "" },
+            { name: "Taipei Main", arrive: "21 min", type: "far", note: "" },
+            { name: "Beimen", arrive: "27 min", type: "far", note: "" },
+          ],
+        };
+        return (
+          <div className="scroll-area">
+            <div className="page fade-up">
+              <PageHeader
+                title="Bus 230"
+                onBack={onBack}
+                action={
+                  <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
+                    <button
+                      onClick={() => setFav(!fav)}
+                      className="clickable"
+                      style={{
+                        background: "white",
+                        border: "none",
+                        width: 36,
+                        height: 36,
+                        borderRadius: 10,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {I.Heart(fav, "#EF4444", 16)}
+                    </button>
+                    <button
+                      className="clickable"
+                      style={{
+                        background: "white",
+                        border: "none",
+                        width: 36,
+                        height: 36,
+                        borderRadius: 10,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {I.Settings()}
+                    </button>
+                  </div>
+                }
+              />
+
+              {/* Route banner */}
+              <div
+                style={{
+                  background: "linear-gradient(135deg,#2563EB,#1D4ED8)",
+                  borderRadius: 18,
+                  padding: "16px 18px",
+                  marginBottom: 16,
+                  color: "white",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <div>
+                    <div
+                      style={{
+                        fontSize: 10,
+                        opacity: 0.7,
+                        fontWeight: 600,
+                        letterSpacing: "0.06em",
+                        marginBottom: 4,
+                      }}
+                    >
+                      ROUTE 230
+                    </div>
+                    <div style={{ fontSize: 17, fontWeight: 800 }}>
+                      Downtown Town
+                    </div>
+                    <div style={{ fontSize: 11, opacity: 0.7, marginTop: 2 }}>
+                      ↔ Exhibition Center
+                    </div>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <ArrivalBadge text="Live" type="soon" />
+                    <div style={{ fontSize: 10, opacity: 0.6, marginTop: 6 }}>
+                      Updated 5s ago
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Direction toggle */}
+              <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
+                <div
+                  onClick={() => setDir("inbound")}
+                  className={`pill-btn ${dir === "inbound" ? "active" : "inactive"}`}
+                >
+                  ← Inbound
+                </div>
+                <div
+                  onClick={() => setDir("outbound")}
+                  className={`pill-btn ${dir === "outbound" ? "active" : "inactive"}`}
+                >
+                  Outbound →
+                </div>
+              </div>
+
+              {/* Stop list */}
+              {stops[dir].map((s, i) => (
+                <div
+                  key={s.name}
+                  className="card"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 14,
+                    padding: "13px 16px",
+                  }}
+                >
+                  {/* Timeline */}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      flexShrink: 0,
+                      height: "100%",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: "50%",
+                        background: i === 0 ? "#2563EB" : "#E2E8F0",
+                        border:
+                          i === 0 ? "2px solid #2563EB" : "2px solid #CBD5E1",
+                        flexShrink: 0,
+                      }}
+                    />
+                    {i < stops[dir].length - 1 && (
+                      <div
+                        style={{
+                          width: 2,
+                          height: 24,
+                          background: "#F1F5F9",
+                          marginTop: 2,
+                        }}
+                      />
+                    )}
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div
+                      style={{
+                        fontSize: 13,
+                        fontWeight: i === 0 ? 800 : 600,
+                        color: i === 0 ? "#18181B" : "#334155",
+                      }}
+                    >
+                      {s.name}
+                    </div>
+                    {s.note && (
+                      <div
+                        style={{ fontSize: 10, color: "#94A3B8", marginTop: 1 }}
+                      >
+                        {s.note}
+                      </div>
+                    )}
+                  </div>
+                  <ArrivalBadge text={s.arrive} type={s.type} />
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
+      /* ══════════════════════════════════════
+         MRT PAGE
+      ══════════════════════════════════════ */
+      const MRTPage = ({ onBack }) => {
+        const [line, setLine] = useState("Red");
+        const lines = [
+          { key: "Red", label: "Tamsui-Xinyi", color: "#DC2626" },
+          { key: "Blue", label: "Bannan", color: "#2563EB" },
+          { key: "Green", label: "Zhonghe", color: "#059669" },
+          { key: "Orange", label: "Wenhu", color: "#EA580C" },
+          { key: "Brown", label: "Xinyi Br.", color: "#92400E" },
+        ];
+        const stations = {
+          Red: [
+            "Tamsui",
+            "Hongshulin",
+            "Zhuwei",
+            "Guandu",
+            "Zhongshan",
+            "Taipei Main",
+            "NTU Hospital",
+            "Chiang Kai-shek",
+            "Xiaonanmen",
+          ],
+          Blue: [
+            "Kunyang",
+            "Nangang",
+            "Nankang Exh.",
+            "Taipei City Hall",
+            "Sun Yat-sen",
+            "Taipei Main",
+            "Longshan Temple",
+            "Ximen",
+          ],
+          Green: ["Xinpu", "Banqiao", "Fuzhong", "Tucheng"],
+          Orange: ["Neihu", "Gangqian", "Wende", "Kunyang"],
+          Brown: ["Xinyi Anhe", "Daan", "Daan Park", "Zhongxiao Xinsheng"],
+        };
+        const current = lines.find((l) => l.key === line);
+        return (
+          <div className="scroll-area">
+            <div className="page fade-up">
+              <PageHeader
+                title="MRT Network"
+                onBack={onBack}
+                action={
+                  <button
+                    className="clickable"
+                    style={{
+                      background: "white",
+                      border: "none",
+                      width: 36,
+                      height: 36,
+                      borderRadius: 10,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                      cursor: "pointer",
+                      marginTop: 4,
+                    }}
+                  >
+                    {I.Settings()}
+                  </button>
+                }
+              />
+
+              {/* Map placeholder */}
+              <div className="map-bg" style={{ height: 140, marginBottom: 16 }}>
+                <div className="map-grid-lines" />
+                {/* Red line */}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "50%",
+                    top: "5%",
+                    bottom: "5%",
+                    width: 5,
+                    background: "#DC2626",
+                    borderRadius: 3,
+                    transform: "translateX(-50%)",
+                    opacity: line === "Red" ? 1 : 0.35,
+                  }}
+                />
+                {/* Blue line */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "42%",
+                    left: "5%",
+                    right: "5%",
+                    height: 5,
+                    background: "#2563EB",
+                    borderRadius: 3,
+                    transform: "translateY(-50%)",
+                    opacity: line === "Blue" ? 1 : 0.35,
+                  }}
+                />
+                {/* Green line */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "68%",
+                    left: "5%",
+                    right: "55%",
+                    height: 5,
+                    background: "#059669",
+                    borderRadius: 3,
+                    opacity: line === "Green" ? 1 : 0.35,
+                  }}
+                />
+                {/* Orange line diagonal-ish */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "20%",
+                    left: "55%",
+                    right: "5%",
+                    height: 5,
+                    background: "#EA580C",
+                    borderRadius: 3,
+                    opacity: line === "Orange" ? 1 : 0.35,
+                  }}
+                />
+                {/* Exchange stations */}
+                {[
+                  { x: "50%", y: "42%", c: "white", b: "#334155" },
+                  { x: "50%", y: "25%", c: "white", b: "#DC2626" },
+                  { x: "50%", y: "60%", c: "white", b: "#DC2626" },
+                  { x: "25%", y: "42%", c: "white", b: "#2563EB" },
+                  { x: "75%", y: "42%", c: "white", b: "#2563EB" },
+                ].map((s, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      position: "absolute",
+                      left: s.x,
+                      top: s.y,
+                      width: 10,
+                      height: 10,
+                      borderRadius: "50%",
+                      background: s.c,
+                      border: `2.5px solid ${s.b}`,
+                      transform: "translate(-50%,-50%)",
+                    }}
+                  />
+                ))}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "50%",
+                    top: "42%",
+                    transform: "translate(6px,-16px)",
+                    fontSize: 8,
+                    fontWeight: 700,
+                    color: "#18181B",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Taipei Main
+                </div>
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "50%",
+                    top: "25%",
+                    transform: "translate(6px,-16px)",
+                    fontSize: 8,
+                    fontWeight: 700,
+                    color: "#18181B",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Zhongshan
+                </div>
+              </div>
+
+              {/* Line tabs */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 6,
+                  marginBottom: 16,
+                  overflowX: "auto",
+                  paddingBottom: 2,
+                }}
+              >
+                {lines.map((l) => (
+                  <div
+                    key={l.key}
+                    onClick={() => setLine(l.key)}
+                    className="clickable"
+                    style={{
+                      padding: "6px 12px",
+                      borderRadius: 100,
+                      fontSize: 11,
+                      fontWeight: 700,
+                      whiteSpace: "nowrap",
+                      background: line === l.key ? l.color : "#F1F5F9",
+                      color: line === l.key ? "white" : "#64748B",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {l.key}
+                  </div>
+                ))}
+              </div>
+
+              {/* Station list */}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 12,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: current.color,
+                  }}
+                >
+                  {current.label} Line
+                </div>
+                <ArrivalBadge text="Normal Service" type="ontime" />
+              </div>
+
+              {(stations[line] || []).map((st, i) => (
+                <div
+                  key={st}
+                  className="card"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    padding: "11px 14px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      background: current.color,
+                      flexShrink: 0,
+                    }}
+                  />
+                  <div
+                    style={{
+                      flex: 1,
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: "#18181B",
+                    }}
+                  >
+                    {st}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      fontFamily: "'JetBrains Mono',monospace",
+                      color: "#94A3B8",
+                    }}
+                  >
+                    {i === 0 ? "Arriving" : `${(i + 1) * 2} min`}
+                  </div>
+                  {I.Arrow()}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
+      /* ══════════════════════════════════════
+         TRAIN (TRA) PAGE
+      ══════════════════════════════════════ */
+      const TrainPage = ({ onBack }) => {
+        const [tab, setTab] = useState("list");
+        const trains = [
+          {
+            id: "1147",
+            type: "Local",
+            dep: "08:15",
+            arr: "09:30",
+            price: "$114",
+            status: "ontime",
+            seats: "Available",
+          },
+          {
+            id: "272",
+            type: "Express",
+            dep: "08:45",
+            arr: "09:20",
+            price: "$177",
+            status: "ontime",
+            seats: "Available",
+          },
+          {
+            id: "108",
+            type: "Taroko",
+            dep: "09:00",
+            arr: "09:40",
+            price: "$440",
+            status: "delay",
+            seats: "Limited",
+          },
+          {
+            id: "512",
+            type: "Puyuma",
+            dep: "09:30",
+            arr: "10:05",
+            price: "$481",
+            status: "ontime",
+            seats: "Available",
+          },
+          {
+            id: "1201",
+            type: "Local",
+            dep: "10:00",
+            arr: "11:15",
+            price: "$114",
+            status: "ontime",
+            seats: "Available",
+          },
+        ];
+        const typeColor = {
+          Local: "#64748B",
+          Express: "#2563EB",
+          Taroko: "#D97706",
+          Puyuma: "#DC2626",
+        };
+        return (
+          <div className="scroll-area">
+            <div className="page fade-up">
+              <PageHeader title="TRA Railway" onBack={onBack} />
+
+              {/* Route selector */}
+              <div
+                style={{
+                  fontSize: 9,
+                  opacity: 0.7,
+                  fontWeight: 700,
+                  letterSpacing: "0.08em",
+                  marginBottom: 10,
+                }}
+              >
+                Today, Apr 17
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  marginBottom: 16,
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    flex: 1,
+                    background: "white",
+                    padding: "11px 14px",
+                    borderRadius: 12,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 9,
+                      color: "#94A3B8",
+                      fontWeight: 700,
+                      letterSpacing: "0.06em",
+                      marginBottom: 2,
+                    }}
+                  >
+                    FROM
+                  </div>
+                  <div
+                    style={{ fontSize: 14, fontWeight: 700, color: "#18181B" }}
+                  >
+                    Taipei
+                  </div>
+                </div>
+                <div
+                  className="clickable"
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 10,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  {I.Swap("#2563EB", 18)}
+                </div>
+                <div
+                  style={{
+                    flex: 1,
+                    background: "white",
+                    padding: "11px 14px",
+                    borderRadius: 12,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 9,
+                      color: "#94A3B8",
+                      fontWeight: 700,
+                      letterSpacing: "0.06em",
+                      marginBottom: 2,
+                    }}
+                  >
+                    TO
+                  </div>
+                  <div
+                    style={{ fontSize: 14, fontWeight: 700, color: "#18181B" }}
+                  >
+                    Hsinchu
+                  </div>
+                </div>
+              </div>
+
+              {/* Date + filter */}
+              <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
+                <div style={{ display: "flex", gap: 6 }}>
+                  {["All", "Express", "Local"].map((t) => (
+                    <div
+                      key={t}
+                      className={`pill-btn ${t === "All" ? "active" : "inactive"}`}
+                      style={{ padding: "7px 12px", fontSize: 11 }}
+                    >
+                      {t}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {trains.map((t) => (
+                <div
+                  key={t.id}
+                  className="card clickable"
+                  style={{ padding: "14px 16px" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      marginBottom: 8,
+                    }}
+                  >
+                    <div
+                      style={{ display: "flex", alignItems: "center", gap: 8 }}
+                    >
+                      <span
+                        style={{
+                          background: typeColor[t.type] || "#64748B",
+                          color: "white",
+                          fontSize: 9,
+                          fontWeight: 800,
+                          padding: "2px 7px",
+                          borderRadius: 5,
+                          letterSpacing: "0.04em",
+                        }}
+                      >
+                        {t.type.toUpperCase()}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 700,
+                          color: "#64748B",
+                          fontFamily: "'JetBrains Mono',monospace",
+                        }}
+                      >
+                        #{t.id}
+                      </span>
+                    </div>
+                    <ArrivalBadge
+                      text={t.status === "ontime" ? "On Time" : "Delayed"}
+                      type={t.status === "ontime" ? "ontime" : "delay"}
+                    />
+                  </div>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 8 }}
+                  >
+                    <span
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 800,
+                        fontFamily: "'JetBrains Mono',monospace",
+                        color: "#18181B",
+                      }}
+                    >
+                      {t.dep}
+                    </span>
+                    <div
+                      style={{
+                        flex: 1,
+                        height: 1.5,
+                        background: "#E2E8F0",
+                        borderRadius: 1,
+                        position: "relative",
+                      }}
+                    >
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%,-50%)",
+                          background: "white",
+                          padding: "0 4px",
+                          fontSize: 10,
+                          color: "#94A3B8",
+                          fontWeight: 600,
+                        }}
+                      >
+                        →
+                      </div>
+                    </div>
+                    <span
+                      style={{
+                        fontSize: 20,
+                        fontWeight: 800,
+                        fontFamily: "'JetBrains Mono',monospace",
+                        color: "#18181B",
+                      }}
+                    >
+                      {t.arr}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginTop: 10,
+                      alignItems: "center",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: 11,
+                        color: "#94A3B8",
+                        fontWeight: 500,
+                      }}
+                    >
+                      {t.seats === "Limited"
+                        ? "⚠️ Limited seats"
+                        : "✓ " + t.seats}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: 17,
+                        fontWeight: 800,
+                        color: "#18181B",
+                      }}
+                    >
+                      {t.price}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
+      /* ══════════════════════════════════════
+         HSR PAGE
+      ══════════════════════════════════════ */
+      const HSRPage = ({ onBack }) => {
+        const [tab, setTab] = useState("oneway");
+        const trains = [
+          {
+            id: "612",
+            dep: "08:30",
+            arr: "10:40",
+            dur: "2h10m",
+            price: "$1,490",
+            seats: "Business ✓",
+            status: "ontime",
+          },
+          {
+            id: "616",
+            dep: "09:00",
+            arr: "11:05",
+            dur: "2h05m",
+            price: "$1,490",
+            seats: "Standard ✓",
+            status: "ontime",
+          },
+          {
+            id: "620",
+            dep: "10:00",
+            arr: "12:00",
+            dur: "2h00m",
+            price: "$1,490",
+            seats: "⚠️ Limited",
+            status: "delay",
+          },
+          {
+            id: "624",
+            dep: "11:00",
+            arr: "13:08",
+            dur: "2h08m",
+            price: "$1,490",
+            seats: "Standard ✓",
+            status: "ontime",
+          },
+        ];
+        const stops = [
+          "Taipei",
+          "Banqiao",
+          "Taoyuan",
+          "Hsinchu",
+          "Miaoli",
+          "Taichung",
+          "Changhua",
+          "Yunlin",
+          "Chiayi",
+          "Tainan",
+          "Zuoying",
+        ];
+        return (
+          <div className="scroll-area">
+            <div className="page fade-up">
+              <PageHeader title="High Speed Rail" onBack={onBack} />
+
+              {/* Hero card */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  marginBottom: 16,
+                  alignItems: "flex-start",
+                  flexDirection: "column",
+                  color: "#18181b",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                    flexDirection: "column",
+                    gap: 4,
+                    width: "100%",
+                    marginBottom: 14,
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 9,
+                      opacity: 0.7,
+                      fontWeight: 700,
+                      letterSpacing: "0.08em",
+                      marginBottom: 10,
+                    }}
+                  >
+                    TODAY · APR 17
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "space-between",
+                      gap: 10,
+                      width: "100%",
+                    }}
+                  >
+                    <div
+                      style={{
+                        flex: 1,
+                        background: "white",
+                        padding: "11px 14px",
+                        borderRadius: 12,
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 9,
+                          color: "#94A3B8",
+                          fontWeight: 700,
+                          letterSpacing: "0.06em",
+                          marginBottom: 2,
+                        }}
+                      >
+                        FROM
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 22,
+                          fontWeight: 900,
+                          letterSpacing: "-0.5px",
+                        }}
+                      >
+                        TPE
+                      </div>
+                      <div style={{ fontSize: 10, opacity: 0.6 }}>Taipei</div>
+                    </div>
+                    <div
+                      style={{
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: 2,
+                      }}
+                    >
+                      <div style={{ opacity: 0.5, fontSize: 11 }}> 2h</div>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: 1,
+                          background: "#71717a",
+                        }}
+                      />
+                      ✈
+                    </div>
+                    <div
+                      style={{
+                        flex: 1,
+                        background: "white",
+                        padding: "11px 14px",
+                        borderRadius: 12,
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 9,
+                          color: "#94A3B8",
+                          fontWeight: 700,
+                          letterSpacing: "0.06em",
+                          marginBottom: 2,
+                        }}
+                      >
+                        TO
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 22,
+                          fontWeight: 900,
+                          letterSpacing: "-0.5px",
+                        }}
+                      >
+                        ZOY
+                      </div>
+                      <div style={{ fontSize: 10, opacity: 0.6 }}>Zuoying</div>
+                    </div>
+                  </div>
+                </div>
+                <div style={{ display: "flex", gap: 8 }}>
+                  {["One Way", "Return"].map((t) => (
+                    <div
+                      key={t}
+                      onClick={() => setTab(t)}
+                      className="clickable"
+                      style={{
+                        padding: "7px 16px",
+                        borderRadius: 100,
+                        fontSize: 12,
+                        fontWeight: 700,
+                        background: tab === t ? "#2563eb" : "#71717a",
+                        color: "white",
+                      }}
+                    >
+                      {t}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Stops scroll */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 6,
+                  overflowX: "auto",
+                  marginBottom: 18,
+                  paddingBottom: 2,
+                }}
+              >
+                {stops.map((s, i) => (
+                  <div
+                    key={s}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: 4,
+                      flexShrink: 0,
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: "50%",
+                        background:
+                          i === 0 || i === stops.length - 1
+                            ? "#DC2626"
+                            : "#E2E8F0",
+                        border: "2px solid",
+                        borderColor:
+                          i === 0 || i === stops.length - 1
+                            ? "#DC2626"
+                            : "#CBD5E1",
+                      }}
+                    />
+                    <div
+                      style={{
+                        fontSize: 9,
+                        fontWeight: 600,
+                        color: "#64748B",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {s}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {trains.map((t) => (
+                <div
+                  key={t.id}
+                  className="card clickable"
+                  style={{ padding: "14px 16px" }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      marginBottom: 10,
+                    }}
+                  >
+                    <div
+                      style={{ display: "flex", alignItems: "center", gap: 8 }}
+                    >
+                      <span
+                        style={{
+                          background: "#FEF2F2",
+                          color: "#DC2626",
+                          fontSize: 9,
+                          fontWeight: 800,
+                          padding: "2px 7px",
+                          borderRadius: 5,
+                          letterSpacing: "0.04em",
+                        }}
+                      >
+                        HSR
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 700,
+                          color: "#64748B",
+                          fontFamily: "'JetBrains Mono',monospace",
+                        }}
+                      >
+                        #{t.id}
+                      </span>
+                    </div>
+                    <ArrivalBadge
+                      text={t.status === "ontime" ? "On Time" : "Delayed"}
+                      type={t.status === "ontime" ? "ontime" : "delay"}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      marginBottom: 10,
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: 22,
+                        fontWeight: 900,
+                        fontFamily: "'JetBrains Mono',monospace",
+                        color: "#18181B",
+                      }}
+                    >
+                      {t.dep}
+                    </span>
+                    <div
+                      style={{
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: 10,
+                          color: "#94A3B8",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {t.dur}
+                      </div>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: 1.5,
+                          background: "#F1F5F9",
+                        }}
+                      />
+                    </div>
+                    <span
+                      style={{
+                        fontSize: 22,
+                        fontWeight: 900,
+                        fontFamily: "'JetBrains Mono',monospace",
+                        color: "#18181B",
+                      }}
+                    >
+                      {t.arr}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span style={{ fontSize: 11, color: "#94A3B8" }}>
+                      {t.seats}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: 18,
+                        fontWeight: 800,
+                        color: "#DC2626",
+                      }}
+                    >
+                      {t.price}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
+      /* ══════════════════════════════════════
+         BIKE PAGE
+      ══════════════════════════════════════ */
+      const BikePage = ({ onBack }) => {
+        const stations = [
+          {
+            name: "Taipei Main Station",
+            available: 12,
+            docks: 20,
+            dist: "80m",
+          },
+          {
+            name: "Zhongshan MRT Exit 2",
+            available: 5,
+            docks: 15,
+            dist: "220m",
+          },
+          {
+            name: "Civic Blvd. & Section 1",
+            available: 0,
+            docks: 10,
+            dist: "350m",
+          },
+          { name: "NTU Hospital", available: 8, docks: 20, dist: "500m" },
+        ];
+        return (
+          <div className="scroll-area">
+            <div className="page fade-up">
+              <PageHeader title="YouBike 2.0" onBack={onBack} />
+              <div className="map-bg" style={{ height: 160, marginBottom: 16 }}>
+                <div className="map-grid-lines" />
+                <div
+                  className="map-road"
+                  style={{ height: 8, top: "45%", left: 0, right: 0 }}
+                />
+                <div
+                  className="map-road"
+                  style={{ width: 8, left: "40%", top: 0, bottom: 0 }}
+                />
+                {/* Bike pins */}
+                {[
+                  { x: "40%", y: "45%", n: 12 },
+                  { x: "60%", y: "30%", n: 5 },
+                  { x: "25%", y: "65%", n: 0 },
+                  { x: "70%", y: "60%", n: 8 },
+                ].map((p, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      position: "absolute",
+                      left: p.x,
+                      top: p.y,
+                      transform: "translate(-50%,-50%)",
+                      textAlign: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        background: p.n > 0 ? "#059669" : "#94A3B8",
+                        color: "white",
+                        fontSize: 9,
+                        fontWeight: 800,
+                        padding: "3px 6px",
+                        borderRadius: 6,
+                        marginBottom: 2,
+                      }}
+                    >
+                      {p.n}
+                    </div>
+                    <div
+                      style={{
+                        width: 0,
+                        height: 0,
+                        borderLeft: "5px solid transparent",
+                        borderRight: "5px solid transparent",
+                        borderTop: `6px solid ${p.n > 0 ? "#059669" : "#94A3B8"}`,
+                        margin: "0 auto",
+                      }}
+                    />
+                  </div>
+                ))}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 8,
+                    right: 8,
+                    background: "white",
+                    borderRadius: 8,
+                    padding: "4px 8px",
+                    fontSize: 9,
+                    fontWeight: 700,
+                    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  📍 You are here
+                </div>
+              </div>
+
+              {stations.map((s, i) => (
+                <div
+                  key={i}
+                  className="card"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    padding: "13px 14px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      background: s.available > 0 ? "#ECFDF5" : "#F8FAFC",
+                      borderRadius: 10,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {I.Bike(s.available > 0 ? "#059669" : "#94A3B8", 20)}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div
+                      style={{
+                        fontSize: 12,
+                        fontWeight: 700,
+                        color: "#18181B",
+                      }}
+                    >
+                      {s.name}
+                    </div>
+                    <div
+                      style={{ fontSize: 10, color: "#94A3B8", marginTop: 2 }}
+                    >
+                      {s.dist} away · {s.docks} docks
+                    </div>
+                  </div>
+                  <div style={{ textAlign: "right", flexShrink: 0 }}>
+                    <div
+                      style={{
+                        fontSize: 18,
+                        fontWeight: 900,
+                        color:
+                          s.available > 5
+                            ? "#059669"
+                            : s.available > 0
+                              ? "#D97706"
+                              : "#94A3B8",
+                        fontFamily: "'JetBrains Mono',monospace",
+                      }}
+                    >
+                      {s.available}
+                    </div>
+                    <div
+                      style={{ fontSize: 9, color: "#94A3B8", fontWeight: 600 }}
+                    >
+                      bikes
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
+      /* ══════════════════════════════════════
+         MAP PAGE
+      ══════════════════════════════════════ */
+      const MapPage = ({ onBack }) => (
+        <div className="scroll-area">
+          <div className="page fade-up">
+            <PageHeader title="Live Map" onBack={onBack} />
+            <div className="map-bg" style={{ height: 320, marginBottom: 16 }}>
+              <div className="map-grid-lines" />
+              {/* Roads */}
+              <div
+                className="map-road"
+                style={{ height: 8, top: "35%", left: 0, right: 0 }}
+              />
+              <div
+                className="map-road"
+                style={{ height: 8, top: "60%", left: 0, right: 0 }}
+              />
+              <div
+                className="map-road"
+                style={{ width: 8, left: "30%", top: 0, bottom: 0 }}
+              />
+              <div
+                className="map-road"
+                style={{ width: 8, left: "65%", top: 0, bottom: 0 }}
+              />
+              {/* MRT red line */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: "30%",
+                  top: 0,
+                  bottom: 0,
+                  width: 4,
+                  background: "#DC2626",
+                  opacity: 0.7,
+                  borderRadius: 2,
+                }}
+              />
+              {/* Bus route */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "35%",
+                  left: "30%",
+                  right: "5%",
+                  height: 3,
+                  background: "#2563EB",
+                  opacity: 0.7,
+                  borderRadius: 2,
+                }}
+              />
+              {/* Stops */}
+              {[
+                { x: "30%", y: "35%", c: "#DC2626", label: "Main St." },
+                { x: "30%", y: "55%", c: "#DC2626", label: "Zhongshan" },
+                { x: "55%", y: "35%", c: "#2563EB", label: "Stop 3" },
+                { x: "75%", y: "35%", c: "#2563EB", label: "City Hall" },
+              ].map((s, i) => (
+                <div
+                  key={i}
+                  style={{
+                    position: "absolute",
+                    left: s.x,
+                    top: s.y,
+                    transform: "translate(-50%,-50%)",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 12,
+                      height: 12,
+                      borderRadius: "50%",
+                      background: "white",
+                      border: `3px solid ${s.c}`,
+                      boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
+                    }}
+                  />
+                  <div
+                    style={{
+                      fontSize: 8,
+                      fontWeight: 700,
+                      color: "#18181B",
+                      whiteSpace: "nowrap",
+                      marginTop: 2,
+                      transform: "translateX(-30%)",
+                    }}
+                  >
+                    {s.label}
+                  </div>
+                </div>
+              ))}
+              {/* User dot */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: "50%",
+                  top: "48%",
+                  transform: "translate(-50%,-50%)",
+                }}
+              >
+                <div
+                  style={{
+                    width: 14,
+                    height: 14,
+                    borderRadius: "50%",
+                    background: "#2563EB",
+                    border: "2.5px solid white",
+                    boxShadow: "0 0 0 4px rgba(37,99,235,0.2)",
+                  }}
+                />
+              </div>
+              {/* Legend */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 8,
+                  left: 8,
+                  background: "rgba(255,255,255,0.92)",
+                  borderRadius: 8,
+                  padding: "6px 10px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 4,
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    fontSize: 9,
+                    fontWeight: 600,
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 12,
+                      height: 3,
+                      background: "#DC2626",
+                      borderRadius: 1,
+                    }}
+                  />{" "}
+                  MRT Red
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    fontSize: 9,
+                    fontWeight: 600,
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 12,
+                      height: 3,
+                      background: "#2563EB",
+                      borderRadius: 1,
+                    }}
+                  />{" "}
+                  Bus 230
+                </div>
+              </div>
+            </div>
+            {/* Nearby transport */}
+            <div style={{ display: "flex", gap: 10 }}>
+              {[
+                { label: "BUS", color: "#2563EB", bg: "#EEF2FF", count: 3 },
+                { label: "MRT", color: "#DC2626", bg: "#FEF2F2", count: 1 },
+                { label: "BIKE", color: "#059669", bg: "#ECFDF5", count: 8 },
+              ].map((c) => (
+                <div
+                  key={c.label}
+                  style={{
+                    flex: 1,
+                    background: c.bg,
+                    borderRadius: 14,
+                    padding: "14px",
+                    textAlign: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: 18,
+                      fontWeight: 900,
+                      color: c.color,
+                      fontFamily: "'JetBrains Mono',monospace",
+                    }}
+                  >
+                    {c.count}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 10,
+                      fontWeight: 700,
+                      color: c.color,
+                      marginTop: 2,
+                    }}
+                  >
+                    {c.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+
+      /* ══════════════════════════════════════
+         SEARCH PAGE
+      ══════════════════════════════════════ */
+      const SearchPage = ({ onBack }) => {
+        const recent = [
+          "Taipei Main Station",
+          "Ximen MRT",
+          "City Hall",
+          "National Taiwan University",
+          "Zhongshan District",
+        ];
+        return (
+          <div className="scroll-area">
+            <div className="page fade-up">
+              <PageHeader title="Search" onBack={onBack} />
+              <div
+                style={{
+                  background: "white",
+                  borderRadius: 14,
+                  padding: "12px 16px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  marginBottom: 16,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                  border: "1.5px solid #DBEAFE",
+                }}
+              >
+                {I.Search("#2563EB", 18)}
+                <span
+                  style={{
+                    fontSize: 13,
+                    color: "#94A3B8",
+                    fontFamily: "'Sora',sans-serif",
+                  }}
+                >
+                  Search routes or stops…
+                </span>
+              </div>
+
+              <div
+                style={{
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: "#94A3B8",
+                  letterSpacing: "0.06em",
+                  marginBottom: 10,
+                }}
+              >
+                RECENT SEARCHES
+              </div>
+              {recent.map((r, i) => (
+                <div
+                  key={i}
+                  className="clickable"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    padding: "12px 0",
+                    borderBottom: "1px solid #F8FAFC",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 32,
+                      height: 32,
+                      background: "#F1F5F9",
+                      borderRadius: 8,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {I.Clock("#94A3B8", 13)}
+                  </div>
+                  <span
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: "#334155",
+                      flex: 1,
+                    }}
+                  >
+                    {r}
+                  </span>
+                  {I.Arrow()}
+                </div>
+              ))}
+
+              <div
+                style={{
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: "#94A3B8",
+                  letterSpacing: "0.06em",
+                  marginTop: 20,
+                  marginBottom: 10,
+                }}
+              >
+                POPULAR ROUTES
+              </div>
+              {[
+                { from: "Taipei", to: "Taichung", mode: "HSR", time: "1h05m" },
+                { from: "Taipei", to: "Kaohsiung", mode: "HSR", time: "2h00m" },
+                { from: "Taipei", to: "Hsinchu", mode: "TRA", time: "1h15m" },
+              ].map((r, i) => (
+                <div
+                  key={i}
+                  className="card clickable"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    padding: "12px 14px",
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <div
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: "#18181B",
+                      }}
+                    >
+                      {r.from} → {r.to}
+                    </div>
+                    <div
+                      style={{ fontSize: 11, color: "#94A3B8", marginTop: 2 }}
+                    >
+                      {r.mode} · {r.time}
+                    </div>
+                  </div>
+                  {I.Arrow()}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      };
+
+      /* ══════════════════════════════════════
+         TICKETS PAGE
+      ══════════════════════════════════════ */
+      const TicketsPage = ({ onBack }) => {
+        const [tab, setTab] = useState("active");
+        return (
+          <div className="scroll-area">
+            <div className="page fade-up">
+              <PageHeader title="My Tickets" onBack={onBack} />
+              <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+                {["active", "history"].map((t) => (
+                  <div
+                    key={t}
+                    onClick={() => setTab(t)}
+                    className={`pill-btn ${tab === t ? "active" : "inactive"}`}
+                  >
+                    {t === "active" ? "Active Tickets" : "History"}
+                  </div>
+                ))}
+              </div>
+
+              {tab === "active" ? (
+                <>
+                  {/* HSR ticket */}
+                  <div
+                    style={{
+                      background: "linear-gradient(135deg,#DC2626,#B91C1C)",
+                      borderRadius: 20,
+                      padding: "20px",
+                      marginBottom: 14,
+                      color: "white",
+                      position: "relative",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: -20,
+                        top: -20,
+                        width: 100,
+                        height: 100,
+                        borderRadius: "50%",
+                        background: "rgba(255,255,255,0.05)",
+                      }}
+                    />
+                    <div
+                      style={{
+                        fontSize: 9,
+                        opacity: 0.7,
+                        fontWeight: 700,
+                        letterSpacing: "0.08em",
+                        marginBottom: 12,
+                      }}
+                    >
+                      HSR EXPRESS · ADULT
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        marginBottom: 16,
+                      }}
+                    >
+                      <div>
+                        <div
+                          style={{
+                            fontSize: 28,
+                            fontWeight: 900,
+                            letterSpacing: "-0.5px",
+                          }}
+                        >
+                          TPE
+                        </div>
+                        <div style={{ fontSize: 10, opacity: 0.6 }}>Taipei</div>
+                      </div>
+                      <div style={{ textAlign: "center", opacity: 0.5 }}>
+                        <div style={{ fontSize: 10, marginBottom: 4 }}>
+                          Train #616
+                        </div>
+                        <div style={{ fontSize: 16 }}> ——— ✈ </div>
+                        <div style={{ fontSize: 10, marginTop: 4 }}>2h 05m</div>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <div
+                          style={{
+                            fontSize: 28,
+                            fontWeight: 900,
+                            letterSpacing: "-0.5px",
+                          }}
+                        >
+                          ZOY
+                        </div>
+                        <div style={{ fontSize: 10, opacity: 0.6 }}>
+                          Zuoying
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        paddingTop: 14,
+                        borderTop: "1px dashed rgba(255,255,255,0.3)",
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontSize: 9, opacity: 0.6 }}>
+                          DEPARTURE
+                        </div>
+                        <div
+                          style={{
+                            fontSize: 15,
+                            fontWeight: 800,
+                            fontFamily: "'JetBrains Mono',monospace",
+                          }}
+                        >
+                          09:00
+                        </div>
+                      </div>
+                      <div style={{ textAlign: "center" }}>
+                        <div style={{ fontSize: 9, opacity: 0.6 }}>SEAT</div>
+                        <div
+                          style={{
+                            fontSize: 15,
+                            fontWeight: 800,
+                            fontFamily: "'JetBrains Mono',monospace",
+                          }}
+                        >
+                          7C
+                        </div>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ fontSize: 9, opacity: 0.6 }}>DATE</div>
+                        <div
+                          style={{
+                            fontSize: 15,
+                            fontWeight: 800,
+                            fontFamily: "'JetBrains Mono',monospace",
+                          }}
+                        >
+                          APR 17
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* QR section */}
+                  <div
+                    className="card"
+                    style={{ textAlign: "center", padding: "20px" }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: "#94A3B8",
+                        fontWeight: 600,
+                        marginBottom: 14,
+                      }}
+                    >
+                      SCAN TO BOARD
+                    </div>
+                    <div
+                      style={{
+                        width: 130,
+                        height: 130,
+                        background: "#18181B",
+                        margin: "0 auto",
+                        borderRadius: 12,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <svg width="100" height="100" viewBox="0 0 100 100">
+                        {[0, 10, 20, 30, 40, 50, 60, 70, 80, 90].map((x) =>
+                          [0, 10, 20, 30, 40, 50, 60, 70, 80, 90].map((y) =>
+                            Math.random() > 0.5 ? (
+                              <rect
+                                key={`${x}${y}`}
+                                x={x}
+                                y={y}
+                                width="8"
+                                height="8"
+                                fill="white"
+                                opacity="0.9"
+                              />
+                            ) : null,
+                          ),
+                        )}
+                        <rect
+                          x="5"
+                          y="5"
+                          width="30"
+                          height="30"
+                          fill="none"
+                          stroke="white"
+                          strokeWidth="4"
+                        />
+                        <rect
+                          x="65"
+                          y="5"
+                          width="30"
+                          height="30"
+                          fill="none"
+                          stroke="white"
+                          strokeWidth="4"
+                        />
+                        <rect
+                          x="5"
+                          y="65"
+                          width="30"
+                          height="30"
+                          fill="none"
+                          stroke="white"
+                          strokeWidth="4"
+                        />
+                        <rect
+                          x="15"
+                          y="15"
+                          width="10"
+                          height="10"
+                          fill="white"
+                        />
+                        <rect
+                          x="75"
+                          y="15"
+                          width="10"
+                          height="10"
+                          fill="white"
+                        />
+                        <rect
+                          x="15"
+                          y="75"
+                          width="10"
+                          height="10"
+                          fill="white"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      style={{
+                        marginTop: 14,
+                        fontFamily: "'JetBrains Mono',monospace",
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: "#18181B",
+                        letterSpacing: "0.08em",
+                      }}
+                    >
+                      HSR-616-7C-20250417
+                    </div>
+                  </div>
+
+                  {/* MRT pass */}
+                  <div
+                    style={{
+                      background: "linear-gradient(135deg,#059669,#065F46)",
+                      borderRadius: 20,
+                      padding: "16px 20px",
+                      color: "white",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 9,
+                        opacity: 0.7,
+                        fontWeight: 700,
+                        letterSpacing: "0.08em",
+                        marginBottom: 8,
+                      }}
+                    >
+                      MRT STORED VALUE CARD
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontSize: 10, opacity: 0.7 }}>
+                          Balance
+                        </div>
+                        <div
+                          style={{
+                            fontSize: 28,
+                            fontWeight: 900,
+                            fontFamily: "'JetBrains Mono',monospace",
+                          }}
+                        >
+                          $482
+                        </div>
+                      </div>
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ fontSize: 10, opacity: 0.7 }}>
+                          Card ID
+                        </div>
+                        <div
+                          style={{
+                            fontSize: 13,
+                            fontWeight: 700,
+                            fontFamily: "'JetBrains Mono',monospace",
+                          }}
+                        >
+                          0012·3456
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        marginTop: 12,
+                        background: "rgba(255,255,255,0.15)",
+                        borderRadius: 10,
+                        padding: "8px 12px",
+                        fontSize: 11,
+                        fontWeight: 600,
+                      }}
+                    >
+                      + Top Up Card
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {[
+                    {
+                      type: "HSR",
+                      route: "Taipei → Zuoying",
+                      date: "Apr 10, 2025",
+                      price: "$1,490",
+                      num: "616",
+                    },
+                    {
+                      type: "TRA",
+                      route: "Taipei → Hsinchu",
+                      date: "Apr 5, 2025",
+                      price: "$177",
+                      num: "272",
+                    },
+                    {
+                      type: "MRT",
+                      route: "Ximen → Taipei Main",
+                      date: "Apr 3, 2025",
+                      price: "$25",
+                      num: "",
+                    },
+                    {
+                      type: "BUS",
+                      route: "Route 230",
+                      date: "Apr 1, 2025",
+                      price: "$15",
+                      num: "",
+                    },
+                  ].map((t, i) => (
+                    <div
+                      key={i}
+                      className="card"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 12,
+                        padding: "13px 14px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 38,
+                          height: 38,
+                          background:
+                            t.type === "HSR"
+                              ? "#FEF2F2"
+                              : t.type === "TRA"
+                                ? "#FFF7ED"
+                                : t.type === "MRT"
+                                  ? "#ECFDF5"
+                                  : "#EEF2FF",
+                          borderRadius: 10,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontSize: 10,
+                            fontWeight: 800,
+                            color:
+                              t.type === "HSR"
+                                ? "#DC2626"
+                                : t.type === "TRA"
+                                  ? "#EA580C"
+                                  : t.type === "MRT"
+                                    ? "#059669"
+                                    : "#2563EB",
+                          }}
+                        >
+                          {t.type}
+                        </span>
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div
+                          style={{
+                            fontSize: 13,
+                            fontWeight: 700,
+                            color: "#18181B",
+                          }}
+                        >
+                          {t.route}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: 10,
+                            color: "#94A3B8",
+                            marginTop: 2,
+                          }}
+                        >
+                          {t.date}
+                        </div>
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 800,
+                          color: "#18181B",
+                        }}
+                      >
+                        {t.price}
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+          </div>
+        );
+      };
+
+      /* ══════════════════════════════════════
+         ALERTS PAGE
+      ══════════════════════════════════════ */
+      const AlertsPage = ({ onBack }) => {
+        const alerts = [
+          {
+            title: "Route 230 Delay",
+            msg: "~10 min delay near Main Station due to road works.",
+            type: "warning",
+            time: "2 min ago",
+            read: false,
+          },
+          {
+            title: "MRT Blue Line",
+            msg: "Scheduled maintenance at Ximen station tonight 23:00–01:00.",
+            type: "info",
+            time: "1h ago",
+            read: false,
+          },
+          {
+            title: "YouBike Notice",
+            msg: "Station near NTU Hospital is now full. No docks available.",
+            type: "info",
+            time: "3h ago",
+            read: true,
+          },
+          {
+            title: "HSR Service Update",
+            msg: "Train #620 delayed by 15 minutes. We apologize for the inconvenience.",
+            type: "warning",
+            time: "4h ago",
+            read: true,
+          },
+          {
+            title: "System",
+            msg: "Your monthly pass expires in 3 days. Tap to renew.",
+            type: "alert",
+            time: "Yesterday",
+            read: true,
+          },
+        ];
+        const styles = {
+          warning: {
+            bg: "#FFFBEB",
+            border: "#FDE68A",
+            icon: I.Warning,
+            ic: "#D97706",
+            dot: "#D97706",
+          },
+          info: {
+            bg: "#EFF6FF",
+            border: "#BFDBFE",
+            icon: I.Info,
+            ic: "#2563EB",
+            dot: "#2563EB",
+          },
+          alert: {
+            bg: "#FEF2F2",
+            border: "#FECACA",
+            icon: I.Warning,
+            ic: "#DC2626",
+            dot: "#DC2626",
+          },
+        };
+        return (
+          <div className="scroll-area">
+            <div className="page fade-up">
+              <PageHeader title="Alerts" onBack={onBack} />
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 14,
+                }}
+              >
+                <span
+                  style={{ fontSize: 12, color: "#94A3B8", fontWeight: 600 }}
+                >
+                  2 unread
+                </span>
+                <span
+                  className="clickable"
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 700,
+                    color: "#2563EB",
+                    cursor: "pointer",
+                  }}
+                >
+                  Mark all read
+                </span>
+              </div>
+              {alerts.map((a, i) => {
+                const s = styles[a.type];
+                return (
+                  <div
+                    key={i}
+                    className="clickable"
+                    style={{
+                      background: s.bg,
+                      border: `1.5px solid ${s.border}`,
+                      borderRadius: 14,
+                      padding: "13px 14px",
+                      marginBottom: 10,
+                      display: "flex",
+                      gap: 12,
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <div style={{ flexShrink: 0, marginTop: 1 }}>
+                      {s.icon(s.ic, 16)}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          marginBottom: 3,
+                        }}
+                      >
+                        <div
+                          style={{
+                            fontSize: 13,
+                            fontWeight: 700,
+                            color: "#18181B",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                          }}
+                        >
+                          {a.title}
+                          {!a.read && (
+                            <div
+                              style={{
+                                width: 6,
+                                height: 6,
+                                borderRadius: "50%",
+                                background: s.dot,
+                                flexShrink: 0,
+                              }}
+                            />
+                          )}
+                        </div>
+                        <div
+                          style={{
+                            fontSize: 10,
+                            color: "#94A3B8",
+                            flexShrink: 0,
+                            marginLeft: 8,
+                          }}
+                        >
+                          {a.time}
+                        </div>
+                      </div>
+                      <p
+                        style={{
+                          fontSize: 12,
+                          color: "#475569",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {a.msg}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      };
+
+      /* ══════════════════════════════════════
+         PROFILE PAGE
+      ══════════════════════════════════════ */
+      const ProfilePage = ({ onBack }) => {
+        const [notif, setNotif] = useState(true);
+        const [realtime, setRealtime] = useState(true);
+        const [dark, setDark] = useState(false);
+        const settings = [
+          {
+            label: "Push Notifications",
+            sub: "Route delays & updates",
+            val: notif,
+            set: setNotif,
+          },
+          {
+            label: "Real-time Tracking",
+            sub: "Live bus location",
+            val: realtime,
+            set: setRealtime,
+          },
+          {
+            label: "Dark Mode",
+            sub: "System default",
+            val: dark,
+            set: setDark,
+          },
+        ];
+        const icons = {
+          payment: (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-credit-card-icon lucide-credit-card"
+            >
+              <rect width="20" height="14" x="2" y="5" rx="2" />
+              <line x1="2" x2="22" y1="10" y2="10" />
+            </svg>
+          ),
+          location: (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-map-pin-icon lucide-map-pin"
+            >
+              <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+          ),
+          trip: (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-history-icon lucide-history"
+            >
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
+              <path d="M12 7v5l4 2" />
+            </svg>
+          ),
+          language: (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-globe-icon lucide-globe"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+              <path d="M2 12h20" />
+            </svg>
+          ),
+          help: (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-info-icon lucide-info"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 16v-4" />
+              <path d="M12 8h.01" />
+            </svg>
+          ),
+        };
+
+        const menuItems = [
+          {
+            label: "Payment Methods",
+            icon: icons.payment,
+            sub: "Visa ending in 4242",
+          },
+          {
+            label: "Saved Locations",
+            icon: icons.location,
+            sub: "Home, Work, 3 others",
+          },
+          {
+            label: "Trip History",
+            icon: icons.trip,
+            sub: "42 trips this month",
+          },
+          { label: "Language", icon: icons.language, sub: "English" },
+          { label: "Help & Support", icon: icons.help, sub: "FAQ, Contact us" },
+        ];
+        return (
+          <div className="scroll-area">
+            <div className="page fade-up">
+              {/* Profile hero */}
+              <div style={{ textAlign: "center", marginBottom: 24 }}>
+                <div
+                  style={{
+                    width: 60,
+                    height: 60,
+                    background: "#2563EB",
+                    borderRadius: "50%",
+                    margin: "0 auto 12px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="30"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-user-icon lucide-user"
+                  >
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                  </svg>
+                </div>
+                <h2 style={{ fontSize: 20, fontWeight: 800, color: "#18181B" }}>
+                  Alex Johnson
+                </h2>
+                <div
+                  style={{
+                    marginTop: 6,
+                    display: "flex",
+                    justifyContent: "center",
+                    gap: 8,
+                  }}
+                >
+                  <span
+                    style={{
+                      background: "#FEF3C7",
+                      color: "#92400E",
+                      fontSize: 10,
+                      fontWeight: 800,
+                      padding: "3px 10px",
+                      borderRadius: 8,
+                      letterSpacing: "0.04em",
+                    }}
+                  >
+                    ★ GOLD MEMBER
+                  </span>
+                  <span
+                    style={{
+                      background: "#EFF6FF",
+                      color: "#1D4ED8",
+                      fontSize: 10,
+                      fontWeight: 700,
+                      padding: "3px 10px",
+                      borderRadius: 8,
+                    }}
+                  >
+                    alex.j@gmail.com
+                  </span>
+                </div>
+              </div>
+
+              {/* Stats row */}
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr 1fr",
+                  gap: 10,
+                  marginBottom: 20,
+                }}
+              >
+                {[
+                  { n: "142", l: "Trips" },
+                  { n: "$4,290", l: "Spent" },
+                  { n: "38 kg", l: "CO₂ Saved" },
+                ].map((s, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      background: "white",
+                      borderRadius: 14,
+                      padding: "12px",
+                      textAlign: "center",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: 16,
+                        fontWeight: 900,
+                        color: "#18181B",
+                        fontFamily: "'JetBrains Mono',monospace",
+                      }}
+                    >
+                      {s.n}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: 10,
+                        color: "#94A3B8",
+                        fontWeight: 600,
+                        marginTop: 2,
+                      }}
+                    >
+                      {s.l}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Settings toggles */}
+              <div
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: "#94A3B8",
+                  letterSpacing: "0.08em",
+                  marginBottom: 10,
+                }}
+              >
+                PREFERENCES
+              </div>
+              <div className="card" style={{ padding: "4px 16px" }}>
+                {settings.map((s, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "12px 0",
+                      borderBottom:
+                        i < settings.length - 1 ? "1px solid #F8FAFC" : "none",
+                    }}
+                  >
+                    <div>
+                      <div
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 600,
+                          color: "#18181B",
+                        }}
+                      >
+                        {s.label}
+                      </div>
+                      <div
+                        style={{ fontSize: 11, color: "#94A3B8", marginTop: 1 }}
+                      >
+                        {s.sub}
+                      </div>
+                    </div>
+                    <div
+                      onClick={() => s.set(!s.val)}
+                      className="switch clickable"
+                      style={{
+                        background: s.val ? "#059669" : "#E2E8F0",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <div
+                        className="switch-handle"
+                        style={{ left: s.val ? 23 : 3 }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Menu items */}
+              <div
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  color: "#94A3B8",
+                  letterSpacing: "0.08em",
+                  marginTop: 18,
+                  marginBottom: 10,
+                }}
+              >
+                ACCOUNT
+              </div>
+              <div className="card" style={{ padding: "4px 16px" }}>
+                {menuItems.map((m, i) => (
+                  <div
+                    key={i}
+                    className="clickable"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 12,
+                      padding: "12px 0",
+                      borderBottom:
+                        i < menuItems.length - 1 ? "1px solid #F8FAFC" : "none",
+                    }}
+                  >
+                    <span style={{ fontSize: 18 }}>{m.icon}</span>
+                    <div style={{ flex: 1 }}>
+                      <div
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 600,
+                          color: "#18181B",
+                        }}
+                      >
+                        {m.label}
+                      </div>
+                      <div
+                        style={{ fontSize: 11, color: "#94A3B8", marginTop: 1 }}
+                      >
+                        {m.sub}
+                      </div>
+                    </div>
+                    {I.Arrow()}
+                  </div>
+                ))}
+              </div>
+
+              <div
+                className="card clickable"
+                style={{
+                  textAlign: "center",
+                  marginTop: 6,
+                  padding: "14px",
+                  border: "1.5px solid #FEE2E2",
+                  background: "#FEF2F2",
+                  boxShadow: "none",
+                }}
+              >
+                <span
+                  style={{ fontSize: 13, fontWeight: 700, color: "#DC2626" }}
+                >
+                  Log Out
+                </span>
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      /* ══════════════════════════════════════
+         MAIN APP
+      ══════════════════════════════════════ */
+      function App() {
+        const [screen, setScreen] = useState("home");
+
+        const allScreens = [
+          "home",
+          "bus",
+          "mrt",
+          "tra",
+          "hsr",
+          "bike",
+          "map",
+          "search",
+          "tickets",
+          "alerts",
+          "profile",
+        ];
+
+        const tabKeyMap = {
+          home: "home",
+          search: "search",
+          tickets: "tickets",
+          alerts: "alerts",
+          profile: "profile",
+        };
+        const activeTab =
+          tabKeyMap[screen] ||
+          (screen === "home" ||
+          screen === "bus" ||
+          screen === "mrt" ||
+          screen === "tra" ||
+          screen === "hsr" ||
+          screen === "bike" ||
+          screen === "map"
+            ? "home"
+            : null);
+
+        const handleTab = (key) => {
+          const m = {
+            home: "home",
+            search: "search",
+            tickets: "tickets",
+            alerts: "alerts",
+            profile: "profile",
+          };
+          setScreen(m[key] || "home");
+        };
+
+        const renderScreen = () => {
+          switch (screen) {
+            case "home":
+              return <HomePage onNav={setScreen} />;
+            case "bus":
+              return <BusPage onBack={() => setScreen("home")} />;
+            case "mrt":
+              return <MRTPage onBack={() => setScreen("home")} />;
+            case "tra":
+              return <TrainPage onBack={() => setScreen("home")} />;
+            case "hsr":
+              return <HSRPage onBack={() => setScreen("home")} />;
+            case "bike":
+              return <BikePage onBack={() => setScreen("home")} />;
+            case "map":
+              return <MapPage onBack={() => setScreen("home")} />;
+            case "search":
+              return <SearchPage onBack={() => setScreen("home")} />;
+            case "tickets":
+              return <TicketsPage onBack={() => setScreen("home")} />;
+            case "alerts":
+              return <AlertsPage onBack={() => setScreen("home")} />;
+            case "profile":
+              return <ProfilePage onBack={() => setScreen("home")} />;
+            default:
+              return <HomePage onNav={setScreen} />;
+          }
+        };
+
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            {/* Screen controller */}
+            <div className="nav-controller">
+              {allScreens.map((k) => (
+                <button
+                  key={k}
+                  className={`nav-btn ${screen === k ? "active" : ""}`}
+                  onClick={() => setScreen(k)}
+                >
+                  {k.charAt(0).toUpperCase() + k.slice(1)}
+                </button>
+              ))}
+            </div>
+
+            {/* Phone */}
+            <div className="phone-frame">
+              <StatusBar />
+              {renderScreen()}
+              <TabBar active={activeTab} onTab={handleTab} />
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
