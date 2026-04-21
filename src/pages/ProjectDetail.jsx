@@ -188,7 +188,7 @@ function UserFlowSection({ project }) {
       <p className="key-title">Screens</p>
 
       <div className="flex gap-4 overflow-x-auto">
-        {Array.from({ length: 10 }, (_, i) => {
+        {Array.from({ length: project.screenCount ?? 0 }, (_, i) => {
           // 將索引 (0-9) 轉為字串並補零 (01, 02...10)
           const pageNum = String(i + 1).padStart(2, "0");
 
@@ -295,9 +295,9 @@ function NextProject({ currentId }) {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           className="group-hover:-translate-x-1 transition-transform"
         >
           <path d="M6 8L2 12L6 16" />
@@ -318,9 +318,9 @@ function NextProject({ currentId }) {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="group-hover:-translate-x-1 transition-transform"
           >
             <path d="M18 8L22 12L18 16" />

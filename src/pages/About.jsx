@@ -39,7 +39,7 @@ const SKILLS = [
 const CONTACT = [
   {
     label: "Resume",
-    href: "/public/FanYiH_resume.pdf",
+    href: "/FanYiH_resume.pdf",
     download: "FanYiH_resume.pdf",
   },
   {

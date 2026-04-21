@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -7,8 +7,8 @@ import ProjectDetail from "./pages/ProjectDetail";
 
 export default function App() {
   return (
-    // HashRouter works on GitHub Pages without a server-side redirect
-    <HashRouter>
+    // BrowserRouter works on GitHub Pages without a server-side redirect
+    <BrowserRouter>
       <Nav />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -16,6 +16,6 @@ export default function App() {
         <Route path="/projects/:id" element={<ProjectDetail />} />
       </Routes>
       <Footer />
-    </HashRouter>
+    </BrowserRouter>
   );
 }
