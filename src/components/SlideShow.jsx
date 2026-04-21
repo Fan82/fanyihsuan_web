@@ -87,7 +87,7 @@ export default function SlideShow({ onComplete }) {
         </div>
         <button
           onClick={complete}
-          className="fixed top-6 right-8 z-50 text-sm text-muted hover:text-ink transition-colors"
+          className="text-sm text-muted hover:text-ink transition-colors"
         >
           Skip
         </button>
