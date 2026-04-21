@@ -26,6 +26,7 @@ export default function SlideShow({ onComplete }) {
   useScrollLock(!done);
 
   const complete = useCallback(() => {
+    document.body.style.overflow = "";
     setDone(true);
     onComplete?.();
   }, [onComplete]);
@@ -84,6 +85,12 @@ export default function SlideShow({ onComplete }) {
             style={{ transform: "rotate(-135deg)", marginBottom: "4px" }}
           />
         </div>
+        <button
+          onClick={complete}
+          className="fixed top-6 right-8 z-50 text-sm text-muted hover:text-ink transition-colors"
+        >
+          Skip
+        </button>
       </div>
     </div>
   );

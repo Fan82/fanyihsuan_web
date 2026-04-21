@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SlideShow from "../components/SlideShow";
 import ProjectList from "../components/ProjectList";
 
 export default function Home() {
   const [slideDone, setSlideDone] = useState(false);
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, []);
 
   return (
     <main className="relative">
