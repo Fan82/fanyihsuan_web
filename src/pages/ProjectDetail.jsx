@@ -75,7 +75,7 @@ function HeroSection({ project }) {
 
       {/* Right: hero image */}
       <img
-        src={`./public/projects/${project.id}/hero-mockup.png`}
+        src={`/projects/${project.id}/hero-mockup.png`}
         alt={`${project.name} mockup`}
         className="w-full object-contain drop-shadow-2xl rounded-2xl"
       />
@@ -141,7 +141,7 @@ function InspirationSection({ project }) {
 //   return (
 //     <section className="px-6 lg:px-12 py-24 max-w-[1200px] mx-auto">
 //       <img
-//         src={`./public/projects/${project.id}/using-mockup.png`}
+//         src={`/projects/${project.id}/using-mockup.png`}
 //         alt={`${project.name} in use`}
 //         className="w-full rounded-2xl object-cover"
 //         style={{ maxHeight: "620px", objectPosition: "center 50%" }}
@@ -195,7 +195,7 @@ function UserFlowSection({ project }) {
           return (
             <img
               key={pageNum}
-              src={`./public/projects/${project.id}/screen/${pageNum}.png`}
+              src={`/projects/${project.id}/screen/${pageNum}.png`}
               alt={`${project.name} screen ${pageNum}`}
               className="w-full max-w-48 rounded-2xl mb-4" // 加上 mb-4 讓圖片之間有間距
             />
@@ -214,7 +214,7 @@ function UserFlowSection({ project }) {
 //         style={{ background: "rgba(255,255,255,0.04)" }}
 //       >
 //         <video
-//           src={`./public/projects/${project.id}/MP4.mp4`}
+//           src={`/projects/${project.id}/MP4.mp4`}
 //           autoPlay
 //           loop
 //           muted

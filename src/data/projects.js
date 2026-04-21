@@ -84,7 +84,7 @@ export const projects = [
     tags: ["UX Design", "Mobile App"],
     meta: { client: "Personal Project", role: "UX + Front-End", year: "2024" },
     desc: "An AI-powered to-do app that automatically organises tasks from your calendar, email & messages — so you can focus on doing.",
-    demoUrl: "./public/projects/takeTask/plan_task_app.html",
+    demoUrl: "/projects/takeTask/plan_task_app.html",
     overview: {
       problem:
         "Most checklist tools lack intelligent prioritisation. Users waste time sorting, typing, and reorganising — the very overhead they wanted to eliminate.",
@@ -137,14 +137,14 @@ export const projects = [
     name: "Easy Bank",
     tagline: "Precision code for a trustworthy banking experience.",
     tags: ["React/CSS", "UI/UX Implementation", "Fintech Design"],
-    demoUrl: "./public/projects/easyBank/easy_bank_app.html",
+    demoUrl: "/projects/easyBank/easy_bank_app.html",
     meta: {
       client: "Personal Project",
       role: "UI",
       year: "2025",
     },
     desc: "A faithful reproduction of a modern digital banking identity. This project explores how front-end architecture—through meticulous typography, color systems, and micro-interactions—communicates 'Security' and 'Professionalism' to the end-user.",
-    demoUrl: "./public/projects/easyBank/easy_bank_app.html",
+    demoUrl: "/projects/easyBank/easy_bank_app.html",
     overview: {
       problem:
         "In the digital finance sector, the challenge lies in presenting dense financial information clearly while maintaining a high-fidelity brand identity that fosters user trust.",
@@ -182,7 +182,7 @@ export const projects = [
     tags: ["React", "Front-End Dev"],
     meta: { client: "Flight Company", role: "UX + Front-End", year: "2024" },
     desc: "Transforming a seemingly simple booking form into an intelligent interface — exploring Vue.js component architecture and reactive data flow.",
-    demoUrl: "./public/projects/bookFlight/flight-booking-demo.html",
+    demoUrl: "/projects/bookFlight/flight-booking-demo.html",
     overview: {
       problem:
         "Flight booking forms are notorious for user errors. Wrong return dates, missed passengers, confusing one-way vs return states.",
@@ -228,7 +228,7 @@ export const projects = [
       year: "2024",
     },
     desc: "A travel site that uses captivating imagery and fluid layout to ignite the desire to explore — built with CSS Grid and a component-based mindset.",
-    demoUrl: "./public/projects/goTravel/goTravel-demo.html",
+    demoUrl: "/projects/goTravel/goTravel-demo.html",
     overview: {
       problem:
         "Travel sites drown users in information. The design challenge: make large amounts of content feel light, digestible, inspiring.",
@@ -267,7 +267,7 @@ export const projects = [
 
     desc: "A real-time transportation app that brings together buses, trains, metro, high-speed rail, and bike systems into one seamless search experience — turning complex live data into calm, reliable information for everyday travel.",
 
-    demoUrl: "./public/projects/publicTransp/public-transport-demo.html",
+    demoUrl: "/projects/publicTransp/public-transport-demo.html",
 
     overview: {
       problem:

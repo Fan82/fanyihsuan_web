@@ -89,7 +89,7 @@ export default function About() {
       <div
         className="w-full h-[50vh] -z-10"
         style={{
-          backgroundImage: "url(./public/profolio.webp)",
+          backgroundImage: "url(/profolio.webp)",
           backgroundSize: "contain",
           backgroundRepeat: "repeat",
           mixBlendMode: "",

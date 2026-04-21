@@ -33,7 +33,7 @@ export default function ProjectCard({ project, variant = "full" }) {
     >
       {/* Background image */}
       <img
-        src={`./public/projects/${project.id}/hero-mockup.png`}
+        src={`/projects/${project.id}/hero-mockup.png`}
         alt={project.name}
         className={project.theme}
         style={{
@@ -52,7 +52,7 @@ export default function ProjectCard({ project, variant = "full" }) {
       {/* Background video (plays on hover) */}
       {/* <video
         ref={videoRef}
-        src={`./public/projects/${project.id}/MP4.mp4`}
+        src={`/projects/${project.id}/MP4.mp4`}
         loop
         muted
         playsInline
@@ -85,7 +85,7 @@ export default function ProjectCard({ project, variant = "full" }) {
         }}
       >
         <img
-          src={`./public/projects/${project.id}/logo.png`}
+          src={`/projects/${project.id}/logo.png`}
           alt={`${project.name} logo`}
           className="w-16 mx-auto mb-4 rounded-xl"
         />
@@ -101,7 +101,7 @@ export default function ProjectCard({ project, variant = "full" }) {
       {/* Touch fallback — always visible on mobile */}
       <div className="absolute bottom-0 left-0 right-0 z-20 text-center p-10 bg-gradient-to-t from-ink/80 to-transparent md:hidden">
         <img
-          src={`./public/projects/${project.id}/logo.png`}
+          src={`/projects/${project.id}/logo.png`}
           alt={`${project.name} logo`}
           className="w-10 mx-auto mb-4 rounded-md"
         />
