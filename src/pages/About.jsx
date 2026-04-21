@@ -38,9 +38,9 @@ const SKILLS = [
 
 const CONTACT = [
   {
-    label: "Download Resume",
-    href: "/files/FanYiH_resume.pdf",
-    external: true,
+    label: "Resume",
+    href: "/public/FanYiH_resume.pdf",
+    download: "FanYiH_resume.pdf",
   },
   {
     label: "LinkedIn",
@@ -83,11 +83,11 @@ export default function About() {
   return (
     <main
       ref={sectionRef}
-      className="pt-[50vh] pb-32 max-w-[1200px] mx-auto px-8 lg:px-16 text-ink relative"
+      className="pt-[10vh] pb-32 max-w-[1200px] mx-auto px-8 lg:px-16 text-ink relative"
     >
       {/* Background watermark — profolio.webp tiled */}
       <div
-        className="fixed top-0 left-0 w-full h-[50vh] -z-10"
+        className="w-full h-[50vh] -z-10"
         style={{
           backgroundImage: "url(./public/profolio.webp)",
           backgroundSize: "contain",
@@ -165,9 +165,8 @@ export default function About() {
                 href={c.href}
                 target={c.external ? "_blank" : undefined}
                 rel={c.external ? "noreferrer" : undefined}
-                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5
-                           bg-ink text-chalk text-sm
-                           hover:bg-dim transition-colors"
+                download={c.download || undefined}
+                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 bg-ink text-chalk text-sm hover:bg-dim transition-colors"
               >
                 {c.label}
               </a>
@@ -180,9 +179,7 @@ export default function About() {
       <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40">
         <a
           href="mailto:fys840802@gmail.com"
-          className="px-10 py-3 rounded-full bg-chalk text-ink text-sm font-medium
-                     shadow-[0_0_20px_rgba(5,2,6,0.15)] hover:shadow-[0_0_32px_rgba(5,2,6,0.25)]
-                     transition-shadow"
+          className="px-10 py-3 rounded-full bg-chalk text-ink text-sm font-medium shadow-[0_0_20px_rgba(5,2,6,0.15)] hover:shadow-[0_0_32px_rgba(5,2,6,0.25)] transition-shadow"
         >
           Contact
         </a>

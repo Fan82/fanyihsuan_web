@@ -278,7 +278,8 @@ import { projects } from "../data/projects";
 
 function NextProject({ currentId }) {
   const idx = projects.findIndex((p) => p.id === currentId);
-  const next = projects[(idx + 1) % projects.length];
+  const isLast = idx === projects.length - 1;
+  const next = !isLast ? projects[idx + 1] : null;
 
   return (
     <div
@@ -286,38 +287,47 @@ function NextProject({ currentId }) {
       style={{ borderColor: "rgba(250,250,250,0.07)" }}
     >
       {/* ← Back link */}
-      <Link to="/" className="text-sm group">
+      <Link to="/" className="text-sm flex items-center gap-2 group">
         <svg
+          xmlns="http://www.w3.org/2000/svg"
           width="16"
-          height="16"
-          viewBox="0 0 16 16"
+          height="24"
+          viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="inline mr-2 scale-x-[-1] group-hover:-translate-x-1 transition-transform"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          className="group-hover:-translate-x-1 transition-transform"
         >
-          <path d="M3 8h10M9 4l4 4-4 4" />
+          <path d="M6 8L2 12L6 16" />
+          <path d="M2 12H22" />
         </svg>
         <span className="text-sm inline">Back</span>
       </Link>
-      <Link to={`./${next.id}`} className="text-sm group">
-        <span className="text-sm inline">Next project</span>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="inline ml-2 group-hover:translate-x-1 transition-transform"
+      {next && (
+        <Link
+          to={`/projects/${next.id}`}
+          className="text-sm flex items-center gap-2 group"
         >
-          <path d="M3 8h10M9 4l4 4-4 4" />
-        </svg>
-      </Link>
+          <span className="text-sm inline">Next project</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            className="group-hover:-translate-x-1 transition-transform"
+          >
+            <path d="M18 8L22 12L18 16" />
+            <path d="M2 12H22" />
+          </svg>
+        </Link>
+      )}
     </div>
   );
 }

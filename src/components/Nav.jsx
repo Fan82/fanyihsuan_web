@@ -24,12 +24,12 @@ export default function Nav() {
         >
           about
         </Link>
-        <Link
+        {/* <Link
           to="/"
           className={`nav-pill  ${pathname === "/ProjectDetail" ? "active" : ""}`}
         >
           project
-        </Link>
+        </Link> */}
       </nav>
     </header>
   );
