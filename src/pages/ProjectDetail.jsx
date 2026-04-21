@@ -1,85 +1,148 @@
 import { useParams, Link } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getProject } from "../data/projects";
+
+// ─── Phone Demo Modal ─────────────────────────────────────────
+
+function PhoneModal({ url, onClose }) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="relative flex flex-col items-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 關閉按鈕 */}
+        <button
+          onClick={onClose}
+          className="mb-4 text-white/60 hover:text-white text-sm transition-colors"
+        >
+          ✕ Close
+        </button>
+
+        {/* 手機外框 */}
+        <div
+          className="relative bg-zinc-900 rounded-[40px]"
+          style={{
+            width: "390px",
+            height: "760px",
+            border: "8px solid #27272a",
+            boxShadow: "0 0 0 2px #3f3f46, 0 40px 80px rgba(0,0,0,0.6)",
+          }}
+        >
+          {/* 瀏海 */}
+          <div
+            className="absolute top-3 left-1/2 -translate-x-1/2 bg-zinc-800 rounded-full z-10"
+            style={{ width: "120px", height: "34px" }}
+          />
+
+          {/* iframe */}
+          <iframe
+            src={url}
+            title="demo"
+            className="w-full h-full rounded-[32px]"
+            style={{ border: "none" }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // ─── Sub-sections ────────────────────────────────────────────
 
 function HeroSection({ project }) {
+  const [showDemo, setShowDemo] = useState(false);
+
   return (
-    <div className="px-6 pt-24 pb-8 mx-auto max-w-[1200px] grid items-center gap-16 relative overflow-hidden lg:grid-cols-2 lg:px-12">
-      {/* Left: copy */}
-      <div className="pt-5 lg:pt-0">
-        <div className="flex flex-wrap gap-2 mb-8">
-          {project.tags.map((tag) => (
-            <span key={tag} className="accent-pill">
-              {tag}
-            </span>
-          ))}
-        </div>
+    <>
+      {showDemo &&
+        (project.demoExternal ? (
+          // Running App 等外部連結 — 直接開新分頁，不用 iframe
+          (() => {
+            window.open(project.demoUrl, "_blank");
+            setShowDemo(false);
+            return null;
+          })()
+        ) : (
+          <PhoneModal
+            url={project.demoUrl}
+            onClose={() => setShowDemo(false)}
+          />
+        ))}
 
-        <h1
-          className="mb-3"
-          style={{
-            fontSize: "clamp(3rem, 6vw, 5rem)",
-            lineHeight: 1.25,
-            color: "var(--accent-text)",
-          }}
-        >
-          {project.name}
-        </h1>
-        <p
-          className="font-serif italic mb-4"
-          style={{
-            fontSize: "clamp(2rem, 4vw, 3.5rem)",
-            color: "var(--accent)",
-          }}
-        >
-          {project.tagline}
-        </p>
+      <div className="px-6 pt-24 pb-8 mx-auto max-w-[1200px] grid items-center gap-16 relative overflow-hidden lg:grid-cols-2 lg:px-12">
+        {/* Left: copy */}
+        <div className="pt-5 lg:pt-0">
+          <div className="flex flex-wrap gap-2 mb-8">
+            {project.tags.map((tag) => (
+              <span key={tag} className="accent-pill">
+                {tag}
+              </span>
+            ))}
+          </div>
 
-        <p className="text-muted leading-relaxed mb-12">{project.desc}</p>
-
-        {project.demoUrl && (
-          <a
-            href={project.demoUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="btn-accent"
+          <h1
+            className="mb-3"
+            style={{
+              fontSize: "clamp(3rem, 6vw, 5rem)",
+              lineHeight: 1.25,
+              color: "var(--accent-text)",
+            }}
           >
-            Try the demo
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M3 8h10M9 4l4 4-4 4" />
-            </svg>
-          </a>
-        )}
+            {project.name}
+          </h1>
+          <p
+            className="font-serif italic mb-4"
+            style={{
+              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              color: "var(--accent)",
+            }}
+          >
+            {project.tagline}
+          </p>
 
-        {/* Meta row */}
-        <div className="flex gap-8 mt-12">
-          {Object.entries(project.meta).map(([key, val]) => (
-            <div key={key}>
-              <small className="block key-title mb-1">{key}</small>
-              <span className="font-light">{val}</span>
-            </div>
-          ))}
+          <p className="text-muted leading-relaxed mb-12">{project.desc}</p>
+
+          {project.demoUrl && (
+            <button onClick={() => setShowDemo(true)} className="btn-accent">
+              Try the demo
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M3 8h10M9 4l4 4-4 4" />
+              </svg>
+            </button>
+          )}
+
+          {/* Meta row */}
+          <div className="flex gap-8 mt-12">
+            {Object.entries(project.meta).map(([key, val]) => (
+              <div key={key}>
+                <small className="block key-title mb-1">{key}</small>
+                <span className="font-light">{val}</span>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Right: hero image */}
-      <img
-        src={`/projects/${project.id}/hero-mockup.png`}
-        alt={`${project.name} mockup`}
-        className="w-full object-contain drop-shadow-2xl rounded-2xl"
-      />
-    </div>
+        {/* Right: hero image */}
+        <img
+          src={`/projects/${project.id}/hero-mockup.png`}
+          alt={`${project.name} mockup`}
+          className="w-full object-contain drop-shadow-2xl rounded-2xl"
+        />
+      </div>
+    </>
   );
 }
 
@@ -137,19 +200,6 @@ function InspirationSection({ project }) {
   );
 }
 
-// function UsingMockup({ project }) {
-//   return (
-//     <section className="px-6 lg:px-12 py-24 max-w-[1200px] mx-auto">
-//       <img
-//         src={`/projects/${project.id}/using-mockup.png`}
-//         alt={`${project.name} in use`}
-//         className="w-full rounded-2xl object-cover"
-//         style={{ maxHeight: "620px", objectPosition: "center 50%" }}
-//       />
-//     </section>
-//   );
-// }
-
 function ProcessSection({ project }) {
   return (
     <section className="px-6 pt-12 pb-8 max-w-[1200px] gap-6 lg:px-12 mx-auto">
@@ -186,18 +236,15 @@ function UserFlowSection({ project }) {
   return (
     <section className="px-6 lg:px-12 py-24 max-w-[1200px] mx-auto space-y-8">
       <p className="key-title">Screens</p>
-
       <div className="flex gap-4 overflow-x-auto">
         {Array.from({ length: project.screenCount ?? 0 }, (_, i) => {
-          // 將索引 (0-9) 轉為字串並補零 (01, 02...10)
           const pageNum = String(i + 1).padStart(2, "0");
-
           return (
             <img
               key={pageNum}
               src={`/projects/${project.id}/screen/${pageNum}.png`}
               alt={`${project.name} screen ${pageNum}`}
-              className="w-full max-w-48 rounded-2xl mb-4" // 加上 mb-4 讓圖片之間有間距
+              className="w-full max-w-48 rounded-2xl mb-4"
             />
           );
         })}
@@ -206,27 +253,6 @@ function UserFlowSection({ project }) {
   );
 }
 
-// function VideoSection({ project }) {
-//   return (
-//     <section className="px-6 lg:px-12 py-20 max-w-[1200px] mx-auto">
-//       <div
-//         className="w-full rounded-2xl overflow-hidden flex items-center justify-center py-16 px-8"
-//         style={{ background: "rgba(255,255,255,0.04)" }}
-//       >
-//         <video
-//           src={`/projects/${project.id}/MP4.mp4`}
-//           autoPlay
-//           loop
-//           muted
-//           playsInline
-//           className="rounded-3xl shadow-2xl"
-//           style={{ maxHeight: "70vh", width: "auto" }}
-//         />
-//       </div>
-//     </section>
-//   );
-// }
-
 // ─── Page ────────────────────────────────────────────────────
 
 export default function ProjectDetail() {
@@ -234,7 +260,6 @@ export default function ProjectDetail() {
   const project = getProject(id);
   const pageRef = useRef(null);
 
-  // Apply the project theme + bg colour to the page wrapper
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
@@ -262,11 +287,8 @@ export default function ProjectDetail() {
       <HeroSection project={project} />
       <OverviewSection project={project} />
       <InspirationSection project={project} />
-      {/* <UsingMockup project={project} /> */}
       <ProcessSection project={project} />
       <UserFlowSection project={project} />
-      {/* <VideoSection project={project} /> */}
-      {/* Bottom nav — next project */}
       <NextProject currentId={id} />
     </div>
   );
@@ -286,7 +308,6 @@ function NextProject({ currentId }) {
       className="border-t px-6 lg:px-12 py-2 flex justify-between items-center"
       style={{ borderColor: "rgba(250,250,250,0.07)" }}
     >
-      {/* ← Back link */}
       <Link to="/" className="text-sm flex items-center gap-2 group">
         <svg
           xmlns="http://www.w3.org/2000/svg"
