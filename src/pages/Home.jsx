@@ -3,9 +3,7 @@ import SlideShow from "../components/SlideShow";
 import ProjectList from "../components/ProjectList";
 
 export default function Home() {
-  const [slideDone, setSlideDone] = useState(
-    () => sessionStorage.getItem("hasViewedSlides") === "true",
-  );
+  const [slideDone, setSlideDone] = useState(false);
 
   return (
     <main className="relative">

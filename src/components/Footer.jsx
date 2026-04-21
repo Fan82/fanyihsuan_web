@@ -2,7 +2,7 @@ export default function Footer() {
   return (
     <footer className="py-2 flex justify-center items-center text-main gap-8">
       <a
-        href="/public/FanYiH_resume.pdf"
+        hhref="/FanYiH_resume.pdf"
         className="transition-colors hover:text-red-500"
         download
       >

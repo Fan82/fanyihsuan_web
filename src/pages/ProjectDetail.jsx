@@ -321,7 +321,7 @@ function NextProject({ currentId }) {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="group-hover:-translate-x-1 transition-transform"
+            className="group-hover:translate-x-1 transition-transform"
           >
             <path d="M18 8L22 12L18 16" />
             <path d="M2 12H22" />

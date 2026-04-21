@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 
 const EXPERIENCE = [
   {
@@ -85,6 +86,26 @@ export default function About() {
       ref={sectionRef}
       className="pt-[10vh] pb-32 max-w-[1200px] mx-auto px-8 lg:px-16 text-ink relative"
     >
+      {/* Back 按鈕 */}
+      <Link
+        to="/"
+        className="inline-flex items-center gap-2 text-sm text-muted hover:text-ink transition-colors mb-8 mt-4"
+      >
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M6 8L2 12L6 16" />
+          <path d="M2 12H22" />
+        </svg>
+        Back
+      </Link>
       {/* Background watermark — profolio.webp tiled */}
       <div
         className="w-full h-[50vh] -z-10"

@@ -15,8 +15,6 @@ const SLIDES = [
   { title: "Startup Mindset.", slogan: "Agile Driven, Rapid Prototyping." },
 ];
 
-const LS_KEY = "hasViewedSlides";
-
 export default function SlideShow({ onComplete }) {
   const containerRef = useRef(null);
   const timeoutRef = useRef(null);
@@ -25,16 +23,10 @@ export default function SlideShow({ onComplete }) {
   const [slideIndex, setSlideIndex] = useState(0);
   const [done, setDone] = useState(false);
 
-  // Check sessionStorage — skip slides if already seen
-  const alreadySeen =
-    typeof window !== "undefined" && sessionStorage.getItem(LS_KEY) === "true";
-
-  // Lock body scroll while slides are active
-  useScrollLock(!done && !alreadySeen);
+  useScrollLock(!done);
 
   const complete = useCallback(() => {
     setDone(true);
-    sessionStorage.setItem(LS_KEY, "true");
     onComplete?.();
   }, [onComplete]);
 
@@ -56,8 +48,7 @@ export default function SlideShow({ onComplete }) {
 
   useEffect(() => () => clearTimeout(timeoutRef.current), []);
 
-  // Already seen — render nothing (Home will show project list)
-  if (alreadySeen || done) return null;
+  if (done) return null;
 
   const currentSlide = SLIDES[slideIndex];
 
@@ -94,19 +85,6 @@ export default function SlideShow({ onComplete }) {
           />
         </div>
       </div>
-
-      {/* Dev-only reset shortcut */}
-      {/* {import.meta.env.DEV && (
-        <button
-          className="fixed bottom-4 right-4 text-xs text-muted underline z-50"
-          onClick={() => {
-            sessionStorage.removeItem(LS_KEY);
-            window.location.reload();
-          }}
-        >
-          reset slides
-        </button>
-      )} */}
     </div>
   );
 }
