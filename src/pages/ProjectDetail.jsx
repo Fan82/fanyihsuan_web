@@ -14,7 +14,6 @@ function PhoneModal({ url, onClose }) {
         className="relative flex flex-col items-center"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 關閉按鈕 */}
         <button
           onClick={onClose}
           className="mb-4 text-white/60 hover:text-white text-sm transition-colors"
@@ -22,7 +21,6 @@ function PhoneModal({ url, onClose }) {
           ✕ Close
         </button>
 
-        {/* 手機外框 */}
         <div
           className="relative bg-zinc-900 rounded-[40px]"
           style={{
@@ -32,13 +30,10 @@ function PhoneModal({ url, onClose }) {
             boxShadow: "0 0 0 2px #3f3f46, 0 40px 80px rgba(0,0,0,0.6)",
           }}
         >
-          {/* 瀏海 */}
           <div
             className="absolute top-3 left-1/2 -translate-x-1/2 bg-zinc-800 rounded-full z-10"
             style={{ width: "120px", height: "34px" }}
           />
-
-          {/* iframe */}
           <iframe
             src={url}
             title="demo"
@@ -58,20 +53,9 @@ function HeroSection({ project }) {
 
   return (
     <>
-      {showDemo &&
-        (project.demoExternal ? (
-          // Running App 等外部連結 — 直接開新分頁，不用 iframe
-          (() => {
-            window.open(project.demoUrl, "_blank");
-            setShowDemo(false);
-            return null;
-          })()
-        ) : (
-          <PhoneModal
-            url={project.demoUrl}
-            onClose={() => setShowDemo(false)}
-          />
-        ))}
+      {showDemo && (
+        <PhoneModal url={project.demoUrl} onClose={() => setShowDemo(false)} />
+      )}
 
       <div className="px-6 pt-24 pb-8 mx-auto max-w-[1200px] grid items-center gap-16 relative overflow-hidden lg:grid-cols-2 lg:px-12">
         {/* Left: copy */}
@@ -106,23 +90,47 @@ function HeroSection({ project }) {
 
           <p className="text-muted leading-relaxed mb-12">{project.desc}</p>
 
-          {project.demoUrl && (
-            <button onClick={() => setShowDemo(true)} className="btn-accent">
-              Try the demo
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+          {project.demoUrl &&
+            (project.demoMobile ? (
+              // 手機 app — 彈出手機框架
+              <button onClick={() => setShowDemo(true)} className="btn-accent">
+                Try the demo
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 8h10M9 4l4 4-4 4" />
+                </svg>
+              </button>
+            ) : (
+              // 其他專案 — 直接開新分頁
+              <a
+                href={project.demoUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-accent"
               >
-                <path d="M3 8h10M9 4l4 4-4 4" />
-              </svg>
-            </button>
-          )}
+                Try the demo
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M3 8h10M9 4l4 4-4 4" />
+                </svg>
+              </a>
+            ))}
 
           {/* Meta row */}
           <div className="flex gap-8 mt-12">

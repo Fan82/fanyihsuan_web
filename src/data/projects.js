@@ -10,7 +10,7 @@ export const projects = [
     meta: { client: "Fitness", role: "UI + Front-End", year: "2026" },
     desc: "I started running and wanted an app that actually fit my life. So I built one. A full-stack running app with real Supabase authentication, live GPS tracking via Leaflet.js, and a social feed to share runs with friends.",
     demoUrl: "https://fan82.github.io/runnnnn/",
-    demoExternal: true,
+    demoMobile: true,
     overview: {
       problem:
         "Running apps often focus only on numbers. But motivation comes from emotion, connection, and shared experiences.",
