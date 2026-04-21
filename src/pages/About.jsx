@@ -40,7 +40,7 @@ const SKILLS = [
 const CONTACT = [
   {
     label: "Resume",
-    href: "/FanYiH_resume.pdf",
+    href: "/FanYiH_resume.pdf", // 移掉 /public
     download: "FanYiH_resume.pdf",
   },
   {
@@ -140,11 +140,12 @@ export default function About() {
 
       {/* ── Bio ─────────────────────────────────────────── */}
       <p data-reveal className="font-light mb-16 leading-6">
-        Hellooooo — I'm a UI/UX designer and front-end developer from Taiwan,
-        currently in London. I focus on blending design aesthetics with
-        functional, user-centered code. I have experience in Vue and am now
-        sharpening my skills in React, Tailwind, and animation with GSAP to
-        create engaging, high-quality digital experiences.
+        Hellooooo — I'm a Design Engineer from Taiwan, currently based in
+        London. I bridge the gap between design and code — turning ideas into
+        interfaces that are both beautiful and functional. With 6+ years across
+        UX, UI, and front-end development, I'm now open to full-time and
+        freelance opportunities in London and remote, where I can bring both
+        design sensibility and engineering execution to the same table.
       </p>
 
       {/* ── Skills ──────────────────────────────────────── */}
