@@ -26,7 +26,7 @@ export default function SlideShow({ onComplete }) {
   useScrollLock(!done);
 
   const complete = useCallback(() => {
-    document.body.style.overflow = "";
+    document.body.style.overflow = ""; // ← 加這行
     setDone(true);
     onComplete?.();
   }, [onComplete]);

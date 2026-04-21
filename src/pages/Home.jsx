@@ -4,7 +4,9 @@ import ProjectList from "../components/ProjectList";
 
 export default function Home() {
   const [slideDone, setSlideDone] = useState(false);
+
   useEffect(() => {
+    document.body.style.overflow = "";
     return () => {
       document.body.style.overflow = "";
     };
