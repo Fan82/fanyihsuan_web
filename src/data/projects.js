@@ -1,26 +1,3 @@
-// ─────────────────────────────────────────────────────────────
-//  projects.js  —  single source of truth for all project data
-//
-//  Each project has:
-//    id          → matches folder name in /public/projects/{id}/
-//    theme       → CSS class applied to project page (see index.css)
-//    accent      → hex, used for og:theme-color etc.
-//    name        → display title
-//    tagline     → italic subtitle under title
-//    tags        → shown as pills in hero
-//    meta        → client / role / year
-//    desc        → hero description paragraph
-//    demoUrl     → link for "Try the demo" CTA (null to hide)
-//    overview    → { problem, solution }
-//    inspiration → blockquote string
-//    process     → array of { num, title, desc }
-//    screens     → array of screen names (images live in /public/projects/{id}/)
-//
-//  Image paths expected in /public/projects/{id}/:
-//    hero-mockup.png, MockUp.png, logo.png,
-//    using-mockup.png, userFlow.png, MP4.mp4
-// ─────────────────────────────────────────────────────────────
-
 export const projects = [
   {
     id: "runApp",
@@ -31,8 +8,8 @@ export const projects = [
     tagline: "Track your run. Share your pace.",
     tags: ["React", "API Integration"],
     meta: { client: "Fitness", role: "UI + Front-End", year: "2026" },
-    desc: "More than a running tracker — this app turns every run into a shared experience. Capture your progress, express your moments, and connect with a community that runs alongside you.",
-    demoUrl: null,
+    desc: "I started running and wanted an app that actually fit my life. So I built one. A full-stack running app with real Supabase authentication, live GPS tracking via Leaflet.js, and a social feed to share runs with friends.",
+    demoUrl: "https://fan82.github.io/runnnnn/",
 
     overview: {
       problem:
@@ -49,17 +26,17 @@ export const projects = [
       {
         num: "01",
         title: "Live Data Tracking",
-        desc: "Capture your distance, pace, and time — every run becomes part of your story.",
+        desc: "Capture your distance, pace, and time. Every run becomes part of your story.",
       },
       {
         num: "02",
         title: "Social Feed Experience",
-        desc: "Share runs, post updates, and interact with others through likes, comments, and engagement.",
+        desc: "Share runs, post updates, and interact with others through likes, comments and engagement.",
       },
       {
         num: "03",
         title: "Seamless Interaction",
-        desc: "Smooth transitions between tracking, posting, and browsing — no interruption to the user flow.",
+        desc: "Smooth transitions between tracking, posting, and browsing. No interruption to the user flow.",
       },
       {
         num: "04",
@@ -81,47 +58,50 @@ export const projects = [
     theme: "theme-takeTask",
     accent: "#FFAE00",
     name: "Plan Task",
-    screenCount: 10,
     tagline: "Track smarter, do more.",
     tags: ["UX Design", "Mobile App"],
     meta: { client: "Personal Project", role: "UX + Front-End", year: "2024" },
-    desc: "An AI-powered to-do app that automatically organises tasks from your calendar, email & messages — so you can focus on doing.",
+    desc: "Started from a personal frustration too many tasks scattered across too many places. Went through 3 design iterations, used AI to help consolidate feature requirements, and landed on the simplest version that actually solves the problem.",
     demoUrl: "/projects/takeTask/plan_task_app.html",
+
     overview: {
       problem:
-        "Most checklist tools lack intelligent prioritisation. Users waste time sorting, typing, and reorganising — the very overhead they wanted to eliminate.",
+        "Most checklist tools lack intelligent prioritisation. After 3 rounds of redesign, the core insight was clear: the real problem isn't organisation. It's cognitive overload from deciding what to do next.",
       solution:
-        "Plan Task pulls from calendar, email and messages to build your daily list automatically. Then applies AI to surface what actually matters right now.",
+        "Plan Task pulls from calendar, email and messages to build your daily list automatically. AI surfaces what actually matters right now, so you spend less time organising and more time doing.",
     },
+
     inspiration:
-      '"Get back to basics, focusing on doing — not organising. The best to-do list should be simple, intuitive, and automated. Reduce cognitive load; free up mental energy."',
+      '"Get back to basics, focusing on doing which not organising. The best to-do list should be simple, intuitive, and automated. Reduce cognitive load, free up mental energy."',
+
     process: [
       {
         num: "01",
-        title: "Research & UX Strategy",
-        desc: "Analysed productivity apps to map friction points and define an efficient task flow.",
+        title: "Research & 3 Rounds of Redesign",
+        desc: "Iterated through 3 design versions which each one stripping away complexity until the core flow felt effortless.",
       },
       {
         num: "02",
-        title: "Wireframe & Prototype",
-        desc: "Interactive prototypes to validate task creation, priority setting, and automation flows.",
+        title: "AI-Assisted Feature Scoping",
+        desc: "Had too many features I wanted to build. Used AI to help consolidate and prioritise requirements, keeping the product focused.",
       },
       {
         num: "03",
+        title: "Wireframe & Prototype",
+        desc: "Interactive prototypes to validate task creation, priority setting, and automation flows before writing any code.",
+      },
+      {
+        num: "04",
         title: "UI Design",
         desc: "Dark-mode first. AI-powered priority badges. Minimal chrome, maximum clarity.",
       },
       {
-        num: "04",
+        num: "05",
         title: "Front-End Dev",
         desc: "Smooth task updates and automation hooks built in React with real-time state.",
       },
-      {
-        num: "05",
-        title: "User Testing",
-        desc: "Usability rounds iterated on task input speed, badge legibility, and notification clarity.",
-      },
     ],
+
     screens: [
       "Welcome",
       "Home",
@@ -130,6 +110,7 @@ export const projects = [
       "Add Task",
       "Notifications",
     ],
+    screenCount: 6,
   },
 
   {
@@ -137,37 +118,49 @@ export const projects = [
     theme: "theme-easyBank",
     accent: "#2563eb",
     name: "Easy Bank",
-    screenCount: 14,
     tagline: "Precision code for a trustworthy banking experience.",
-    tags: ["React/CSS", "UI/UX Implementation", "Fintech Design"],
+    tags: ["React/CSS", "UI Implementation", "Fintech Design"],
     demoUrl: "/projects/easyBank/easy_bank_app.html",
     meta: {
       client: "Personal Project",
-      role: "UI",
+      role: "UI + Front-End",
       year: "2025",
     },
-    desc: "A faithful reproduction of a modern digital banking identity. This project explores how front-end architecture—through meticulous typography, color systems, and micro-interactions—communicates 'Security' and 'Professionalism' to the end-user.",
-    demoUrl: "/projects/easyBank/easy_bank_app.html",
+    desc: "After studying the design patterns of multiple banking apps, I built my own interpretation — exploring how typography, color, and micro-interactions communicate trust and security in financial products.",
+
     overview: {
       problem:
-        "In the digital finance sector, the challenge lies in presenting dense financial information clearly while maintaining a high-fidelity brand identity that fosters user trust.",
+        "Digital banking interfaces carry a unique design burden: they must feel secure and professional while remaining approachable. Studying real banking apps revealed how much visual language does the heavy lifting.",
       solution:
-        "Utilized a modular React component architecture and a strict CSS variable system to ensure design consistency. Enhanced user engagement through intuitive haptic-like feedback, a clear typographic hierarchy for financial data, and seamless navigation transitions.",
+        "Built a modular React component system with a strict CSS variable design token structure — translating observed patterns into code, and adding micro-interactions that reinforce confidence at every touchpoint.",
     },
+
     inspiration:
-      "“Exceptional front-end development is the intersection of technical precision and aesthetic sensibility.”",
+      '"Exceptional front-end development is the intersection of technical precision and aesthetic sensibility."',
+
     process: [
       {
         num: "01",
-        title: "Visualizing Brand Authority",
-        desc: "Translated a specific brand palette (e.g., #2563eb) and layout constraints into code that prioritizes readability for balances, exchange rates, and transaction history.",
+        title: "Competitive Research",
+        desc: "Studied multiple banking apps to identify shared visual patterns — how colour, spacing, and hierarchy build perceived trustworthiness.",
       },
       {
         num: "02",
-        title: "Design-to-Code Precision",
-        desc: "Implemented a mobile-first responsive layout featuring custom linear gradients, complex box-shadows, and functional components like currency exchange modules and secure transfer forms.",
+        title: "Design Interpretation",
+        desc: "Rather than copying, distilled the research into my own design language — same trust signals, different aesthetic voice.",
+      },
+      {
+        num: "03",
+        title: "Design Token System",
+        desc: "Built a CSS variable system to enforce consistency across components — colours, spacing, and typography all driven by tokens.",
+      },
+      {
+        num: "04",
+        title: "Component Architecture",
+        desc: "Modular React components for balance cards, transaction lists, exchange modules, and transfer forms — each self-contained and reusable.",
       },
     ],
+
     screens: [
       "Asset Overview",
       "Quick Actions",
@@ -175,146 +168,159 @@ export const projects = [
       "Finance Hub",
       "Mobile Optimization",
     ],
+    screenCount: 5,
   },
-  {
-    id: "bookFlight",
-    theme: "theme-bookFlight",
-    accent: "#2563EB",
-    name: "Flight Booking",
-    screenCount: 16,
-    tagline: "Booking your flight, enjoy your life.",
-    tags: ["React", "Front-End Dev"],
-    meta: { client: "Flight Company", role: "UX + Front-End", year: "2024" },
-    desc: "Transforming a seemingly simple booking form into an intelligent interface — exploring Vue.js component architecture and reactive data flow.",
-    demoUrl: "/projects/bookFlight/flight-booking-demo.html",
-    overview: {
-      problem:
-        "Flight booking forms are notorious for user errors. Wrong return dates, missed passengers, confusing one-way vs return states.",
-      solution:
-        "A modular Vue component system. With smart validation: return date locks before departure date, one-way mode hides irrelevant fields, the submit button only activates when the form is genuinely complete.",
-    },
-    inspiration:
-      '"A great application requires not only solid technical skills but also a deep understanding of user needs."',
-    process: [
-      {
-        num: "01",
-        title: "Data Flow & Validation",
-        desc: "Designed a robust validation system — return date can never precede departure date, with instant visual feedback.",
-      },
-      {
-        num: "02",
-        title: "Intelligent Interaction Design",
-        desc: "Conditional rendering hides the return date section for one-way flights, reducing visual clutter.",
-      },
-      {
-        num: "03",
-        title: "Component Architecture",
-        desc: "Date Picker, City Picker, Passenger Counter — each a self-contained, reusable Vue component.",
-      },
-      {
-        num: "04",
-        title: "Form State Management",
-        desc: "Tracked all input state to control the submit button, guiding users smoothly through the process.",
-      },
-    ],
-    screens: ["Search", "Date Picker", "Passenger", "Results", "Confirm"],
-  },
+
   {
     id: "goTravel",
     theme: "theme-goTravel",
     accent: "#ff6000",
     name: "Let's Travel",
-    screenCount: 13,
     tagline: "Visual storytelling for explorers.",
     tags: ["HTML/CSS", "CSS Grid"],
     meta: {
-      client: "Travel Website",
+      client: "Personal Project",
       role: "UI Design",
       year: "2024",
     },
-    desc: "A travel site that uses captivating imagery and fluid layout to ignite the desire to explore — built with CSS Grid and a component-based mindset.",
+    desc: "Arriving somewhere unfamiliar and wanting to join a local tour that feeling inspired this project. A travel site designed to make destinations feel inviting and tours easy to discover, built with CSS Grid and a visual-first layout.",
     demoUrl: "/projects/goTravel/goTravel-demo.html",
+
     overview: {
       problem:
-        "Travel sites drown users in information. The design challenge: make large amounts of content feel light, digestible, inspiring.",
+        "When you arrive somewhere new, the last thing you want is to dig through walls of text to find something to do. Travel sites often drown users in information instead of inspiring them to explore.",
       solution:
-        "Card-based layout with CSS Grid and Flexbox — each destination card as a bounded, scannable object. Mobile-first responsive design that reflows gracefully on any screen.",
+        "A card-based visual layout that lets destinations and tours speak for themselves. CSS Grid and Flexbox keep the content light and scannable mobile-first, so it works wherever you are.",
     },
+
     inspiration:
       '"A travel website is more than information — it\'s the starting point for longing."',
+
     process: [
       {
         num: "01",
-        title: "Modular Layout Design",
-        desc: "Broke content into independent sections — 'Why Choose Us', 'Top Destinations', 'Blog' — each with its own visual rhythm.",
+        title: "Designing for Arrival",
+        desc: "Focused on the mindset of someone already in a new place curious, a little lost, looking for the next experience rather than planning ahead.",
       },
       {
         num: "02",
-        title: "Responsive Web Design",
-        desc: "Mobile-first strategy: cards stack vertically on phones, expand to a grid on desktop.",
+        title: "Visual-First Layout",
+        desc: "Let imagery lead. Each destination card is designed to evoke a feeling before communicating information.",
       },
       {
         num: "03",
-        title: "Complex Layout Mastery",
-        desc: "Extensive CSS Grid and Flexbox, deeply understanding multi-layered layout control.",
+        title: "Modular Sections",
+        desc: "Broke content into independent sections — 'Why Choose Us', 'Top Destinations', 'Blog'. Each with its own visual rhythm.",
+      },
+      {
+        num: "04",
+        title: "Responsive Design",
+        desc: "Mobile first strategy: cards stack vertically on phones, expand to a full grid on desktop works wherever you are in the world.",
       },
     ],
+
     screens: ["Hero", "Destinations", "Why Us", "Blog", "Mobile"],
+    screenCount: 5,
+  },
+
+  {
+    id: "bookFlight",
+    theme: "theme-bookFlight",
+    accent: "#2563EB",
+    name: "Flight Booking",
+    tagline: "Booking your flight, enjoy your life.",
+    tags: ["React", "Front-End Dev"],
+    meta: { client: "Personal Project", role: "UX + Front-End", year: "2024" },
+    desc: "As someone who travels frequently, I've felt the frustration of clunky booking forms firsthand. This project explores how smart validation and conditional UI can turn a stressful process into a smooth one.",
+    demoUrl: "/projects/bookFlight/flight-booking-demo.html",
+
+    overview: {
+      problem:
+        "Flight booking forms are notorious for user errors — wrong return dates, missed passengers, confusing one-way vs return states. As a frequent traveller, I wanted to design the experience I wish existed.",
+      solution:
+        "A modular Vue component system with smart validation: return date locks before departure date, one-way mode hides irrelevant fields, and the submit button only activates when the form is genuinely complete.",
+    },
+
+    inspiration:
+      '"A great application requires not only solid technical skills but also a deep understanding of user needs."',
+
+    process: [
+      {
+        num: "01",
+        title: "Designing from Personal Frustration",
+        desc: "Mapped out every pain point I'd experienced as a traveller booking flights — wrong dates, unclear passenger counts, confusing form states.",
+      },
+      {
+        num: "02",
+        title: "Smart Validation",
+        desc: "Return date can never precede departure date, with instant visual feedback — eliminating the most common booking error.",
+      },
+      {
+        num: "03",
+        title: "Conditional UI",
+        desc: "One-way mode hides the return date section entirely, reducing visual clutter and guiding users through only what's relevant.",
+      },
+      {
+        num: "04",
+        title: "Component Architecture",
+        desc: "Date Picker, City Picker, Passenger Counter — each a self-contained, reusable component with its own state and validation logic.",
+      },
+    ],
+
+    screens: ["Search", "Date Picker", "Passenger", "Results", "Confirm"],
+    screenCount: 5,
   },
   {
     id: "publicTransp",
     theme: "theme-publicTransp",
-    accent: "#7C3AED",
+    accent: "#dc2626",
     name: "Zei Qia",
-    screenCount: 11,
     tagline: "Navigate the city.",
     tags: ["UI Design", "Figma", "Mobile App"],
-    meta: { client: "Public Transport", role: "UI + UX", year: "2025" },
-
-    desc: "A real-time transportation app that brings together buses, trains, metro, high-speed rail, and bike systems into one seamless search experience — turning complex live data into calm, reliable information for everyday travel.",
-
+    meta: { client: "Personal Project", role: "UI + UX", year: "2025" },
+    desc: "Designed while living in Taiwan, where public transport is complex but reliable. Moving to London made the need feel even more real — a city with an incredible transit network, but an experience that still leaves a lot to be desired.",
     demoUrl: "/projects/publicTransp/public-transport-demo.html",
 
     overview: {
       problem:
-        "How to handle real-time data, asynchronous states, and multiple transport systems. While keeping the experience simple, fast, and stress-free for users on the move.",
-
+        "How to handle real-time data, asynchronous states, and multiple transport systems — bus, train, metro, high-speed rail, bike — while keeping the experience simple and stress-free for users on the move.",
       solution:
-        "Rather than displaying all available data, the approach focused on filtering and prioritising information. Through clear hierarchy, real-time updates, and responsive search, complex transport data is distilled into a calm, easy-to-navigate experience.",
+        "Rather than displaying all available data, the approach focused on filtering and prioritising information. Clear hierarchy, real-time updates, and responsive search distil complex transport data into a calm, easy-to-navigate experience.",
     },
 
     inspiration:
-      '"Good transit design is not about showing more data — it’s about showing the right data at the right moment."',
+      '"Good transit design is not about showing more data — it\'s about showing the right data at the right moment."',
 
     process: [
       {
         num: "01",
-        title: "Framing the Problem",
-        desc: "Defined the core challenge as managing a large volume of real-time transport data without overwhelming users, focusing on clarity and usability over completeness.",
+        title: "Cross-Cultural Observation",
+        desc: "Observed transit UX in Taiwan daily, then moved to London and immediately noticed the same pain points at a larger scale — the problem was universal.",
       },
       {
         num: "02",
         title: "Information Architecture",
-        desc: "Structured multiple transport systems — bus, rail, metro, high-speed rail, and bike — into a clear and consistent hierarchy to support quick scanning and understanding.",
+        desc: "Structured multiple transport types into a consistent hierarchy — supporting quick scanning without overwhelming users with every available option.",
       },
       {
         num: "03",
         title: "Designing for Real-Time Behaviour",
-        desc: "Mapped how live data should behave in the interface, ensuring updates feel natural and reliable rather than disruptive or confusing.",
+        desc: "Mapped how live data should behave in the interface — updates that feel natural and reliable rather than disruptive or confusing.",
       },
       {
         num: "04",
-        title: "Interaction & Feedback",
-        desc: "Designed instant search and filtering interactions that respond immediately to user input, reducing friction and supporting fast decision-making.",
+        title: "Clarity in Complexity",
+        desc: "Refined layouts, spacing, and visual hierarchy to transform dense information into a calm, readable interface suitable for on-the-go use.",
       },
       {
         num: "05",
-        title: "Clarity in Complexity",
-        desc: "Refined layouts, spacing, and visual hierarchy to transform dense information into a calm, readable interface suitable for on-the-go use.",
+        title: "Interaction & Feedback",
+        desc: "Instant search and filtering that responds immediately to user input — reducing friction and supporting fast decision-making.",
       },
     ],
 
     screens: ["Search", "Route List", "Stop Detail", "Arrival Times", "Mobile"],
+    screenCount: 5,
   },
 ];
 
