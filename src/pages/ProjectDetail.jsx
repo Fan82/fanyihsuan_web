@@ -51,6 +51,19 @@ function PhoneModal({ url, onClose }) {
 function HeroSection({ project }) {
   const [showDemo, setShowDemo] = useState(false);
 
+  useEffect(() => {
+    if (showDemo) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    // cleanup：component 卸載時還原
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showDemo]);
+
   return (
     <>
       {showDemo && (
