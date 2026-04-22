@@ -1,0 +1,4500 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,700;1,500&family=DM+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        padding: 28px 16px;
+        font-family: "DM Sans", sans-serif;
+      }
+      input,
+      button,
+      select {
+        font-family: "DM Sans", sans-serif;
+      }
+      .fraunces {
+        font-family: "Fraunces", serif;
+      }
+      ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      const { useState } = React;
+
+      /* ─── PALETTE ─────────────────────────────────── */
+      const C = {
+        bg: "#ffffff",
+        bg2: "#fef2f2",
+        bg3: "#fee2e2",
+        surface: "#ffffff",
+        primary: "#ff6000",
+        primaryD: "#dc8826",
+        primaryL: "#ff9300",
+        primaryXL: "#fca5a5",
+        tint: "#ff93001c",
+        ink: "#1a1a1a",
+        ink2: "#4b4b4b",
+        muted: "#9ca3af",
+        border: "#f1f5f9",
+        green: "#059669",
+        white: "#ffffff",
+        // aliases for backward compat
+        amber: "#f59e0b",
+        amberL: "#fbbf24",
+        red: "#ff6000",
+      };
+
+      /* ─── DATA ─────────────────────────────────────── */
+      const ATTRACTIONS = [
+        {
+          id: 1,
+          title: "Colosseum Skip-the-Line",
+          city: "Rome",
+          cat: "Attraction",
+          rating: 4.9,
+          rev: 12400,
+          price: 28,
+          was: 45,
+          tag: "Best Seller",
+          dur: "2h",
+          img: ["#dc8826", "#9b1c1c"],
+        },
+        {
+          id: 2,
+          title: "Street Food Night Walk",
+          city: "Bangkok",
+          cat: "Food Trip",
+          rating: 4.8,
+          rev: 8320,
+          price: 32,
+          was: null,
+          tag: "Top Rated",
+          dur: "3h",
+          img: ["#047857", "#065f46"],
+        },
+        {
+          id: 3,
+          title: "Ha Long Bay Day Cruise",
+          city: "Hanoi",
+          cat: "Day Tour",
+          rating: 4.7,
+          rev: 5910,
+          price: 89,
+          was: 120,
+          tag: "30% Off",
+          dur: "Full Day",
+          img: ["#0369a1", "#075985"],
+        },
+        {
+          id: 4,
+          title: "Flamenco Show + Tapas",
+          city: "Seville",
+          cat: "Experience",
+          rating: 4.9,
+          rev: 3280,
+          price: 55,
+          was: null,
+          tag: "Unique",
+          dur: "3.5h",
+          img: ["#7c3aed", "#5b21b6"],
+        },
+        {
+          id: 5,
+          title: "Airport Transfer",
+          city: "Anywhere",
+          cat: "Transfer",
+          rating: 4.6,
+          rev: 22000,
+          price: 18,
+          was: null,
+          tag: "Instant OK",
+          dur: "~1h",
+          img: ["#1d4ed8", "#1e3a8a"],
+        },
+        {
+          id: 6,
+          title: "Vesuvius Hike & Pompeii",
+          city: "Naples",
+          cat: "Day Tour",
+          rating: 4.7,
+          rev: 4100,
+          price: 65,
+          was: 85,
+          tag: "Nature",
+          dur: "Full Day",
+          img: ["#b45309", "#92400e"],
+        },
+        {
+          id: 7,
+          title: "Tokyo Tsukiji Fish Market",
+          city: "Tokyo",
+          cat: "Food Trip",
+          rating: 4.8,
+          rev: 6700,
+          price: 45,
+          was: null,
+          tag: "Top Rated",
+          dur: "2h",
+          img: ["#db2777", "#9d174d"],
+        },
+        {
+          id: 8,
+          title: "Eiffel Tower Express",
+          city: "Paris",
+          cat: "Attraction",
+          rating: 4.7,
+          rev: 9800,
+          price: 35,
+          was: 50,
+          tag: "Best Seller",
+          dur: "1.5h",
+          img: ["#0284c7", "#075985"],
+        },
+      ];
+
+      const CITIES = [
+        "Anywhere",
+        "Rome",
+        "Bangkok",
+        "Hanoi",
+        "Seville",
+        "Naples",
+        "Tokyo",
+        "Paris",
+      ];
+      const CATS = [
+        { id: "all", ico: "map", lab: "All" },
+        { id: "att", ico: "ticket", lab: "Tickets" },
+        { id: "food", ico: "food", lab: "Food" },
+        { id: "tour", ico: "bus", lab: "Day Tours" },
+        { id: "xp", ico: "sparkle", lab: "Experiences" },
+        { id: "tf", ico: "plane", lab: "Transfers" },
+      ];
+      const CAT_MAP = {
+        att: "Attraction",
+        food: "Food Trip",
+        tour: "Day Tour",
+        xp: "Experience",
+        tf: "Transfer",
+      };
+
+      const REVIEWS = [
+        {
+          name: "Sarah M.",
+          ago: "2 days ago",
+          stars: 5,
+          text: "Absolutely incredible — our guide was brilliant and we skipped a 2-hour queue!",
+        },
+        {
+          name: "Tom K.",
+          ago: "1 week ago",
+          stars: 5,
+          text: "Best tour in Europe. The private option is 100% worth it.",
+        },
+        {
+          name: "Yuki T.",
+          ago: "2 weeks ago",
+          stars: 4,
+          text: "Loved every minute. Slightly rushed at the end but totally worth it.",
+        },
+      ];
+      const NOTIFS = [
+        {
+          id: 1,
+          col: C.amber,
+          text: "Colosseum ticket confirmed — June 6, 10:00 AM",
+        },
+        {
+          id: 2,
+          col: C.amberL,
+          text: "Flash Deal: Flamenco Show 20% off this weekend!",
+        },
+        {
+          id: 3,
+          col: C.primary,
+          text: "Reminder: Ha Long Bay cruise departs tomorrow 07:30",
+        },
+        {
+          id: 4,
+          col: C.green,
+          text: "New: Street food tours added in Taipei & Seoul",
+        },
+        {
+          id: 5,
+          col: C.red,
+          text: "Price Drop: Vesuvius Hike now $65 (was $85)",
+        },
+        {
+          id: 6,
+          col: C.amber,
+          text: "Explorer badge earned — 5 tours completed!",
+        },
+      ];
+      const INCLUDES = [
+        "Professional licensed guide",
+        "Skip-the-line entry tickets",
+        "Hotel pickup & drop-off",
+        "Complimentary water bottle",
+        "Digital travel guidebook",
+        "Free cancellation (48h prior)",
+      ];
+      const PACKAGES = [
+        { name: "Standard Group", sub: "Max 12 pax · Shared guide", mult: 1 },
+        { name: "Small Group", sub: "Max 6 pax · More personal", mult: 1.6 },
+        {
+          name: "Private Tour",
+          sub: "Just your group · Flexible timing",
+          mult: 2.4,
+        },
+      ];
+      const TRANSFER_OPTS = [
+        { ico: "car", name: "Private Car", sub: "1–3 passengers", price: 18 },
+        { ico: "car", name: "Private SUV", sub: "1–6 passengers", price: 28 },
+        { ico: "van", name: "Minivan", sub: "7–12 passengers", price: 45 },
+        {
+          ico: "plane",
+          name: "Luxury Sedan",
+          sub: "Premium comfort",
+          price: 65,
+        },
+      ];
+
+      /* ─── SHARED COMPONENTS ──────────────────────── */
+      /* ─── SVG ICON LIBRARY ───────────────────────── */
+      const Ico = ({
+        name,
+        size = 20,
+        color = "currentColor",
+        strokeWidth = 1.8,
+      }) => {
+        const s = {
+          width: size,
+          height: size,
+          flexShrink: 0,
+          display: "inline-block",
+          verticalAlign: "middle",
+        };
+        const paths = {
+          /* navigation */
+          home: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M3 12L12 3L21 12V21H15V15H9V21H3V12Z"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          search: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21L16.65 16.65" strokeLinecap="round" />
+            </svg>
+          ),
+          trips: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          profile: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <circle cx="12" cy="8" r="4" />
+              <path
+                d="M4 20c0-3.314 3.582-6 8-6s8 2.686 8 6"
+                strokeLinecap="round"
+              />
+            </svg>
+          ),
+          back: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M15 18L9 12L15 6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          bell: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          share: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8M16 6L12 2L8 6M12 2v13"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          bookmark: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          close: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
+            </svg>
+          ),
+          chevron: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M9 18L15 12L9 6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          check: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M20 6L9 17L4 12"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          eye: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          ),
+          /* categories */
+          ticket: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M15 5V7M15 11V13M15 17V19M5 5a2 2 0 00-2 2v3a2 2 0 000 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 000-4V7a2 2 0 00-2-2H5z"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          food: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M18 8h1a4 4 0 010 8h-1M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8zM6 1v3M10 1v3M14 1v3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          bus: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <rect x="2" y="5" width="20" height="14" rx="2" />
+              <path
+                d="M2 9h20M8 5V3M16 5V3M7 17v1M17 17v1"
+                strokeLinecap="round"
+              />
+            </svg>
+          ),
+          plane: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M21 16v-2l-8-5V3.5a1.5 1.5 0 00-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          star: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+          ),
+          map: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+              <line x1="8" y1="2" x2="8" y2="18" />
+              <line x1="16" y1="6" x2="16" y2="22" />
+            </svg>
+          ),
+          sparkle: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M12 3L13.9 8.1L19 10L13.9 11.9L12 17L10.1 11.9L5 10L10.1 8.1L12 3Z"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M19 3L19.9 5.1L22 6L19.9 6.9L19 9L18.1 6.9L16 6L18.1 5.1L19 3Z"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          /* places / activities */
+          monument: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M3 21h18M6 21V8l6-5 6 5v13M9 21v-4a3 3 0 016 0v4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          bowl: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12h20C22 6.48 17.52 2 12 2zM2 12c0 5.52 4.48 10 10 10s10-4.48 10-10"
+                strokeLinecap="round"
+              />
+              <path d="M12 12v4M9 14h6" strokeLinecap="round" />
+            </svg>
+          ),
+          boat: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M3 17l1.5-9L12 5l7.5 3L21 17M3 17c0 2.5 18 2.5 18 0M12 5V2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          masks: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M5 3h14M5 3C3 3 2 5 2 7v4c0 3 2 5 5 5h10c3 0 5-2 5-5V7c0-2-1-4-3-4M9 12c.5 1 1.5 2 3 2s2.5-1 3-2M9 9h.01M15 9h.01"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          car: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M5 17H3v-5l2.5-5h13L21 12v5h-2M5 17a2 2 0 104 0 2 2 0 00-4 0zm10 0a2 2 0 104 0 2 2 0 00-4 0zM3 12h18"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          volcano: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M9 3L6 21h12L15 3M9 3h6M9 3L7 9h10L15 3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          sushi: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <ellipse cx="12" cy="14" rx="9" ry="5" />
+              <path
+                d="M3 14v2c0 2.76 4.03 5 9 5s9-2.24 9-5v-2M12 9c-4.97 0-9 1.79-9 4s4.03 4 9 4 9-1.79 9-4-4.03-4-9-4z"
+                strokeLinecap="round"
+              />
+            </svg>
+          ),
+          tower: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M12 2L8 22M12 2L16 22M8 10h8M7 14h10M6 18h12"
+                strokeLinecap="round"
+              />
+            </svg>
+          ),
+          /* profile menu */
+          heart: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          starFill: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                fill={color}
+              />
+            </svg>
+          ),
+          card: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <rect x="2" y="5" width="20" height="14" rx="2" />
+              <line x1="2" y1="10" x2="22" y2="10" />
+            </svg>
+          ),
+          globe: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="2" y1="12" x2="22" y2="12" />
+              <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+            </svg>
+          ),
+          help: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path
+                d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          logout: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          /* payment / booking */
+          apple: (
+            <svg style={s} viewBox="0 0 24 24" fill={color}>
+              <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.37c1.37.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.39-1.32 2.76-2.53 4.02zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
+            </svg>
+          ),
+          bank: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M8 10v11M12 10v11M16 10v11M20 10v11"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          /* location / time */
+          pin: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+          ),
+          clock: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          ),
+          calendar: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+          ),
+          /* misc */
+          shield: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <path
+                d="M9 12l2 2 4-4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          phone: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <rect x="5" y="2" width="14" height="20" rx="2" />
+              <line
+                x1="12"
+                y1="18"
+                x2="12.01"
+                y2="18"
+                strokeLinecap="round"
+                strokeWidth="2"
+              />
+            </svg>
+          ),
+          van: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M3 17V9l4-4h10l4 4v8M3 17h18M8 17a2 2 0 104 0 2 2 0 00-4 0zm8 0a2 2 0 104 0 2 2 0 00-4 0zM3 12h18"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          confetti: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <path
+                d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3zM13 13l6 6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          ),
+          user: (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <circle cx="12" cy="8" r="5" />
+              <path
+                d="M3 21c0-4.42 4.03-8 9-8s9 3.58 9 8"
+                strokeLinecap="round"
+              />
+            </svg>
+          ),
+          google: (
+            <svg style={s} viewBox="0 0 24 24">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                fill="#4285F4"
+              />
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853"
+              />
+              <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335"
+              />
+            </svg>
+          ),
+          fb: (
+            <svg style={s} viewBox="0 0 24 24" fill="#1877F2">
+              <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" />
+            </svg>
+          ),
+        };
+        return (
+          paths[name] || (
+            <svg
+              style={s}
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={color}
+              strokeWidth={strokeWidth}
+            >
+              <circle cx="12" cy="12" r="10" />
+            </svg>
+          )
+        );
+      };
+
+      /* Attraction category → icon name mapping */
+      const ATTR_ICON = {
+        1: "monument",
+        2: "bowl",
+        3: "boat",
+        4: "masks",
+        5: "car",
+        6: "volcano",
+        7: "sushi",
+        8: "tower",
+      };
+
+      const StatusBar = ({ onRed }) => (
+        <div
+          style={{
+            position: "sticky",
+            top: "0",
+            left: "0",
+            display: "flex",
+            width: "100%",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "20px 24px",
+            fontSize: 12,
+            color: "#fff",
+            fontWeight: 600,
+            background: "#ff9300",
+          }}
+        >
+          <span>15:41</span>
+          <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="white">
+              <rect x="0" y="4" width="3" height="8" rx="1" />
+              <rect x="4.5" y="2.5" width="3" height="9.5" rx="1" />
+              <rect x="9" y="1" width="3" height="11" rx="1" />
+              <rect
+                x="13.5"
+                y="0"
+                width="2.5"
+                height="12"
+                rx="1"
+                opacity="0.4"
+              />
+            </svg>
+            <svg width="16" height="12" viewBox="0 0 16 12" fill="white">
+              <path d="M8 2C5 2 2.5 3.5 1 5.7L2.5 7.2C3.7 5.4 5.7 4.2 8 4.2C10.3 4.2 12.3 5.4 13.5 7.2L15 5.7C13.5 3.5 11 2 8 2Z" />
+              <path d="M8 6C6.3 6 4.8 6.8 3.8 8.1L5.3 9.5C6 8.6 6.9 8 8 8C9.1 8 10 8.6 10.7 9.5L12.2 8.1C11.2 6.8 9.7 6 8 6Z" />
+              <circle cx="8" cy="11" r="1.5" />
+            </svg>
+            <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+              <rect
+                x="0.5"
+                y="0.5"
+                width="21"
+                height="11"
+                rx="3.5"
+                stroke="white"
+                strokeOpacity="0.35"
+              />
+              <rect x="2" y="2" width="17" height="8" rx="2" fill="white" />
+              <path
+                d="M23 4.5V7.5C23.8 7.2 24.5 6.5 24.5 6C24.5 5.5 23.8 4.8 23 4.5Z"
+                fill="white"
+                fillOpacity="0.4"
+              />
+            </svg>
+          </div>
+        </div>
+      );
+
+      const Btn = ({
+        children,
+        onClick,
+        variant = "primary",
+        small,
+        full,
+        style: sx = {},
+      }) => {
+        const base = {
+          border: "none",
+          borderRadius: small ? 10 : 14,
+          cursor: "pointer",
+          fontWeight: 600,
+          fontFamily: "'DM Sans',sans-serif",
+          lineHeight: 1,
+          transition: "opacity .15s",
+          width: full ? "100%" : undefined,
+        };
+        const v = {
+          primary: {
+            background: `${C.primaryL}`,
+            color: C.white,
+            padding: small ? "8px 16px" : "14px 0",
+            fontSize: small ? 12 : 15,
+            boxShadow: `0 4px 14px ${C.primary}44`,
+          },
+          outline: {
+            background: "transparent",
+            border: `1.5px solid ${C.primary}`,
+            color: C.primary,
+            padding: small ? "7px 15px" : "13px 0",
+            fontSize: small ? 12 : 14,
+          },
+          ghost: {
+            background: "#f3f4f6",
+            color: C.ink2,
+            border: "1px solid #e5e7eb",
+            padding: small ? "7px 14px" : "13px 0",
+            fontSize: small ? 12 : 14,
+          },
+        };
+        return (
+          <button
+            onClick={onClick}
+            style={{ ...base, ...v[variant], ...sx }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = ".85")}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+          >
+            {children}
+          </button>
+        );
+      };
+
+      const Tag = ({ text, color = C.amber }) => (
+        <span
+          style={{
+            background: `${color}22`,
+            border: `1px solid ${color}66`,
+            borderRadius: 99,
+            padding: "3px 9px",
+            fontSize: 10,
+            color,
+            fontWeight: 600,
+            whiteSpace: "nowrap",
+            letterSpacing: 0.2,
+          }}
+        >
+          {text}
+        </span>
+      );
+
+      const Stars = ({ n, reviews }) => (
+        <span
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 3,
+            fontSize: 12,
+            color: C.amber,
+            fontWeight: 600,
+          }}
+        >
+          <Ico name="starFill" size={12} color={C.amber} strokeWidth={0} />
+          {n.toFixed(1)}
+          {reviews && (
+            <span style={{ color: C.muted, fontWeight: 400 }}>
+              ({(reviews / 1000).toFixed(reviews >= 10000 ? 0 : 1)}k)
+            </span>
+          )}
+        </span>
+      );
+
+      const BackBtn = ({ onBack, dark }) => (
+        <button
+          onClick={onBack}
+          style={{
+            background: dark ? "rgba(255,255,255,0.2)" : C.surface,
+            border: dark
+              ? "1px solid rgba(255,255,255,0.25)"
+              : `1px solid ${C.border}`,
+            borderRadius: 12,
+            width: 36,
+            height: 36,
+            color: dark ? C.white : C.ink,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backdropFilter: "blur(8px)",
+            flexShrink: 0,
+          }}
+        >
+          <Ico
+            name="back"
+            size={20}
+            color={dark ? "#fff" : C.ink}
+            strokeWidth={2}
+          />
+        </button>
+      );
+
+      const TabBar = ({ active, onTab }) => {
+        const T = [
+          {
+            id: "home",
+            lbl: "Home",
+            ic: (
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <path
+                  d="M3 12L12 3L21 12V21H15V15H9V21H3V12Z"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            ),
+          },
+          {
+            id: "explore",
+            lbl: "Explore",
+            ic: (
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="M21 21L16.65 16.65" strokeLinecap="round" />
+              </svg>
+            ),
+          },
+          {
+            id: "trips",
+            lbl: "My Trips",
+            ic: (
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <path
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            ),
+          },
+          {
+            id: "profile",
+            lbl: "Profile",
+            ic: (
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              >
+                <circle cx="12" cy="8" r="4" />
+                <path
+                  d="M4 20c0-3.314 3.582-6 8-6s8 2.686 8 6"
+                  strokeLinecap="round"
+                />
+              </svg>
+            ),
+          },
+        ];
+        return (
+          <div
+            style={{
+              display: "flex",
+              background: C.surface,
+              borderTop: `1px solid ${C.border}`,
+              padding: "8px 0 14px",
+              flexShrink: 0,
+            }}
+          >
+            {T.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => onTab(t.id)}
+                style={{
+                  flex: 1,
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 4,
+                  color: active === t.id ? C.primary : C.muted,
+                  fontSize: 9.5,
+                  fontWeight: active === t.id ? 600 : 400,
+                  letterSpacing: 0.3,
+                  fontFamily: "'DM Sans',sans-serif",
+                }}
+              >
+                {t.ic}
+                {t.lbl}
+              </button>
+            ))}
+          </div>
+        );
+      };
+
+      /* hero image block */
+      const HeroImg = ({ a, h = 160 }) => (
+        <div
+          style={{
+            height: h,
+            background: `linear-gradient(145deg,${a.img[0]},${a.img[1]})`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
+            flexShrink: 0,
+          }}
+        >
+          <Ico
+            name={ATTR_ICON[a.id] || "map"}
+            size={h > 140 ? 64 : 46}
+            color="rgba(255,255,255,0.9)"
+            strokeWidth={1.4}
+          />
+        </div>
+      );
+
+      /* ─── ATTRACTION CARDS ───────────────────────── */
+      const CardWide = ({ a, onClick }) => (
+        <div
+          onClick={() => onClick(a)}
+          style={{
+            minWidth: 200,
+            borderRadius: 18,
+            overflow: "hidden",
+            background: C.surface,
+            border: `1px solid ${C.border}`,
+            cursor: "pointer",
+            flexShrink: 0,
+            boxShadow: "0 2px 12px rgba(0,0,0,.06)",
+          }}
+        >
+          <HeroImg a={a} h={120} />
+          <div style={{ padding: "10px 12px 13px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: 4,
+              }}
+            >
+              <Tag
+                text={a.tag}
+                color={
+                  a.tag.includes("Off")
+                    ? C.red
+                    : a.tag === "Top Rated"
+                      ? C.green
+                      : C.amber
+                }
+              />
+              <Stars n={a.rating} />
+            </div>
+            <p
+              style={{
+                fontSize: 13,
+                fontWeight: 600,
+                color: C.ink,
+                marginBottom: 2,
+                lineHeight: 1.3,
+              }}
+            >
+              {a.title}
+            </p>
+            <p
+              style={{
+                fontSize: 11,
+                color: C.muted,
+                marginBottom: 6,
+                display: "flex",
+                alignItems: "center",
+                gap: 3,
+              }}
+            >
+              <Ico name="pin" size={11} color={C.muted} strokeWidth={2} />
+              {a.city} <span style={{ margin: "0 2px" }}>·</span>
+              <Ico name="clock" size={11} color={C.muted} strokeWidth={2} />
+              {a.dur}
+            </p>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
+              {a.was && (
+                <s style={{ fontSize: 10, color: C.muted }}>${a.was}</s>
+              )}
+              <span style={{ fontSize: 14, fontWeight: 700, color: C.primary }}>
+                from ${a.price}
+              </span>
+            </div>
+          </div>
+        </div>
+      );
+
+      const CardList = ({ a, onClick }) => (
+        <div
+          onClick={() => onClick(a)}
+          style={{
+            display: "flex",
+            gap: 12,
+            background: C.surface,
+            border: `1px solid ${C.border}`,
+            borderRadius: 16,
+            padding: 12,
+            cursor: "pointer",
+            marginBottom: 10,
+            boxShadow: "0 1px 6px rgba(0,0,0,.05)",
+          }}
+        >
+          <div
+            style={{
+              width: 72,
+              height: 68,
+              borderRadius: 12,
+              overflow: "hidden",
+              flexShrink: 0,
+              background: `linear-gradient(180deg,${a.img[0]},${a.img[1]})`,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Ico
+              name={ATTR_ICON[a.id] || "map"}
+              size={32}
+              color="rgba(255,255,255,0.9)"
+              strokeWidth={1.5}
+            />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                marginBottom: 4,
+              }}
+            >
+              <Tag text={a.cat} color={C.primary} />
+              <div style={{ textAlign: "right" }}>
+                {a.was && (
+                  <s style={{ fontSize: 10, color: C.muted, marginRight: 3 }}>
+                    ${a.was}
+                  </s>
+                )}
+                <span
+                  style={{ fontSize: 13, fontWeight: 700, color: C.primary }}
+                >
+                  from ${a.price}
+                </span>
+              </div>
+            </div>
+            <p
+              style={{
+                fontSize: 13,
+                fontWeight: 600,
+                color: C.ink,
+                marginBottom: 3,
+              }}
+            >
+              {a.title}
+            </p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: 11,
+                  color: C.muted,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 3,
+                }}
+              >
+                <Ico name="pin" size={11} color={C.muted} strokeWidth={2} />
+                {a.city}
+                <span style={{ margin: "0 2px" }}>·</span>
+                <Ico name="clock" size={11} color={C.muted} strokeWidth={2} />
+                {a.dur}
+              </p>
+              <Stars n={a.rating} reviews={a.rev} />
+            </div>
+          </div>
+        </div>
+      );
+
+      /* ════════════════════════════════════════════════
+         SCREENS
+      ════════════════════════════════════════════════ */
+
+      /* ── START ── */
+      function StartPage({ onNext }) {
+        return (
+          <div
+            style={{
+              background: C.bg,
+              height: 812,
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+            }}
+          >
+            <StatusBar onRed />
+            <div
+              style={{
+                background: `${C.primaryL}`,
+                padding: "28px",
+                position: "relative",
+                overflow: "hidden",
+                flexShrink: 0,
+              }}
+            >
+              <div style={{ position: "relative" }}>
+                <div
+                  style={{
+                    display: "inline-flex",
+                    background: "rgba(255,255,255,.2)",
+                    borderRadius: 18,
+                    padding: "10px 14px",
+                    marginBottom: 20,
+                    gap: 8,
+                    alignItems: "center",
+                  }}
+                >
+                  <Ico name="ticket" size={22} color="#fff" strokeWidth={1.6} />
+                  <span
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 700,
+                      color: "#fff",
+                      fontFamily: "'Fraunces',serif",
+                      letterSpacing: -0.3,
+                    }}
+                  >
+                    goTravel
+                  </span>
+                </div>
+                <h1
+                  className="fraunces"
+                  style={{
+                    fontSize: 36,
+                    color: "#fff",
+                    lineHeight: 1.15,
+                    marginBottom: 12,
+                  }}
+                >
+                  Discover &amp;
+                  <br />
+                  Book Amazing
+                  <br />
+                  Experiences
+                </h1>
+                <p
+                  style={{
+                    fontSize: 13,
+                    color: "rgba(255,255,255,.8)",
+                    lineHeight: 1.8,
+                    maxWidth: 260,
+                  }}
+                >
+                  Discounted tickets, local food trips, day tours &amp; airport
+                  transfers — worldwide.
+                </p>
+              </div>
+            </div>
+
+            {/* White bottom half */}
+            <div
+              style={{
+                flex: 1,
+                padding: "28px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
+              <div>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: 10,
+                    marginBottom: 20,
+                  }}
+                >
+                  {[
+                    ["ticket", "Skip-the-line Tickets", "Save up to 40%"],
+                    ["food", "Food & Night Walks", "Local favourites"],
+                    ["bus", "Day Tours", "Guided experiences"],
+                    ["plane", "Airport Transfers", "Private & shared"],
+                  ].map(([ic, nm, sub]) => (
+                    <div
+                      key={nm}
+                      style={{
+                        background: C.tint,
+                        border: `1px solid ${C.primaryL}`,
+                        borderRadius: 14,
+                        padding: "12px 12px",
+                      }}
+                    >
+                      <div style={{ marginBottom: 8, display: "flex" }}>
+                        <Ico
+                          name={ic}
+                          size={22}
+                          color={C.primary}
+                          strokeWidth={1.7}
+                        />
+                      </div>
+                      <p
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 600,
+                          color: C.ink,
+                          marginBottom: 1,
+                        }}
+                      >
+                        {nm}
+                      </p>
+                      <p style={{ fontSize: 10, color: C.muted }}>{sub}</p>
+                    </div>
+                  ))}
+                </div>
+                <p
+                  style={{
+                    textAlign: "center",
+                    fontSize: 11,
+                    color: C.muted,
+                    letterSpacing: 0.4,
+                  }}
+                >
+                  50,000+ EXPERIENCES IN 100+ CITIES
+                </p>
+              </div>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: 10 }}
+              >
+                <Btn full onClick={onNext}>
+                  Start Exploring →
+                </Btn>
+                <Btn full variant="ghost" onClick={onNext}>
+                  I already have an account
+                </Btn>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      /* ── LOGIN ── */
+      function LoginPage({ onLogin, onSignup }) {
+        return (
+          <div style={{ background: C.bg, height: 812, overflowY: "auto" }}>
+            <StatusBar onRed />
+
+            <div
+              style={{
+                background: `${C.primaryL}`,
+                padding: "24px 20px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  marginBottom: 6,
+                }}
+              >
+                <div
+                  style={{
+                    width: 38,
+                    height: 38,
+                    borderRadius: 12,
+                    background: "rgba(255,255,255,.2)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Ico name="ticket" size={20} color="#fff" strokeWidth={1.6} />
+                </div>
+                <span
+                  className="fraunces"
+                  style={{ fontSize: 18, color: "#fff", letterSpacing: -0.3 }}
+                >
+                  goTravel
+                </span>
+              </div>
+              <h1
+                className="fraunces"
+                style={{ fontSize: 28, color: "#fff", marginBottom: 4 }}
+              >
+                Welcome back
+              </h1>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,.75)" }}>
+                Sign in to access your bookings
+              </p>
+            </div>
+            <div style={{ padding: "24px 24px 32px" }}>
+              {[
+                { lbl: "Email", type: "text", val: "traveller@gmail.com" },
+                { lbl: "Password", type: "password", val: "password123" },
+              ].map((f) => (
+                <div key={f.lbl} style={{ marginBottom: 14 }}>
+                  <label
+                    style={{
+                      fontSize: 12,
+                      color: C.ink2,
+                      fontWeight: 500,
+                      marginBottom: 7,
+                      display: "block",
+                      letterSpacing: 0.2,
+                    }}
+                  >
+                    {f.lbl}
+                  </label>
+                  <div style={{ position: "relative" }}>
+                    <input
+                      defaultValue={f.val}
+                      type={f.type}
+                      style={{
+                        width: "100%",
+                        background: C.surface,
+                        border: `1.5px solid ${C.border}`,
+                        borderRadius: 12,
+                        padding: "12px 44px 12px 14px",
+                        color: C.ink,
+                        fontSize: 14,
+                        outline: "none",
+                      }}
+                    />
+                    {f.type === "password" && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          right: 13,
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          cursor: "pointer",
+                          display: "flex",
+                        }}
+                      >
+                        <Ico
+                          name="eye"
+                          size={18}
+                          color={C.muted}
+                          strokeWidth={1.8}
+                        />
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 22,
+                }}
+              >
+                <label
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 7,
+                    cursor: "pointer",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 18,
+                      height: 18,
+                      borderRadius: 5,
+                      background: C.primary,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <svg width="10" height="8" viewBox="0 0 12 9" fill="none">
+                      <path
+                        d="M1 4L4.5 7.5L11 1"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </div>
+                  <span style={{ fontSize: 12, color: C.ink2 }}>
+                    Keep me signed in
+                  </span>
+                </label>
+                <span
+                  style={{
+                    fontSize: 12,
+                    color: C.primary,
+                    cursor: "pointer",
+                    fontWeight: 500,
+                  }}
+                >
+                  Forgot password?
+                </span>
+              </div>
+
+              <Btn full onClick={onLogin}>
+                Log In
+              </Btn>
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  margin: "18px 0",
+                }}
+              >
+                <div style={{ flex: 1, height: 1, background: C.border }} />
+                <span style={{ fontSize: 12, color: C.muted }}>
+                  or continue with
+                </span>
+                <div style={{ flex: 1, height: 1, background: C.border }} />
+              </div>
+
+              <div style={{ display: "flex", gap: 10, marginBottom: 22 }}>
+                {[
+                  ["apple", "Apple"],
+                  ["google", "Google"],
+                  ["fb", "Facebook"],
+                ].map(([ic, nm]) => (
+                  <button
+                    key={nm}
+                    onClick={onLogin}
+                    style={{
+                      flex: 1,
+                      background: C.surface,
+                      border: `1.5px solid ${C.border}`,
+                      borderRadius: 12,
+                      padding: "11px 0",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Ico name={ic} size={22} />
+                  </button>
+                ))}
+              </div>
+
+              <p style={{ textAlign: "center", fontSize: 13, color: C.muted }}>
+                New here?{" "}
+                <span
+                  onClick={onSignup}
+                  style={{
+                    color: C.primary,
+                    cursor: "pointer",
+                    fontWeight: 600,
+                  }}
+                >
+                  Create account
+                </span>
+              </p>
+            </div>
+          </div>
+        );
+      }
+
+      function CreateAccount({ onBack, onSignup }) {
+        return (
+          <div style={{ background: C.bg, height: 812, overflowY: "auto" }}>
+            <StatusBar onRed />
+
+            <div
+              style={{
+                background: `${C.primaryL}`,
+                padding: "24px 20px",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <BackBtn onBack={onBack} dark />
+                <h1
+                  className="fraunces"
+                  style={{ fontSize: 24, color: "#fff" }}
+                >
+                  Create Account
+                </h1>
+              </div>
+              <p
+                style={{
+                  fontSize: 13,
+                  color: "rgba(255,255,255,.75)",
+                  marginTop: 4,
+                  marginLeft: 46,
+                }}
+              >
+                Join millions of happy travellers
+              </p>
+            </div>
+            <div style={{ padding: "20px 24px 32px" }}>
+              <p style={{ fontSize: 13, color: C.muted, marginBottom: 20 }}>
+                Already have an account?{" "}
+                <span
+                  onClick={onSignup}
+                  style={{
+                    color: C.primary,
+                    cursor: "pointer",
+                    fontWeight: 600,
+                  }}
+                >
+                  Sign in
+                </span>
+              </p>
+              {[
+                { lbl: "Full Name", t: "text" },
+                { lbl: "Email", t: "text" },
+                { lbl: "Password", t: "password" },
+                { lbl: "Confirm Password", t: "password" },
+              ].map((f) => (
+                <div key={f.lbl} style={{ marginBottom: 14 }}>
+                  <label
+                    style={{
+                      fontSize: 12,
+                      color: C.ink2,
+                      fontWeight: 500,
+                      marginBottom: 7,
+                      display: "block",
+                    }}
+                  >
+                    {f.lbl}
+                  </label>
+                  <div style={{ position: "relative" }}>
+                    <input
+                      type={f.t}
+                      style={{
+                        width: "100%",
+                        background: C.surface,
+                        border: `1.5px solid ${C.border}`,
+                        borderRadius: 12,
+                        padding: "12px 14px",
+                        color: C.ink,
+                        fontSize: 14,
+                        outline: "none",
+                      }}
+                    />
+                    {f.t === "password" && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          right: 13,
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          cursor: "pointer",
+                          display: "flex",
+                        }}
+                      >
+                        <Ico
+                          name="eye"
+                          size={18}
+                          color={C.muted}
+                          strokeWidth={1.8}
+                        />
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div style={{ marginBottom: 22 }}>
+                <label
+                  style={{
+                    fontSize: 12,
+                    color: C.ink2,
+                    fontWeight: 500,
+                    marginBottom: 7,
+                    display: "block",
+                  }}
+                >
+                  Phone
+                </label>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <div
+                    style={{
+                      background: C.surface,
+                      border: `1.5px solid ${C.border}`,
+                      borderRadius: 12,
+                      padding: "12px 12px",
+                      color: C.ink,
+                      fontSize: 13,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 5,
+                      whiteSpace: "nowrap",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <Ico
+                      name="globe"
+                      size={16}
+                      color={C.muted}
+                      strokeWidth={1.8}
+                    />{" "}
+                    +886 ▾
+                  </div>
+                  <input
+                    style={{
+                      flex: 1,
+                      background: C.surface,
+                      border: `1.5px solid ${C.border}`,
+                      borderRadius: 12,
+                      padding: "12px 14px",
+                      color: C.ink,
+                      fontSize: 14,
+                      outline: "none",
+                    }}
+                  />
+                </div>
+              </div>
+              <Btn full onClick={onSignup}>
+                Create Account
+              </Btn>
+            </div>
+          </div>
+        );
+      }
+
+      function HomePage({ onBell, onItem, onCity, onTab, tab }) {
+        const [cat, setCat] = useState("all");
+        const [city, setCity] = useState("Anywhere");
+        const [search, setSearch] = useState("");
+
+        const filtered = ATTRACTIONS.filter((a) => {
+          const catOk = cat === "all" || a.cat === CAT_MAP[cat];
+          const cityOk =
+            city === "Anywhere" || a.city === city || a.city === "Anywhere";
+          const srchOk =
+            !search ||
+            a.title.toLowerCase().includes(search.toLowerCase()) ||
+            a.city.toLowerCase().includes(search.toLowerCase());
+          return catOk && cityOk && srchOk;
+        });
+
+        return (
+          <div
+            style={{
+              background: C.bg,
+              height: 812,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <StatusBar onRed />
+            <div style={{ flex: 1, overflowY: "auto" }}>
+              <div
+                style={{
+                  background: `${C.primaryL}`,
+                  padding: "24px 20px",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <div>
+                    <p
+                      style={{
+                        fontSize: 11,
+                        color: "rgba(255,255,255,.7)",
+                        letterSpacing: 0.8,
+                        fontWeight: 500,
+                        marginBottom: 2,
+                      }}
+                    >
+                      DISCOVER
+                    </p>
+                    <h2
+                      className="fraunces"
+                      style={{ fontSize: 22, color: "#fff", lineHeight: 1.2 }}
+                    >
+                      Find Your Next
+                      <br />
+                      Adventure
+                    </h2>
+                  </div>
+                  <div style={{ display: "flex", gap: 8, marginTop: 2 }}>
+                    <button
+                      onClick={onBell}
+                      style={{
+                        background: "rgba(255,255,255,.2)",
+                        border: "1px solid rgba(255,255,255,.25)",
+                        borderRadius: 12,
+                        width: 38,
+                        height: 38,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        position: "relative",
+                      }}
+                    >
+                      <svg
+                        width="17"
+                        height="17"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="white"
+                        strokeWidth="1.8"
+                      >
+                        <path d="M11 2C7.5 2 5 4.5 5 8V13L3 15V16H19V15L17 13V8C17 4.5 14.5 2 11 2Z" />
+                        <path
+                          d="M8.5 16.5C8.5 18 9.6 19 11 19C12.4 19 13.5 18 13.5 16.5"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: 8,
+                          right: 8,
+                          width: 7,
+                          height: 7,
+                          borderRadius: "50%",
+                          background: "#fff",
+                          border: "1.5px solid #fff",
+                        }}
+                      />
+                    </button>
+                    <div
+                      style={{
+                        width: 38,
+                        height: 38,
+                        borderRadius: 12,
+                        background: "rgba(255,255,255,.25)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: 17,
+                        cursor: "pointer",
+                        border: "1px solid rgba(255,255,255,.3)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Ico
+                        name="user"
+                        size={18}
+                        color="rgba(255,255,255,0.9)"
+                        strokeWidth={1.8}
+                      />
+                    </div>
+                  </div>
+                </div>
+                {/* search inside header */}
+                <div
+                  style={{
+                    marginTop: 14,
+                    background: "rgba(255,255,255,.95)",
+                    borderRadius: 12,
+                    padding: "10px 14px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 9,
+                  }}
+                >
+                  <svg
+                    width="15"
+                    height="15"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke={C.muted}
+                    strokeWidth="2"
+                  >
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="M21 21L16.65 16.65" strokeLinecap="round" />
+                  </svg>
+                  <input
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search destinations, tours…"
+                    style={{
+                      flex: 1,
+                      border: "none",
+                      background: "transparent",
+                      color: C.ink,
+                      fontSize: 13,
+                      outline: "none",
+                    }}
+                  />
+                  {search && (
+                    <span
+                      onClick={() => setSearch("")}
+                      style={{ cursor: "pointer", display: "flex" }}
+                    >
+                      <Ico
+                        name="close"
+                        size={16}
+                        color={C.muted}
+                        strokeWidth={2}
+                      />
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              {/* city pills */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 7,
+                  padding: "14px 22px 14px",
+                  overflowX: "auto",
+                }}
+              >
+                {CITIES.map((c) => (
+                  <button
+                    key={c}
+                    onClick={() => setCity(c)}
+                    style={{
+                      background: city === c ? C.primary : C.surface,
+                      border: `1px solid ${city === c ? C.primary : C.border}`,
+                      borderRadius: 99,
+                      padding: "5px 14px",
+                      fontSize: 12,
+                      color: city === c ? "#fff" : C.ink2,
+                      cursor: "pointer",
+                      fontWeight: city === c ? 600 : 400,
+                      whiteSpace: "nowrap",
+                      fontFamily: "'DM Sans',sans-serif",
+                    }}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+
+              {/* hero banner */}
+              {!search && (
+                <div
+                  style={{
+                    margin: "0 22px 16px",
+                    borderRadius: 20,
+                    overflow: "hidden",
+                    background: `${C.primaryL}`,
+                    padding: "18px 18px 18px",
+                    position: "relative",
+                  }}
+                >
+                  <Tag text="LIMITED TIME" color={C.white} />
+                  <h3
+                    className="fraunces"
+                    style={{
+                      fontSize: 20,
+                      color: C.white,
+                      margin: "8px 0 5px",
+                    }}
+                  >
+                    Up to 40% Off
+                    <br />
+                    Top Attractions
+                  </h3>
+                  <p
+                    style={{
+                      fontSize: 12,
+                      color: "rgba(255,255,255,.8)",
+                      marginBottom: 14,
+                    }}
+                  >
+                    Skip queues. Book in seconds.
+                  </p>
+                  <Btn
+                    small
+                    onClick={() => onItem(ATTRACTIONS[0])}
+                    style={{
+                      background: "white",
+                      color: C.primary,
+                      borderRadius: 10,
+                    }}
+                  >
+                    See Deals →
+                  </Btn>
+                </div>
+              )}
+
+              {/* categories */}
+              <div
+                style={{
+                  display: "flex",
+                  gap: 8,
+                  padding: "0 22px 14px",
+                  overflowX: "auto",
+                }}
+              >
+                {CATS.map((c) => (
+                  <button
+                    key={c.id}
+                    onClick={() => setCat(c.id)}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      gap: 4,
+                      background: cat === c.id ? C.primary : C.surface,
+                      border: `1px solid ${cat === c.id ? C.primary : C.border}`,
+                      borderRadius: 14,
+                      padding: "9px 12px",
+                      cursor: "pointer",
+                      flexShrink: 0,
+                      minWidth: 56,
+                      boxShadow:
+                        cat === c.id ? `0 4px 14px ${C.primary}33` : "none",
+                    }}
+                  >
+                    <Ico
+                      name={c.ico}
+                      size={20}
+                      color={cat === c.id ? "#fff" : C.muted}
+                      strokeWidth={1.6}
+                    />
+                    <span
+                      style={{
+                        fontSize: 9.5,
+                        color: cat === c.id ? "#fff" : C.muted,
+                        fontWeight: 600,
+                        fontFamily: "'DM Sans',sans-serif",
+                      }}
+                    >
+                      {c.lab}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              {search ? (
+                <>
+                  <p
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: C.ink,
+                      padding: "0 22px 10px",
+                    }}
+                  >
+                    {filtered.length} result{filtered.length !== 1 ? "s" : ""}{" "}
+                    for "{search}"
+                  </p>
+                  <div style={{ padding: "0 22px" }}>
+                    {filtered.map((a) => (
+                      <CardList key={a.id} a={a} onClick={onItem} />
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* trending */}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "0 22px 10px",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 600,
+                        color: C.ink,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 5,
+                      }}
+                    >
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill={C.primary}
+                        stroke={C.primary}
+                        strokeWidth="1"
+                      >
+                        <path d="M12 2C8.5 6 7 10 9 13c-2-1-3-3-3-5-2 3-1 7 2 9-1-1-1-3 0-4 1 3 4 5 6 5 3 0 6-3 6-7 0-2-1-4-2-5-1 2-2 3-4 3 2-3 2-6-2-9z" />
+                      </svg>
+                      Trending Now
+                    </p>
+                    <span
+                      onClick={() => setSearch(" ")}
+                      style={{
+                        fontSize: 12,
+                        color: C.primary,
+                        cursor: "pointer",
+                        fontWeight: 500,
+                      }}
+                    >
+                      See all
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 12,
+                      padding: "0 22px 18px",
+                      overflowX: "auto",
+                    }}
+                  >
+                    {ATTRACTIONS.map((a) => (
+                      <CardWide key={a.id} a={a} onClick={onItem} />
+                    ))}
+                  </div>
+
+                  {/* filtered list */}
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: "0 22px 10px",
+                    }}
+                  >
+                    <p style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>
+                      {CAT_MAP[cat] || "All Experiences"}
+                      <span
+                        style={{
+                          fontSize: 11,
+                          color: C.muted,
+                          fontWeight: 400,
+                          marginLeft: 6,
+                        }}
+                      >
+                        {filtered.length} found
+                      </span>
+                    </p>
+                  </div>
+                  <div style={{ padding: "0 22px" }}>
+                    {filtered.map((a) => (
+                      <CardList key={a.id} a={a} onClick={onItem} />
+                    ))}
+                  </div>
+
+                  {/* transfer CTA */}
+                  <div
+                    style={{
+                      margin: "4px 22px 20px",
+                      borderRadius: 18,
+                      background: C.surface,
+                      border: `1px solid ${C.border}`,
+                      padding: "16px 16px",
+                      display: "flex",
+                      gap: 12,
+                      alignItems: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: 44,
+                        height: 44,
+                        background: C.tint,
+                        borderRadius: 12,
+                      }}
+                    >
+                      <Ico
+                        name="plane"
+                        size={24}
+                        color={C.primary}
+                        strokeWidth={1.6}
+                      />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <p
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 600,
+                          color: C.ink,
+                          marginBottom: 3,
+                        }}
+                      >
+                        Airport Transfers
+                      </p>
+                      <p
+                        style={{
+                          fontSize: 11,
+                          color: C.muted,
+                          lineHeight: 1.6,
+                        }}
+                      >
+                        Private, shared & luxury rides from any airport
+                        worldwide.
+                      </p>
+                      <Btn
+                        small
+                        variant="outline"
+                        onClick={() => onItem(ATTRACTIONS[4])}
+                        style={{ marginTop: 8 }}
+                      >
+                        Book a Transfer →
+                      </Btn>
+                    </div>
+                  </div>
+                </>
+              )}
+              <div style={{ height: 8 }} />
+            </div>
+            <TabBar active={tab} onTab={onTab} />
+          </div>
+        );
+      }
+
+      /* ── EXPLORE ── */
+      function ExplorePage({ onItem, onTab, tab }) {
+        const [sub, setSub] = useState("Day Tours");
+        const SUBS = [
+          "Day Tours",
+          "Food Trips",
+          "Tickets",
+          "Transfers",
+          "Experiences",
+        ];
+        const subMap = {
+          Tickets: "Attraction",
+          "Food Trips": "Food Trip",
+          "Day Tours": "Day Tour",
+          Experiences: "Experience",
+          Transfers: "Transfer",
+        };
+        const list = ATTRACTIONS.filter((a) => a.cat === subMap[sub]);
+
+        return (
+          <div
+            style={{
+              background: C.bg,
+              height: 812,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <StatusBar onRed />
+            <div
+              style={{
+                background: `${C.primaryL}`,
+                padding: "0 22px 16px",
+                flexShrink: 0,
+              }}
+            >
+              <h2
+                className="fraunces"
+                style={{ fontSize: 24, color: "#fff", marginBottom: 2 }}
+              >
+                Explore
+              </h2>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,.75)" }}>
+                Unique experiences around the world
+              </p>
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                borderBottom: `1px solid ${C.border}`,
+                padding: "0 22px",
+                overflowY: "auto",
+                background: C.surface,
+                flexShrink: 0,
+              }}
+            >
+              {SUBS.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setSub(t)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    borderBottom:
+                      sub === t
+                        ? `2px solid ${C.primary}`
+                        : "2px solid transparent",
+                    padding: "10px 10px",
+                    fontSize: 12,
+                    cursor: "pointer",
+                    color: sub === t ? C.primary : C.muted,
+                    fontWeight: sub === t ? 600 : 400,
+                    marginBottom: "-1px",
+                    whiteSpace: "nowrap",
+                    fontFamily: "'DM Sans',sans-serif",
+                  }}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ flex: 1, overflowY: "auto", padding: "16px 22px" }}>
+              {sub === "Transfers" ? (
+                <>
+                  <div
+                    style={{
+                      background: `${C.primary}08`,
+                      border: `1px solid ${C.primary}22`,
+                      borderRadius: 16,
+                      padding: "14px 16px",
+                      marginBottom: 16,
+                    }}
+                  >
+                    <p style={{ fontSize: 13, color: C.ink2, lineHeight: 1.8 }}>
+                      Upon landing at the airport, we've got all kinds of
+                      transfers — private cars, shared shuttles, luxury vans and
+                      more.
+                    </p>
+                  </div>
+                  {TRANSFER_OPTS.map((t) => (
+                    <div
+                      key={t.name}
+                      onClick={() => onItem(ATTRACTIONS[4])}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 12,
+                        background: C.surface,
+                        border: `1px solid ${C.border}`,
+                        borderRadius: 14,
+                        padding: "13px 14px",
+                        marginBottom: 10,
+                        cursor: "pointer",
+                        boxShadow: "0 1px 6px rgba(0,0,0,.05)",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 44,
+                          height: 44,
+                          borderRadius: 12,
+                          background: C.tint,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Ico
+                          name={t.ico}
+                          size={22}
+                          color={C.primary}
+                          strokeWidth={1.7}
+                        />
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <p
+                          style={{
+                            fontSize: 13,
+                            fontWeight: 600,
+                            color: C.ink,
+                          }}
+                        >
+                          {t.name}
+                        </p>
+                        <p style={{ fontSize: 11, color: C.muted }}>{t.sub}</p>
+                      </div>
+                      <span
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 700,
+                          color: C.primary,
+                        }}
+                      >
+                        from ${t.price}
+                      </span>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                (list.length ? list : ATTRACTIONS).map((a) => (
+                  <CardList key={a.id} a={a} onClick={onItem} />
+                ))
+              )}
+            </div>
+            <TabBar active={tab} onTab={onTab} />
+          </div>
+        );
+      }
+
+      /* ── DETAIL ── */
+      function DetailPage({ item, onBack, onBook }) {
+        const [tab, setTab] = useState("About");
+        const [pkg, setPkg] = useState(0);
+        const DTABS = ["About", "Includes", "Reviews", "Gallery"];
+
+        return (
+          <div
+            style={{
+              background: C.bg,
+              height: 812,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <StatusBar onRed />
+            <div style={{ position: "relative", flexShrink: 0 }}>
+              <HeroImg a={item} h={250} />
+
+              <div
+                style={{
+                  position: "absolute",
+                  top: 24,
+                  left: 16,
+                  right: 16,
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <BackBtn onBack={onBack} dark />
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button
+                    style={{
+                      background: "rgba(0,0,0,.28)",
+                      backdropFilter: "blur(8px)",
+                      border: "1px solid rgba(255,255,255,.2)",
+                      borderRadius: 12,
+                      width: 36,
+                      height: 36,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Ico name="share" size={16} color="#fff" strokeWidth={2} />
+                  </button>
+                  <button
+                    style={{
+                      background: "rgba(0,0,0,.28)",
+                      backdropFilter: "blur(8px)",
+                      border: "1px solid rgba(255,255,255,.2)",
+                      borderRadius: 12,
+                      width: 36,
+                      height: 36,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Ico
+                      name="bookmark"
+                      size={16}
+                      color="#fff"
+                      strokeWidth={2}
+                    />
+                  </button>
+                </div>
+              </div>
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 14,
+                  left: 18,
+                  right: 18,
+                }}
+              >
+                <div style={{ display: "flex", gap: 6, marginBottom: 6 }}>
+                  <Tag text={item.cat} color={C.primaryXL} />
+                  <Tag
+                    text={item.tag}
+                    color={
+                      item.tag.includes("Off")
+                        ? "#fca5a5"
+                        : item.tag === "Top Rated"
+                          ? "#6ee7b7"
+                          : C.primaryXL
+                    }
+                  />
+                </div>
+                <h2
+                  className="fraunces"
+                  style={{
+                    fontSize: 22,
+                    color: C.white,
+                    textShadow: "0 1px 4px rgba(0,0,0,.4)",
+                  }}
+                >
+                  {item.title}
+                </h2>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginTop: 4,
+                  }}
+                >
+                  <p
+                    style={{
+                      fontSize: 12,
+                      color: "rgba(255,255,255,.85)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4,
+                    }}
+                  >
+                    <Ico
+                      name="pin"
+                      size={12}
+                      color="rgba(255,255,255,.85)"
+                      strokeWidth={2}
+                    />
+                    {item.city}
+                    <span>·</span>
+                    <Ico
+                      name="clock"
+                      size={12}
+                      color="rgba(255,255,255,.85)"
+                      strokeWidth={2}
+                    />
+                    {item.dur}
+                  </p>
+                  <Stars n={item.rating} reviews={item.rev} />
+                </div>
+              </div>
+            </div>
+
+            {/* highlights strip */}
+            <div
+              style={{
+                display: "flex",
+                gap: 8,
+                padding: "12px 16px",
+                background: C.surface,
+                flexShrink: 0,
+                borderBottom: `1px solid ${C.border}`,
+              }}
+            >
+              {[
+                ["shield", "Free cancellation"],
+                ["phone", "Mobile voucher"],
+                ["check", "Instant confirm"],
+              ].map(([ic, t]) => (
+                <div
+                  key={t}
+                  style={{
+                    flex: 1,
+                    background: C.bg2,
+                    borderRadius: 10,
+                    padding: "8px 6px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 3,
+                  }}
+                >
+                  <Ico name={ic} size={16} color={C.green} strokeWidth={2} />
+                  <p
+                    style={{
+                      fontSize: 9.5,
+                      color: C.ink2,
+                      lineHeight: 1.4,
+                      textAlign: "center",
+                    }}
+                  >
+                    {t}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div
+              style={{
+                display: "flex",
+                borderBottom: `1px solid ${C.border}`,
+                padding: "0 16px",
+                background: C.surface,
+                flexShrink: 0,
+              }}
+            >
+              {DTABS.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setTab(t)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    borderBottom:
+                      tab === t
+                        ? `2px solid ${C.primary}`
+                        : "2px solid transparent",
+                    padding: "10px 10px",
+                    fontSize: 12,
+                    cursor: "pointer",
+                    color: tab === t ? C.primary : C.muted,
+                    fontWeight: tab === t ? 600 : 400,
+                    marginBottom: "-1px",
+                    fontFamily: "'DM Sans',sans-serif",
+                  }}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+
+            <div style={{ flex: 1, overflowY: "auto", padding: "14px 18px 0" }}>
+              {tab === "About" && (
+                <>
+                  <p
+                    style={{
+                      fontSize: 13,
+                      color: C.ink2,
+                      lineHeight: 1.8,
+                      marginBottom: 16,
+                    }}
+                  >
+                    Join local guides for an unforgettable experience in{" "}
+                    {item.city}. Skip the queues and dive straight in. Perfect
+                    for solo travellers, couples, and small groups.
+                  </p>
+                  <p
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: C.ink,
+                      marginBottom: 10,
+                    }}
+                  >
+                    Choose a Package
+                  </p>
+                  {PACKAGES.map((p, i) => (
+                    <div
+                      key={i}
+                      onClick={() => setPkg(i)}
+                      style={{
+                        background: pkg === i ? `${C.primary}0f` : C.surface,
+                        border: `1.5px solid ${pkg === i ? C.primary : C.border}`,
+                        borderRadius: 14,
+                        padding: "12px 14px",
+                        marginBottom: 10,
+                        cursor: "pointer",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "flex-start",
+                        }}
+                      >
+                        <div>
+                          <p
+                            style={{
+                              fontSize: 13,
+                              fontWeight: 600,
+                              color: C.ink,
+                            }}
+                          >
+                            {p.name}
+                          </p>
+                          <p
+                            style={{
+                              fontSize: 11,
+                              color: C.muted,
+                              marginTop: 2,
+                            }}
+                          >
+                            {p.sub}
+                          </p>
+                        </div>
+                        <div style={{ textAlign: "right" }}>
+                          <p
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 700,
+                              color: C.primary,
+                            }}
+                          >
+                            from ${Math.round(item.price * p.mult)}
+                          </p>
+                          {pkg === i && (
+                            <p
+                              style={{
+                                fontSize: 10,
+                                color: C.green,
+                                marginTop: 2,
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 2,
+                              }}
+                            >
+                              <Ico
+                                name="check"
+                                size={11}
+                                color={C.green}
+                                strokeWidth={2.5}
+                              />
+                              Selected
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+
+              {tab === "Includes" && (
+                <>
+                  <p
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: C.ink,
+                      marginBottom: 12,
+                    }}
+                  >
+                    What's Included
+                  </p>
+                  {INCLUDES.map((it) => (
+                    <div
+                      key={it}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 10,
+                        padding: "10px 0",
+                        borderBottom: `1px solid ${C.border}`,
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 20,
+                          height: 20,
+                          borderRadius: "50%",
+                          background: `${C.green}18`,
+                          border: `1px solid ${C.green}44`,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <svg
+                          width="10"
+                          height="8"
+                          viewBox="0 0 12 9"
+                          fill="none"
+                        >
+                          <path
+                            d="M1 4L4.5 7.5L11 1"
+                            stroke={C.green}
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </div>
+                      <p style={{ fontSize: 13, color: C.ink2 }}>{it}</p>
+                    </div>
+                  ))}
+                  <p
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 600,
+                      color: C.ink,
+                      margin: "16px 0 10px",
+                    }}
+                  >
+                    Not Included
+                  </p>
+                  {[
+                    "Gratuities (optional)",
+                    "Personal shopping",
+                    "Travel insurance",
+                  ].map((it) => (
+                    <div
+                      key={it}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 10,
+                        padding: "10px 0",
+                        borderBottom: `1px solid ${C.border}`,
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 20,
+                          height: 20,
+                          borderRadius: "50%",
+                          background: `${C.red}12`,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexShrink: 0,
+                        }}
+                      >
+                        <Ico
+                          name="close"
+                          size={11}
+                          color={C.red}
+                          strokeWidth={2.5}
+                        />
+                      </div>
+                      <p style={{ fontSize: 13, color: C.muted }}>{it}</p>
+                    </div>
+                  ))}
+                </>
+              )}
+
+              {tab === "Reviews" && (
+                <>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 14,
+                      marginBottom: 16,
+                      background: C.surface,
+                      borderRadius: 14,
+                      padding: "14px",
+                    }}
+                  >
+                    <span
+                      className="fraunces"
+                      style={{ fontSize: 44, color: C.ink }}
+                    >
+                      {item.rating.toFixed(1)}
+                    </span>
+                    <div>
+                      <div style={{ display: "flex", gap: 2 }}>
+                        {Array.from({ length: Math.floor(item.rating) }).map(
+                          (_, i) => (
+                            <Ico
+                              key={i}
+                              name="starFill"
+                              size={18}
+                              color={C.amber}
+                              strokeWidth={0}
+                            />
+                          ),
+                        )}
+                      </div>
+                      <p style={{ fontSize: 12, color: C.muted }}>
+                        {item.rev.toLocaleString()} reviews
+                      </p>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      {[5, 4, 3].map((s) => (
+                        <div
+                          key={s}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                            marginBottom: 3,
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontSize: 10,
+                              color: C.muted,
+                              width: 8,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                            }}
+                          >
+                            {s}
+                            <Ico
+                              name="starFill"
+                              size={7}
+                              color={C.muted}
+                              strokeWidth={0}
+                            />
+                          </span>
+                          <div
+                            style={{
+                              flex: 1,
+                              height: 5,
+                              borderRadius: 99,
+                              background: C.bg3,
+                              overflow: "hidden",
+                            }}
+                          >
+                            <div
+                              style={{
+                                height: "100%",
+                                borderRadius: 99,
+                                background: C.amber,
+                                width:
+                                  s === 5 ? "70%" : s === 4 ? "20%" : "10%",
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 7,
+                      marginBottom: 14,
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    {[
+                      "All",
+                      "5 stars",
+                      "4 stars",
+                      "3 stars",
+                      "With Photos",
+                    ].map((f) => (
+                      <button
+                        key={f}
+                        style={{
+                          background:
+                            f === "All" ? `${C.primary}15` : C.surface,
+                          border: `1px solid ${f === "All" ? C.primary : C.border}`,
+                          borderRadius: 99,
+                          padding: "4px 12px",
+                          fontSize: 11,
+                          cursor: "pointer",
+                          color: f === "All" ? C.primary : C.muted,
+                          fontFamily: "'DM Sans',sans-serif",
+                        }}
+                      >
+                        {f}
+                      </button>
+                    ))}
+                  </div>
+                  {REVIEWS.map((r) => (
+                    <div
+                      key={r.name}
+                      style={{
+                        padding: "13px",
+                        background: C.surface,
+                        borderRadius: 14,
+                        marginBottom: 10,
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          marginBottom: 3,
+                        }}
+                      >
+                        <span
+                          style={{
+                            fontSize: 13,
+                            fontWeight: 600,
+                            color: C.ink,
+                          }}
+                        >
+                          {r.name}
+                        </span>
+                        <span style={{ fontSize: 11, color: C.muted }}>
+                          {r.ago}
+                        </span>
+                      </div>
+                      <div style={{ display: "flex", gap: 1, margin: "3px 0" }}>
+                        {Array.from({ length: r.stars }).map((_, i) => (
+                          <Ico
+                            key={i}
+                            name="starFill"
+                            size={12}
+                            color={C.amber}
+                            strokeWidth={0}
+                          />
+                        ))}
+                      </div>
+                      <p
+                        style={{ fontSize: 13, color: C.ink2, lineHeight: 1.6 }}
+                      >
+                        {r.text}
+                      </p>
+                    </div>
+                  ))}
+                </>
+              )}
+
+              {tab === "Gallery" && (
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(3,1fr)",
+                    gap: 8,
+                  }}
+                >
+                  {ATTRACTIONS.map((a, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        height: 88,
+                        borderRadius: 12,
+                        background: `linear-gradient(180deg,${a.img[0]},${a.img[1]})`,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Ico
+                        name={ATTR_ICON[a.id] || "map"}
+                        size={32}
+                        color="rgba(255,255,255,0.85)"
+                        strokeWidth={1.5}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div style={{ height: 12 }} />
+            </div>
+
+            <div
+              style={{
+                padding: "13px 18px 20px",
+                borderTop: `1px solid ${C.border}`,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                background: C.surface,
+                flexShrink: 0,
+              }}
+            >
+              <div>
+                <p style={{ fontSize: 11, color: C.muted }}>Starting from</p>
+                <div
+                  style={{ display: "flex", alignItems: "baseline", gap: 6 }}
+                >
+                  {item.was && (
+                    <s style={{ fontSize: 12, color: C.muted }}>${item.was}</s>
+                  )}
+                  <span
+                    className="fraunces"
+                    style={{ fontSize: 24, color: C.primary }}
+                  >
+                    ${Math.round(item.price * PACKAGES[pkg].mult)}
+                  </span>
+                  <span style={{ fontSize: 11, color: C.muted }}>/person</span>
+                </div>
+              </div>
+              <Btn onClick={onBook} style={{ padding: "13px 28px" }}>
+                Book Now
+              </Btn>
+            </div>
+          </div>
+        );
+      }
+
+      /* ── BOOKING ── */
+      function BookingPage({ item, pkgIdx, onBack, onConfirm }) {
+        const [persons, setPersons] = useState(2);
+        const [selPkg, setSelPkg] = useState(pkgIdx || 0);
+        const [date, setDate] = useState("June 6, 2024");
+        const [payIdx, setPayIdx] = useState(0);
+        const prc = Math.round(item.price * PACKAGES[selPkg].mult) * persons;
+
+        return (
+          <div
+            style={{
+              background: C.bg,
+              height: 812,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <StatusBar onRed />
+            <div
+              style={{
+                background: `${C.primaryL}`,
+                padding: "0 22px 16px",
+                flexShrink: 0,
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <BackBtn onBack={onBack} dark />
+                <h2
+                  className="fraunces"
+                  style={{ fontSize: 22, color: "#fff" }}
+                >
+                  Confirm Booking
+                </h2>
+              </div>
+            </div>
+            <div style={{ flex: 1, padding: "12px 22px 0", overflowY: "auto" }}>
+              <div
+                style={{
+                  borderRadius: 16,
+                  overflow: "hidden",
+                  marginBottom: 16,
+                  border: `1px solid ${C.border}`,
+                }}
+              >
+                <HeroImg a={item} h={100} />
+                <div style={{ background: C.surface, padding: "11px 13px" }}>
+                  <p
+                    className="fraunces"
+                    style={{ fontSize: 15, color: C.ink }}
+                  >
+                    {item.title}
+                  </p>
+                  <p
+                    style={{
+                      fontSize: 11,
+                      color: C.muted,
+                      marginTop: 2,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 3,
+                    }}
+                  >
+                    <Ico name="pin" size={11} color={C.muted} strokeWidth={2} />
+                    {item.city}
+                    <span>·</span>
+                    <Ico
+                      name="clock"
+                      size={11}
+                      color={C.muted}
+                      strokeWidth={2}
+                    />
+                    {item.dur}
+                  </p>
+                </div>
+              </div>
+
+              <p
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: C.ink2,
+                  letterSpacing: 0.3,
+                  marginBottom: 8,
+                }}
+              >
+                PACKAGE
+              </p>
+              {PACKAGES.map((p, i) => (
+                <div
+                  key={i}
+                  onClick={() => setSelPkg(i)}
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    background: selPkg === i ? `${C.primary}0f` : C.surface,
+                    border: `1.5px solid ${selPkg === i ? C.primary : C.border}`,
+                    borderRadius: 12,
+                    padding: "10px 13px",
+                    marginBottom: 8,
+                    cursor: "pointer",
+                  }}
+                >
+                  <div>
+                    <p style={{ fontSize: 13, fontWeight: 500, color: C.ink }}>
+                      {p.name}
+                    </p>
+                    <p style={{ fontSize: 11, color: C.muted }}>{p.sub}</p>
+                  </div>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 8 }}
+                  >
+                    <span
+                      style={{
+                        fontSize: 13,
+                        fontWeight: 700,
+                        color: C.primary,
+                      }}
+                    >
+                      ${Math.round(item.price * p.mult)}
+                      <span
+                        style={{
+                          fontSize: 10,
+                          fontWeight: 400,
+                          color: C.muted,
+                        }}
+                      >
+                        /pp
+                      </span>
+                    </span>
+                    {selPkg === i && (
+                      <div
+                        style={{
+                          width: 18,
+                          height: 18,
+                          borderRadius: "50%",
+                          background: C.primary,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <svg
+                          width="9"
+                          height="7"
+                          viewBox="0 0 12 9"
+                          fill="none"
+                        >
+                          <path
+                            d="M1 4L4.5 7.5L11 1"
+                            stroke="white"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {/* details */}
+              <p
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: C.ink2,
+                  letterSpacing: 0.3,
+                  margin: "14px 0 8px",
+                }}
+              >
+                DETAILS
+              </p>
+              <div
+                style={{
+                  background: C.surface,
+                  borderRadius: 14,
+                  padding: "14px",
+                  marginBottom: 14,
+                  border: `1px solid ${C.border}`,
+                }}
+              >
+                {[
+                  ["Date", "June 6, 2024"],
+                  ["Time", "10:00 AM"],
+                  ["Language", "English"],
+                ].map(([k, v]) => (
+                  <div
+                    key={k}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: 10,
+                    }}
+                  >
+                    <span style={{ fontSize: 13, color: C.muted }}>{k}</span>
+                    <span
+                      style={{ fontSize: 13, fontWeight: 500, color: C.ink }}
+                    >
+                      {v}
+                    </span>
+                  </div>
+                ))}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: 10,
+                  }}
+                >
+                  <span style={{ fontSize: 13, color: C.muted }}>Persons</span>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 12 }}
+                  >
+                    <button
+                      onClick={() => setPersons(Math.max(1, persons - 1))}
+                      style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: 8,
+                        background: "#f1f5f9",
+                        border: `1px solid #e2e8f0`,
+                        color: C.ink,
+                        fontSize: 16,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontFamily: "'DM Sans',sans-serif",
+                      }}
+                    >
+                      −
+                    </button>
+                    <span
+                      style={{
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: C.ink,
+                        minWidth: 18,
+                        textAlign: "center",
+                      }}
+                    >
+                      {persons}
+                    </span>
+                    <button
+                      onClick={() => setPersons(persons + 1)}
+                      style={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: 8,
+                        background: `${C.primary}10`,
+                        border: `1px solid ${C.primary}44`,
+                        color: C.primary,
+                        fontSize: 16,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontFamily: "'DM Sans',sans-serif",
+                      }}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+                <div
+                  style={{ height: 1, background: C.border, margin: "10px 0" }}
+                />
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <span style={{ fontSize: 14, fontWeight: 600, color: C.ink }}>
+                    Total
+                  </span>
+                  <span
+                    className="fraunces"
+                    style={{ fontSize: 20, color: C.primary }}
+                  >
+                    ${prc}
+                  </span>
+                </div>
+              </div>
+
+              {/* payment */}
+              <p
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  color: C.ink2,
+                  letterSpacing: 0.3,
+                  marginBottom: 8,
+                }}
+              >
+                PAYMENT METHOD
+              </p>
+              {[
+                ["card", "Credit Card", "**** **** **** 4242"],
+                ["phone", "Apple Pay", "Enabled"],
+                ["bank", "PayPal", "user@gmail.com"],
+              ].map(([ic, nm, sub], i) => (
+                <div
+                  key={nm}
+                  onClick={() => setPayIdx(i)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    background: payIdx === i ? `${C.primary}0f` : C.surface,
+                    border: `1.5px solid ${payIdx === i ? C.primary : C.border}`,
+                    borderRadius: 13,
+                    padding: "11px 13px",
+                    marginBottom: 9,
+                    cursor: "pointer",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 10,
+                      background: payIdx === i ? C.tint : C.bg2,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Ico
+                      name={ic}
+                      size={18}
+                      color={payIdx === i ? C.primary : C.muted}
+                      strokeWidth={1.8}
+                    />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontSize: 13, fontWeight: 500, color: C.ink }}>
+                      {nm}
+                    </p>
+                    <p style={{ fontSize: 11, color: C.muted }}>{sub}</p>
+                  </div>
+                  {payIdx === i && (
+                    <div
+                      style={{
+                        width: 18,
+                        height: 18,
+                        borderRadius: "50%",
+                        background: C.primary,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <svg width="9" height="7" viewBox="0 0 12 9" fill="none">
+                        <path
+                          d="M1 4L4.5 7.5L11 1"
+                          stroke="white"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              ))}
+              <div style={{ height: 12 }} />
+            </div>
+            <div
+              style={{
+                padding: "14px 22px 24px",
+                background: C.surface,
+                borderTop: `1px solid ${C.border}`,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 12,
+                }}
+              >
+                <p style={{ fontSize: 12, color: C.muted }}>
+                  Total for {persons} person{persons > 1 ? "s" : ""}
+                </p>
+                <span
+                  className="fraunces"
+                  style={{ fontSize: 20, color: C.primary }}
+                >
+                  ${prc}
+                </span>
+              </div>
+              <Btn full onClick={onConfirm}>
+                Confirm & Pay
+              </Btn>
+            </div>
+          </div>
+        );
+      }
+
+      function SuccessPage({ item, onHome, onMyTrips }) {
+        return (
+          <div
+            style={{
+              background: C.bg,
+              height: 812,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <StatusBar onRed />
+            <div
+              style={{
+                background: `${C.primaryL}`,
+                padding: "0 22px 20px",
+                flexShrink: 0,
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <Ico name="ticket" size={20} color="#fff" strokeWidth={1.6} />
+                <span
+                  className="fraunces"
+                  style={{ fontSize: 18, color: "#fff" }}
+                >
+                  goTravel
+                </span>
+              </div>
+            </div>
+            <div
+              style={{
+                flex: 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: "0 32px",
+              }}
+            >
+              <div style={{ textAlign: "center" }}>
+                <div
+                  style={{
+                    width: 90,
+                    height: 90,
+                    background: `${C.primary}12`,
+                    border: `2px solid ${C.primary}`,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "0 auto 22px",
+                  }}
+                >
+                  <Ico
+                    name="confetti"
+                    size={44}
+                    color={C.primary}
+                    strokeWidth={1.6}
+                  />
+                </div>
+                <h2
+                  className="fraunces"
+                  style={{ fontSize: 28, color: C.ink, marginBottom: 8 }}
+                >
+                  Booking Confirmed!
+                </h2>
+                <p
+                  style={{
+                    fontSize: 14,
+                    color: C.muted,
+                    lineHeight: 1.8,
+                    marginBottom: 6,
+                    maxWidth: 260,
+                    margin: "0 auto 8px",
+                  }}
+                >
+                  {item?.title} is all set. Get ready for an amazing experience!
+                </p>
+                <p style={{ fontSize: 12, color: C.muted, marginBottom: 32 }}>
+                  Confirmation sent to your email.
+                </p>
+
+                {/* booking summary */}
+                <div
+                  style={{
+                    background: C.surface,
+                    borderRadius: 16,
+                    padding: "14px 18px",
+                    marginBottom: 24,
+                    textAlign: "left",
+                    border: `1px solid ${C.border}`,
+                  }}
+                >
+                  {[
+                    ["Reference", "GT-20240606"],
+                    ["Date", "June 6, 2024"],
+                    ["Time", "10:00 AM"],
+                    ["Persons", "2 Adults"],
+                  ].map(([k, v]) => (
+                    <div
+                      key={k}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBottom: 8,
+                      }}
+                    >
+                      <span style={{ fontSize: 12, color: C.muted }}>{k}</span>
+                      <span
+                        style={{ fontSize: 12, fontWeight: 600, color: C.ink }}
+                      >
+                        {v}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ display: "flex", gap: 10, width: "100%" }}>
+                  <Btn full variant="outline" onClick={onMyTrips}>
+                    View My Trips
+                  </Btn>
+                  <Btn full onClick={onHome}>
+                    Back to Home
+                  </Btn>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      function MyTripsPage({ onItem, onTab, tab }) {
+        const [filter, setFilter] = useState("Upcoming");
+        const TRIPS = [
+          {
+            id: 1,
+            a: ATTRACTIONS[0],
+            date: "June 6, 2024",
+            status: "Upcoming",
+            ref: "GT-001",
+          },
+          {
+            id: 2,
+            a: ATTRACTIONS[2],
+            date: "May 15, 2024",
+            status: "Completed",
+            ref: "GT-002",
+          },
+          {
+            id: 3,
+            a: ATTRACTIONS[3],
+            date: "April 2, 2024",
+            status: "Completed",
+            ref: "GT-003",
+          },
+        ];
+        const shown = TRIPS.filter(
+          (t) => t.status === filter || filter === "All",
+        );
+
+        return (
+          <div
+            style={{
+              background: C.bg,
+              height: 812,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <StatusBar onRed />
+            <div
+              style={{
+                background: `${C.primaryL}`,
+                padding: "0 22px 16px",
+                flexShrink: 0,
+              }}
+            >
+              <h2
+                className="fraunces"
+                style={{ fontSize: 24, color: "#fff", marginBottom: 2 }}
+              >
+                My Trips
+              </h2>
+              <p style={{ fontSize: 13, color: "rgba(255,255,255,.75)" }}>
+                {TRIPS.length} bookings total
+              </p>
+
+              {/* 篩選按鈕移入此區塊以保持背景一致，或確保 padding 正確 */}
+              <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+                {["Upcoming", "Completed", "All"].map((f) => (
+                  <button
+                    key={f}
+                    onClick={() => setFilter(f)}
+                    style={{
+                      background:
+                        filter === f
+                          ? "rgba(255,255,255,.25)"
+                          : "rgba(255,255,255,.1)",
+                      border: `1px solid ${filter === f ? "rgba(255,255,255,.6)" : "rgba(255,255,255,.25)"}`,
+                      borderRadius: 99,
+                      padding: "5px 14px",
+                      fontSize: 12,
+                      color: "#fff",
+                      cursor: "pointer",
+                      fontWeight: filter === f ? 600 : 400,
+                      fontFamily: "'DM Sans',sans-serif",
+                    }}
+                  >
+                    {f}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* List Section */}
+            <div style={{ flex: 1, padding: "16px 22px", overflowY: "auto" }}>
+              {shown.map((t) => (
+                <div
+                  key={t.id}
+                  onClick={() => onItem(t.a)}
+                  style={{
+                    background: C.surface,
+                    border: `1px solid ${C.border}`,
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    marginBottom: 12,
+                    cursor: "pointer",
+                    boxShadow: "0 1px 6px rgba(0,0,0,.05)",
+                  }}
+                >
+                  <HeroImg a={t.a} h={90} />
+                  <div style={{ padding: "11px 13px" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "flex-start",
+                      }}
+                    >
+                      <p
+                        style={{ fontSize: 13, fontWeight: 600, color: C.ink }}
+                      >
+                        {t.a.title}
+                      </p>
+                      <Tag
+                        text={t.status}
+                        color={t.status === "Upcoming" ? C.green : C.muted}
+                      />
+                    </div>
+                    {/* 修正後的合併 Style */}
+                    <p
+                      style={{
+                        fontSize: 11,
+                        color: C.muted,
+                        marginTop: 3,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 4,
+                      }}
+                    >
+                      <Ico
+                        name="calendar"
+                        size={12}
+                        color={C.muted}
+                        strokeWidth={2}
+                      />
+                      {t.date} · Ref: {t.ref}
+                    </p>
+                    <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+                      <Btn
+                        small
+                        variant="outline"
+                        onClick={(e) => {
+                          e.stopPropagation(); /* 邏輯 */
+                        }}
+                      >
+                        View Voucher
+                      </Btn>
+                      {t.status === "Completed" && (
+                        <Btn
+                          small
+                          variant="ghost"
+                          onClick={(e) => {
+                            e.stopPropagation(); /* 邏輯 */
+                          }}
+                        >
+                          Write Review
+                        </Btn>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {/* Empty State */}
+              {shown.length === 0 && (
+                <div style={{ textAlign: "center", padding: "60px 0" }}>
+                  <div
+                    style={{
+                      marginBottom: 12,
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Ico
+                      name="map"
+                      size={48}
+                      color={C.muted}
+                      strokeWidth={1.2}
+                    />
+                  </div>
+                  <p style={{ color: C.muted, fontSize: 15 }}>
+                    No {filter.toLowerCase()} trips
+                  </p>
+                </div>
+              )}
+              <div style={{ height: 8 }} />
+            </div>
+
+            <TabBar active={tab} onTab={onTab} />
+          </div>
+        );
+      }
+
+      function ProfilePage({ onTab, tab, onNotif }) {
+        return (
+          <div
+            style={{
+              background: C.bg,
+              height: 812,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <StatusBar onRed />
+            <div
+              style={{
+                background: `${C.primaryL}`,
+                padding: "0 22px 22px",
+                flexShrink: 0,
+                position: "relative",
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 14,
+                  position: "relative",
+                }}
+              >
+                <div
+                  style={{
+                    width: 58,
+                    height: 58,
+                    borderRadius: 18,
+                    background: "rgba(255,255,255,.25)",
+                    border: "2px solid rgba(255,255,255,.4)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Ico
+                    name="user"
+                    size={28}
+                    color="rgba(255,255,255,0.9)"
+                    strokeWidth={1.6}
+                  />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <p
+                    className="fraunces"
+                    style={{ fontSize: 19, color: "#fff" }}
+                  >
+                    Jang Beom
+                  </p>
+                  <p style={{ fontSize: 12, color: "rgba(255,255,255,.75)" }}>
+                    jangBeom@gmail.com
+                  </p>
+                </div>
+                <button
+                  style={{
+                    background: "rgba(255,255,255,.2)",
+                    border: "1px solid rgba(255,255,255,.35)",
+                    borderRadius: 10,
+                    padding: "6px 12px",
+                    fontSize: 12,
+                    color: "#fff",
+                    cursor: "pointer",
+                    fontFamily: "'DM Sans',sans-serif",
+                    fontWeight: 500,
+                  }}
+                >
+                  Edit
+                </button>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  marginTop: 16,
+                  background: "rgba(255,255,255,.12)",
+                  borderRadius: 12,
+                  overflow: "hidden",
+                  border: "1px solid rgba(255,255,255,.15)",
+                }}
+              >
+                {[
+                  ["8", "TRIPS"],
+                  ["24", "REVIEWS"],
+                  ["3", "SAVED"],
+                ].map(([n, l], i) => (
+                  <div
+                    key={l}
+                    style={{
+                      flex: 1,
+                      padding: "10px 0",
+                      textAlign: "center",
+                      borderRight:
+                        i < 2 ? "1px solid rgba(255,255,255,.15)" : "none",
+                    }}
+                  >
+                    <p
+                      className="fraunces"
+                      style={{ fontSize: 20, color: "#fff" }}
+                    >
+                      {n}
+                    </p>
+                    <p
+                      style={{
+                        fontSize: 9,
+                        color: "rgba(255,255,255,.7)",
+                        letterSpacing: 0.5,
+                        fontWeight: 500,
+                      }}
+                    >
+                      {l}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div style={{ flex: 1, overflowY: "auto" }}>
+              <div style={{ padding: "14px 22px 0" }}>
+                {[
+                  ["ticket", "My Bookings", null, () => onTab("trips")],
+                  ["heart", "Saved Experiences", null, null],
+                  ["starFill", "My Reviews", "24 written", null],
+                  ["card", "Payment Methods", null, null],
+                  ["bell", "Notifications", "3 new", onNotif],
+                  ["globe", "Language & Currency", "EN · USD", null],
+                  ["help", "Help & Support", null, null],
+                  ["logout", "Log Out", null, null],
+                ].map(([ic, label, sub, action], i) => (
+                  <div
+                    key={label}
+                    onClick={action || undefined}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 12,
+                      background: C.surface,
+                      borderRadius: 14,
+                      padding: "13px 0",
+                      marginBottom: 9,
+                      cursor: "pointer",
+                      borderBottom: `1px solid ${C.border}`,
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 36,
+                        height: 36,
+                        borderRadius: 10,
+                        background: i === 7 ? "#fef2f2" : C.tint,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Ico
+                        name={ic}
+                        size={18}
+                        color={i === 7 ? "#ef4444" : C.primary}
+                        strokeWidth={1.8}
+                      />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <p
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 500,
+                          color: i === 7 ? "#ef4444" : C.ink,
+                        }}
+                      >
+                        {label}
+                      </p>
+                      {sub && (
+                        <p
+                          style={{ fontSize: 11, color: C.muted, marginTop: 1 }}
+                        >
+                          {sub}
+                        </p>
+                      )}
+                    </div>
+                    {i < 7 && (
+                      <Ico
+                        name="chevron"
+                        size={16}
+                        color={C.muted}
+                        strokeWidth={2}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div style={{ height: 16 }} />
+            </div>
+            <TabBar active={tab} onTab={onTab} />
+          </div>
+        );
+      }
+
+      function NotifyPage({ onBack }) {
+        const [read, setRead] = useState([]);
+        return (
+          <div style={{ background: C.bg, height: 812, overflowY: "auto" }}>
+            <StatusBar onRed />
+
+            <div
+              style={{
+                background: `${C.primaryL}`,
+                padding: "0 22px 16px",
+                flexShrink: 0,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <BackBtn onBack={onBack} dark />
+                  <h2
+                    className="fraunces"
+                    style={{ fontSize: 22, color: "#fff" }}
+                  >
+                    Notifications
+                  </h2>
+                </div>
+                <span
+                  onClick={() => setRead(NOTIFS.map((n) => n.id))}
+                  style={{
+                    fontSize: 12,
+                    color: "rgba(255,255,255,.85)",
+                    cursor: "pointer",
+                    fontWeight: 500,
+                  }}
+                >
+                  Mark all read
+                </span>
+              </div>
+            </div>
+            <div style={{ padding: "14px 22px 8px" }}>
+              {NOTIFS.map((n) => (
+                <div
+                  key={n.id}
+                  onClick={() => setRead((r) => [...r, n.id])}
+                  style={{
+                    background: read.includes(n.id)
+                      ? C.surface
+                      : `${C.primary}07`,
+                    border: `1px solid ${read.includes(n.id) ? C.border : `${C.primary}28`}`,
+                    borderRadius: 14,
+                    padding: "13px 14px",
+                    marginBottom: 9,
+                    cursor: "pointer",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 10,
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: "50%",
+                        background: read.includes(n.id) ? C.border : n.col,
+                        marginTop: 5,
+                        flexShrink: 0,
+                      }}
+                    />
+                    <p style={{ fontSize: 13, color: C.ink2, lineHeight: 1.6 }}>
+                      {n.text}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      }
+
+      /* ════════════════════════════════════════════════
+         APP ROOT
+      ════════════════════════════════════════════════ */
+      function App() {
+        const [screen, setScreen] = useState("start");
+        const [selItem, setSelItem] = useState(ATTRACTIONS[0]);
+        const [selPkg, setSelPkg] = useState(0);
+        const [tab, setTab] = useState("home");
+
+        const goTab = (t) => {
+          setTab(t);
+          const map = {
+            home: "home",
+            explore: "explore",
+            trips: "trips",
+            profile: "profile",
+          };
+          setScreen(map[t] || "home");
+        };
+        const goItem = (item) => {
+          setSelItem(item);
+          setScreen("detail");
+        };
+
+        const SCREENS = {
+          start: <StartPage onNext={() => setScreen("login")} />,
+          login: (
+            <LoginPage
+              onLogin={() => {
+                setScreen("home");
+                setTab("home");
+              }}
+              onSignup={() => setScreen("signup")}
+            />
+          ),
+          signup: (
+            <CreateAccount
+              onBack={() => setScreen("login")}
+              onSignup={() => setScreen("login")}
+            />
+          ),
+          home: (
+            <HomePage
+              onBell={() => setScreen("notify")}
+              onItem={goItem}
+              onCity={(c) => c}
+              onTab={goTab}
+              tab={tab}
+            />
+          ),
+          explore: <ExplorePage onItem={goItem} onTab={goTab} tab={tab} />,
+          detail: (
+            <DetailPage
+              item={selItem}
+              onBack={() =>
+                setScreen(
+                  ["home", "explore", "trips"].includes(tab) ? tab : "home",
+                )
+              }
+              onBook={() => setScreen("booking")}
+            />
+          ),
+          booking: (
+            <BookingPage
+              item={selItem}
+              pkgIdx={selPkg}
+              onBack={() => setScreen("detail")}
+              onConfirm={() => setScreen("success")}
+            />
+          ),
+          success: (
+            <SuccessPage
+              item={selItem}
+              onHome={() => {
+                setScreen("home");
+                setTab("home");
+              }}
+              onMyTrips={() => {
+                setScreen("trips");
+                setTab("trips");
+              }}
+            />
+          ),
+          trips: <MyTripsPage onItem={goItem} onTab={goTab} tab={tab} />,
+          profile: (
+            <ProfilePage
+              onTab={goTab}
+              tab={tab}
+              onNotif={() => setScreen("notify")}
+            />
+          ),
+          notify: <NotifyPage onBack={() => setScreen(tab)} />,
+        };
+
+        const LABELS = {
+          start: "Start",
+          login: "Login",
+          signup: "Sign Up",
+          home: "Home",
+          explore: "Explore",
+          detail: "Detail",
+          booking: "Booking",
+          success: "Success",
+          trips: "My Trips",
+          profile: "Profile",
+          notify: "Notifications",
+        };
+
+        return (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 18,
+              padding: "20px 0",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                gap: 7,
+                flexWrap: "wrap",
+                justifyContent: "center",
+                maxWidth: 560,
+              }}
+            >
+              {Object.entries(LABELS).map(([s, lb]) => (
+                <button
+                  key={s}
+                  onClick={() => setScreen(s)}
+                  style={{
+                    background: screen === s ? C.primary : "#f1f5f9",
+                    border: `1px solid ${screen === s ? C.primary : "#e2e8f0"}`,
+                    borderRadius: 10,
+                    padding: "5px 12px",
+                    color: screen === s ? "#fff" : "#64748b",
+                    fontSize: 12,
+                    cursor: "pointer",
+                    fontWeight: screen === s ? 600 : 400,
+                    fontFamily: "'DM Sans',sans-serif",
+                  }}
+                >
+                  {lb}
+                </button>
+              ))}
+            </div>
+            <div
+              style={{
+                width: 375,
+                background: C.bg,
+                borderRadius: 46,
+                height: 812,
+                overflow: "hidden",
+                overflowY: "auto",
+                boxShadow: `0 0 0 10px #d1d5db, 0 32px 80px rgba(0,0,0,.15)`,
+                border: `1px solid ${C.border}`,
+              }}
+            >
+              {SCREENS[screen]}
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
+</html>
