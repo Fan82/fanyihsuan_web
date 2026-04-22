@@ -3,6 +3,16 @@ import { Link } from "react-router-dom";
 
 const EXPERIENCE = [
   {
+    role: "UI Designer Volunteer",
+    company: "One Sky Collective (Social Enterprise)",
+    period: "Nov 2025 – Now",
+  },
+  {
+    role: "Freelance Content Writer",
+    company: "SharkTech",
+    period: "July 2025 – Now",
+  },
+  {
     role: "UX/UI Designer / Front-End Developer",
     company: "NEUTEC Co., Ltd.",
     period: "Feb 2022 – Feb 2025",
@@ -40,7 +50,7 @@ const SKILLS = [
 const CONTACT = [
   {
     label: "Resume",
-    href: "/FanYiH_resume.pdf", // 移掉 /public
+    href: "/FanYiH_resume.pdf",
     download: "FanYiH_resume.pdf",
   },
   {
@@ -53,20 +63,22 @@ const CONTACT = [
     href: "https://www.behance.net/congee_88",
     external: true,
   },
-  {
-    label: "Get In Touch",
-    href: "mailto:fys840802@gmail.com",
-    external: false,
-  },
+  { label: "Get In Touch", href: "mailto:fys840802@gmail.com" },
 ];
 
 export default function About() {
   const sectionRef = useRef(null);
 
-  // Staggered fade-up on mount
   useEffect(() => {
+    // ✅ Respect reduced motion preference
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    if (prefersReducedMotion) return;
+
     const els = sectionRef.current?.querySelectorAll("[data-reveal]");
     if (!els) return;
+
     els.forEach((el, i) => {
       el.style.opacity = "0";
       el.style.transform = "translateY(20px)";
@@ -82,130 +94,190 @@ export default function About() {
   }, []);
 
   return (
-    <main
-      ref={sectionRef}
-      className="pt-[10vh] pb-32 max-w-[1200px] mx-auto px-8 lg:px-16 text-ink relative"
-    >
-      {/* Back 按鈕 */}
-      <Link
-        to="/"
-        className="inline-flex items-center gap-2 text-sm text-muted hover:text-ink transition-colors mb-8 mt-4"
-      >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M6 8L2 12L6 16" />
-          <path d="M2 12H22" />
-        </svg>
-        Back
-      </Link>
-      {/* Background watermark — profolio.webp tiled */}
+    <>
+      {/* ✅ Background watermark — 移到 <main> 外層，z-index 完全獨立 */}
       <div
-        className="w-full h-[50vh] -z-10"
+        className="relative top-0 left-0 w-full h-[40vh] -z-10 pointer-events-none"
         style={{
           backgroundImage: "url(/profolio.webp)",
           backgroundSize: "contain",
           backgroundRepeat: "repeat",
-          mixBlendMode: "",
         }}
         aria-hidden
       />
-
-      {/* ── Name + titles ───────────────────────────────── */}
-      <h1 data-reveal className="text-6xl font-bold leading-20 mb-4 mt-4">
-        Fan Yi Hsuan
-      </h1>
-
-      <div data-reveal className="flex flex-wrap gap-x-0 mb-6">
-        {["UI/ UX Designer", "Front-End Developer", "Design Developer"].map(
-          (t, i) => (
-            <h2
-              key={t}
-              className="text-base inline-block px-1 py-0.5 lg:text-xl"
-              style={{ background: i === 0 ? "none" : "none" }}
-            >
-              {t}
-              {i < 2 && <span className="text-muted mx-1">/</span>}
-            </h2>
-          ),
-        )}
-      </div>
-
-      {/* ── Bio ─────────────────────────────────────────── */}
-      <p data-reveal className="font-light mb-16 leading-6">
-        Hellooooo — I'm a Design Engineer from Taiwan, currently based in
-        London. I bridge the gap between design and code — turning ideas into
-        interfaces that are both beautiful and functional. With 6+ years across
-        UX, UI, and front-end development, I'm now open to full-time and
-        freelance opportunities in London and remote, where I can bring both
-        design sensibility and engineering execution to the same table.
-      </p>
-
-      {/* ── Skills ──────────────────────────────────────── */}
-      <div data-reveal className="mb-16">
-        <h3 className="text-xl mb-4">Skills</h3>
-        <ol className="flex flex-wrap gap-x-4 gap-y-2">
-          {SKILLS.map((s) => (
-            <li key={s} className="text-muted">
-              {s}
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      {/* ── Work Experience ─────────────────────────────── */}
-      <div data-reveal className="mb-16">
-        <h3 className="text-xl mb-4">Work Experience</h3>
-        <ul className="space-y-6">
-          {EXPERIENCE.map((job) => (
-            <li key={job.company}>
-              <h4 className="text-xl font-light mb-2">{job.role}</h4>
-              <div className="flex items-center gap-2 mt-1">
-                <span className="text-muted">{job.company}</span>
-                <span className="text-muted">•</span>
-                <span className="text-muted">{job.period}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* ── Contact ─────────────────────────────────────── */}
-      <div data-reveal>
-        <h3 className="text-xl mb-4">Contact me</h3>
-        <ol className="flex flex-wrap gap-3">
-          {CONTACT.map((c) => (
-            <li key={c.label}>
-              <a
-                href={c.href}
-                target={c.external ? "_blank" : undefined}
-                rel={c.external ? "noreferrer" : undefined}
-                download={c.download || undefined}
-                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 bg-ink text-chalk text-sm hover:bg-dim transition-colors"
-              >
-                {c.label}
-              </a>
-            </li>
-          ))}
-        </ol>
-      </div>
-
-      {/* Floating Contact button (sticky bottom) */}
-      <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40">
-        <a
-          href="mailto:fys840802@gmail.com"
-          className="px-10 py-3 rounded-full bg-chalk text-ink text-sm font-medium shadow-[0_0_20px_rgba(5,2,6,0.15)] hover:shadow-[0_0_32px_rgba(5,2,6,0.25)] transition-shadow"
+      <main
+        ref={sectionRef}
+        className="pt-4 pb-32 max-w-[1200px] mx-auto px-8 lg:px-16 text-ink relative"
+      >
+        {/* Back button */}
+        <Link
+          to="/"
+          className="inline-flex items-center gap-2 text-sm text-muted hover:text-ink transition-colors mb-8 mt-4"
         >
-          Contact
-        </a>
-      </div>
-    </main>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M6 8L2 12L6 16" />
+            <path d="M2 12H22" />
+          </svg>
+          Back
+        </Link>
+
+        {/* ── Name + titles ── */}
+        <h1 data-reveal className="text-6xl font-bold leading-20 mb-4 mt-4">
+          Fan Yi Hsuan
+        </h1>
+
+        <div data-reveal className="flex flex-wrap gap-x-0 mb-6">
+          {/* ✅ "Design Developer" → "Design Engineer"，與 bio 統一 */}
+          {["UI/ UX Designer", "Front-End Developer", "Design Engineer"].map(
+            (t, i) => (
+              <h2
+                key={t}
+                className="text-base inline-block px-1 py-0.5 lg:text-xl"
+              >
+                {t}
+                {i < 2 && <span className="text-muted mx-1">/</span>}
+              </h2>
+            ),
+          )}
+        </div>
+
+        {/* ── Bio ── */}
+        {/* ✅ 精煉內容，去除重複語意 */}
+        <p data-reveal className="font-light mb-16 leading-6">
+          I'm a Design Engineer from Taiwan, based in London. I bridge design
+          and code — turning ideas into interfaces that are both beautiful and
+          functional. With 6+ years across UX, UI, and front-end development, I
+          bring design sensibility and engineering execution to the same table.
+          Open to full-time and freelance opportunities in London and remote.
+        </p>
+
+        {/* ── Skills ── */}
+        {/* ✅ div → section + aria-labelledby；ol → ul（無順序語意） */}
+        <section
+          data-reveal
+          id="skills"
+          className="mb-16"
+          aria-labelledby="skills-heading"
+        >
+          <h3 id="skills-heading" className="text-xl mb-6">
+            Skills
+          </h3>
+
+          {[
+            {
+              label: "Design",
+              items: [
+                "Figma",
+                "Adobe XD",
+                "User Research",
+                "Prototyping",
+                "Design Systems",
+              ],
+            },
+            {
+              label: "Development",
+              items: [
+                "Vue.js",
+                "React",
+                "Tailwind CSS",
+                "HTML / CSS",
+                "JavaScript",
+              ],
+            },
+          ].map(({ label, items }) => (
+            <div key={label} className="mb-4">
+              <p className="text-xs uppercase tracking-widest text-ink mb-2">
+                {label}
+              </p>
+              <ul className="flex flex-wrap gap-2" role="list">
+                {items.map((s) => (
+                  <li key={s}>
+                    <span className="inline-block text-sm px-3.5 py-1.5 rounded-full border border-ink/10 text-ink bg-transparent hover:bg-ink hover:text-chalk hover:border-ink transition-colors cursor-default">
+                      {s}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </section>
+
+        {/* ── Work Experience ── */}
+        <section
+          data-reveal
+          id="experience"
+          className="mb-16"
+          aria-labelledby="experience-heading"
+        >
+          <h3 id="experience-heading" className="text-xl mb-6">
+            Work Experience
+          </h3>
+
+          <ul
+            className="relative pl-5 border-l border-ink/10 space-y-1"
+            role="list"
+          >
+            {EXPERIENCE.map((job) => (
+              <li
+                key={`${job.company}-${job.period}`}
+                className="relative pl-5 py-3 rounded-xlhover:bg-ink/[0.03] transition-colors group cursor-default"
+              >
+                {/* timeline dot */}
+                <span className="absolute -left-[27px] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border-2 border-white bg-ink/20 group-hover:bg-ink group-hover:scale-12 transition-all" />
+                <span className="text-xs text-muted shrink-0">
+                  {job.period}
+                </span>
+                <div className="flex justify-between items-baseline gap-3">
+                  <h4 className="text-base font-medium">{job.role}</h4>
+                </div>
+                <p className="text-sm text-muted mt-0.5">{job.company}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* ── Contact ── */}
+        {/* ✅ ol → ul + section */}
+        <section data-reveal id="contact" aria-labelledby="contact-heading">
+          <h3 id="contact-heading" className="text-xl mb-4">
+            Contact me
+          </h3>
+          <ul className="flex flex-wrap gap-3" role="list">
+            {CONTACT.map((c) => (
+              <li key={c.label}>
+                <a
+                  href={c.href}
+                  target={c.external ? "_blank" : undefined}
+                  rel={c.external ? "noreferrer" : undefined}
+                  download={c.download || undefined}
+                  className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 bg-ink text-chalk text-sm hover:bg-dim transition-colors"
+                >
+                  {c.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* Floating Contact button */}
+        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40">
+          <a
+            href="mailto:fys840802@gmail.com"
+            className="px-10 py-3 rounded-full bg-chalk text-ink text-sm font-medium shadow-[0_0_20px_rgba(5,2,6,0.15)] hover:shadow-[0_0_32px_rgba(5,2,6,0.25)] transition-shadow"
+          >
+            Contact
+          </a>
+        </div>
+      </main>
+    </>
   );
 }
