@@ -255,7 +255,7 @@ export default function About() {
 
         {/* ── Contact ── */}
         {/* ✅ ol → ul + section */}
-        {/* <section data-reveal id="contact" aria-labelledby="contact-heading">
+        <section data-reveal id="contact" aria-labelledby="contact-heading">
           <h3 id="contact-heading" className="text-xl mb-4">
             Contact me
           </h3>
@@ -274,7 +274,7 @@ export default function About() {
               </li>
             ))}
           </ul>
-        </section> */}
+        </section>
 
         {/* Floating Contact button */}
         <div

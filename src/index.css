@@ -150,12 +150,12 @@
 
   /* Nav pill button */
   .nav-pill {
-    @apply relative rounded-full px-4 py-2 text-sm border border-transparent text-chalk;
+    @apply relative rounded-full px-4 py-2 text-sm border border-transparent text-ink;
   }
 
   .nav-pill:hover,
   .nav-pill.active {
-    @apply bg-chalk text-ink;
+    @apply bg-ink text-chalk;
   }
 
   /* Accent-coloured pill — uses CSS var */
@@ -198,8 +198,4 @@
     height: 28px;
   }
 
-  /* Mix-blend nav (used on homepage dark slides) */
-  .nav-blend {
-    mix-blend-mode: difference;
-  }
 }

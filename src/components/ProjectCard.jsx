@@ -8,19 +8,13 @@ import { useRef, useState } from "react";
  * On touch (mobile):  overlay is always visible at 20% height.
  */
 export default function ProjectCard({ project, variant = "full" }) {
-  const videoRef = useRef(null);
   const [hovered, setHovered] = useState(false);
 
   const handleMouseEnter = () => {
     setHovered(true);
-    videoRef.current?.play().catch(() => {});
   };
   const handleMouseLeave = () => {
     setHovered(false);
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
   };
 
   return (
@@ -49,23 +43,6 @@ export default function ProjectCard({ project, variant = "full" }) {
         }}
       />
 
-      {/* Background video (plays on hover) */}
-      {/* <video
-        ref={videoRef}
-        src={`/projects/${project.id}/MP4.mp4`}
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{
-          opacity: hovered ? 1 : 0,
-          filter: "brightness(0.25)",
-          transition: "opacity 0.4s ease",
-          pointerEvents: "none",
-        }}
-      /> */}
-
-      {/* Hover overlay — desktop */}
       <div
         className="absolute inset-0 bg-ink/70 backdrop-blur-sm z-10 pointer-events-none"
         style={{
@@ -99,7 +76,7 @@ export default function ProjectCard({ project, variant = "full" }) {
       </div>
 
       {/* Touch fallback — always visible on mobile */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 text-center p-10 bg-gradient-to-t from-ink/80 to-transparent md:hidden">
+      <div className="absolute bottom-0 left-0 right-0 z-20 text-center p-10 bg-gradient-to-t from-ink/80 to-transparent xl:hidden">
         <img
           src={`/projects/${project.id}/logo.png`}
           alt={`${project.name} logo`}

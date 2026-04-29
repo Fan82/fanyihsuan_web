@@ -22,6 +22,7 @@ export default function SlideShow({ onComplete }) {
   const [progress, setProgress] = useState(0);
   const [slideIndex, setSlideIndex] = useState(0);
   const [done, setDone] = useState(false);
+  const [hideSkip, setHideSkip] = useState(false);
 
   useScrollLock(!done);
 
@@ -40,6 +41,7 @@ export default function SlideShow({ onComplete }) {
       setSlideIndex(Math.min(Math.floor(p * SLIDES.length), SLIDES.length - 1));
 
       if (p >= 0.95) {
+        setHideSkip(true); // ← 先隱藏 skip
         clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(complete, 400);
       }
@@ -85,12 +87,18 @@ export default function SlideShow({ onComplete }) {
             style={{ transform: "rotate(-135deg)", marginBottom: "4px" }}
           />
         </div>
-        <button
-          onClick={complete}
-          className="text-sm text-muted hover:text-ink transition-colors"
-        >
-          Skip
-        </button>
+        {!hideSkip && (
+          <button
+            onClick={complete}
+            className="text-sm text-muted hover:text-ink transition-colors transition-opacity duration-300"
+            style={{
+              opacity: hideSkip ? 0 : 1,
+              pointerEvents: hideSkip ? "none" : "auto",
+            }}
+          >
+            Skip
+          </button>
+        )}
       </div>
     </div>
   );
