@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+
 import { Link } from "react-router-dom";
 
 const EXPERIENCE = [
@@ -68,9 +69,10 @@ const CONTACT = [
 
 export default function About() {
   const sectionRef = useRef(null);
+  const floatingRef = useRef(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    // ✅ Respect reduced motion preference
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
@@ -91,6 +93,12 @@ export default function About() {
         });
       });
     });
+
+    const handleClickOutside = (e) => {
+      if (!floatingRef.current?.contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -247,7 +255,7 @@ export default function About() {
 
         {/* ── Contact ── */}
         {/* ✅ ol → ul + section */}
-        <section data-reveal id="contact" aria-labelledby="contact-heading">
+        {/* <section data-reveal id="contact" aria-labelledby="contact-heading">
           <h3 id="contact-heading" className="text-xl mb-4">
             Contact me
           </h3>
@@ -266,17 +274,82 @@ export default function About() {
               </li>
             ))}
           </ul>
-        </section>
+        </section> */}
 
         {/* Floating Contact button */}
-        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40">
-          <a
-            href="mailto:fys840802@gmail.com"
+        <div
+          ref={floatingRef}
+          className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center"
+        >
+          <div
+            className="mb-2 bg-white rounded-xl border overflow-hidden min-w-[140px] shadow-lg transition-all duration-150"
+            style={{
+              opacity: open ? 1 : 0,
+              pointerEvents: open ? "auto" : "none",
+              transform: open ? "translateY(0)" : "translateY(6px)",
+            }}
+          >
+            {CONTACT.map((c) => (
+              <a
+                key={c.label}
+                href={c.href}
+                target={c.external ? "_blank" : undefined}
+                rel={c.external ? "noreferrer" : undefined}
+                download={c.download || undefined}
+                className="block px-4 py-2.5 text-sm text-ink hover:bg-gray-50 border-b border-ink/5 last:border-0 transition-colors"
+              >
+                {c.label}
+              </a>
+            ))}
+          </div>
+
+          {/* 觸發按鈕 */}
+          <button
+            onClick={() => setOpen(!open)}
             className="px-10 py-3 rounded-full bg-chalk text-ink text-sm font-medium shadow-[0_0_20px_rgba(5,2,6,0.15)] hover:shadow-[0_0_32px_rgba(5,2,6,0.25)] transition-shadow"
           >
             Contact
-          </a>
+          </button>
         </div>
+        {/* <div
+          className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-white rounded-xl border overflow-hidden min-w-[140px] shadow-lg transition-all duration-150"
+          style={{
+            opacity: open ? 1 : 0,
+            pointerEvents: open ? "auto" : "none",
+            transform: open ? "translateY(0)" : "translateY(6px)",
+          }}
+          ref={ref}
+        >
+          <a
+            href="/FanYiH_resume.pdf"
+            className="transition-colors hover:text-red-500"
+            download
+          >
+            Resume
+          </a>
+          <a
+            href="mailto:fys840802@gmail.com"
+            className="transition-colors hover:text-red-500"
+          >
+            Email
+          </a>
+          <a
+            href="https://www.linkedin.com/in/fanyihsuan/"
+            target="_blank"
+            rel="noreferrer"
+            className="transition-colors hover:text-red-500"
+          >
+            LinkedIn
+          </a>
+          <a
+            href="https://www.behance.net/congee_88"
+            target="_blank"
+            rel="noreferrer"
+            className="transition-colors hover:text-red-500"
+          >
+            Behance
+          </a>
+        </div> */}
       </main>
     </>
   );

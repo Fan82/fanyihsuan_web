@@ -22,13 +22,12 @@ function PhoneModal({ url, onClose }) {
         </button>
 
         <div
-          className="relative bg-zinc-900 rounded-[40px]"
-          style={{
-            width: "390px",
-            height: "760px",
-            border: "8px solid #27272a",
-            boxShadow: "0 0 0 2px #3f3f46, 0 40px 80px rgba(0,0,0,0.6)",
-          }}
+          className="relative bg-zinc-900 rounded-[40px] 
+          w-[310px] h-[620px]
+          sm:w-[320px] sm:h-[640px]
+          md:w-[390px] md:h-[760px]
+          border-[8px] border-zinc-800
+          shadow-[0_0_0_2px_#3f3f46,0_40px_80px_rgba(0,0,0,0.6)]"
         >
           <div
             className="absolute top-3 left-1/2 -translate-x-1/2 bg-zinc-800 rounded-full z-10"
