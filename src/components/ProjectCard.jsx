@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 /**
  * ProjectCard — appears in the homepage project grid.
@@ -9,21 +9,22 @@ import { useRef, useState } from "react";
  */
 export default function ProjectCard({ project, variant = "full" }) {
   const [hovered, setHovered] = useState(false);
+  const cardHeight = variant === "full" ? "100vh" : "50vh";
 
-  const handleMouseEnter = () => {
-    setHovered(true);
-  };
-  const handleMouseLeave = () => {
-    setHovered(false);
-  };
+  // const handleMouseEnter = () => {
+  //   setHovered(true);
+  // };
+  // const handleMouseLeave = () => {
+  //   setHovered(false);
+  // };
 
   return (
     <Link
       to={`/projects/${project.id}`}
       className="relative block overflow-hidden bg-white cursor-pointer"
-      style={{ height: variant === "full" ? "100vh" : "100vh" }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      style={{ height: cardHeight }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
       {/* Background image */}
       <img

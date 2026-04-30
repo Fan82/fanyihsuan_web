@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-
 import { Link } from "react-router-dom";
+import { CONTACT } from "../data/contact.js";
 
 const EXPERIENCE = [
   {
@@ -34,43 +34,9 @@ const EXPERIENCE = [
     period: "Sep 2017 – Feb 2018",
   },
 ];
-
-const SKILLS = [
-  "Figma",
-  "Adobe XD",
-  "User Research",
-  "Prototyping",
-  "Vue.js",
-  "React",
-  "Tailwind CSS",
-  "HTML / CSS",
-  "JavaScript",
-  "Design Systems",
-];
-
-const CONTACT = [
-  {
-    label: "Resume",
-    href: "/FanYiH_resume.pdf",
-    download: "FanYiH_resume.pdf",
-  },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/in/fanyihsuan/",
-    external: true,
-  },
-  {
-    label: "Behance",
-    href: "https://www.behance.net/congee_88",
-    external: true,
-  },
-  { label: "Get In Touch", href: "mailto:fys840802@gmail.com" },
-];
-
 export default function About() {
   const sectionRef = useRef(null);
   const floatingRef = useRef(null);
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -93,19 +59,20 @@ export default function About() {
         });
       });
     });
+  }, []);
 
+  useEffect(() => {
     const handleClickOutside = (e) => {
       if (!floatingRef.current?.contains(e.target)) setOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [open]);
 
   return (
     <>
-      {/* ✅ Background watermark — 移到 <main> 外層，z-index 完全獨立 */}
       <div
-        className="relative top-0 left-0 w-full h-[40vh] -z-10 pointer-events-none"
+        className="relative w-full h-[40vh] -z-10 pointer-events-none"
         style={{
           backgroundImage: "url(/profolio.webp)",
           backgroundSize: "contain",
@@ -117,27 +84,6 @@ export default function About() {
         ref={sectionRef}
         className="pt-4 pb-32 max-w-[1200px] mx-auto px-8 lg:px-16 text-ink relative"
       >
-        {/* Back button */}
-        <Link
-          to="/"
-          className="inline-flex items-center gap-2 text-sm text-muted hover:text-ink transition-colors mb-8 mt-4"
-        >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M6 8L2 12L6 16" />
-            <path d="M2 12H22" />
-          </svg>
-          Back
-        </Link>
-
         {/* ── Name + titles ── */}
         <h1 data-reveal className="text-6xl font-bold leading-20 mb-4 mt-4">
           Fan Yi Hsuan
@@ -277,7 +223,7 @@ export default function About() {
         </section>
 
         {/* Floating Contact button */}
-        <div
+        {/* <div
           ref={floatingRef}
           className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center"
         >
@@ -301,16 +247,8 @@ export default function About() {
                 {c.label}
               </a>
             ))}
-          </div>
-
-          {/* 觸發按鈕 */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="px-10 py-3 rounded-full bg-chalk text-ink text-sm font-medium shadow-[0_0_20px_rgba(5,2,6,0.15)] hover:shadow-[0_0_32px_rgba(5,2,6,0.25)] transition-shadow"
-          >
-            Contact
-          </button>
-        </div>
+          </div> */}
+        {/* </div> */}
         {/* <div
           className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-white rounded-xl border overflow-hidden min-w-[140px] shadow-lg transition-all duration-150"
           style={{

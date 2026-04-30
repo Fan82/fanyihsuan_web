@@ -50,7 +50,7 @@
 .theme-easyBank {
   --accent: #2563eb;
   --accent-btn: #f0f0f0;
-  --accent-dim: #ff0000;
+  --accent-dim: #2563eb1f;
   --accent-text: #0f172a;
   --project-bg: linear-gradient(180deg, #ffffff 0%, #fff5e6 100%);
   --project-mainbg: #fffefc;

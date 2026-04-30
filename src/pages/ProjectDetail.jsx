@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { getProject } from "../data/projects";
+import { useEffect, useState } from "react"; // Bug #5 fix: removed useRef (pageRef no longer used)
+import { getProject, projects } from "../data/projects"; // Bug #10 fix: moved import to top
+import { useScrollLock } from "../hooks/useScrollLock";
 
 // ─── Phone Demo Modal ─────────────────────────────────────────
 
@@ -50,18 +51,7 @@ function PhoneModal({ url, onClose }) {
 function HeroSection({ project }) {
   const [showDemo, setShowDemo] = useState(false);
 
-  useEffect(() => {
-    if (showDemo) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-
-    // cleanup：component 卸載時還原
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [showDemo]);
+  useScrollLock(showDemo);
 
   return (
     <>
@@ -175,7 +165,8 @@ function OverviewSection({ project }) {
           className="text-xl font-medium leading-snug mb-5"
           style={{ color: "var(--accent-text)" }}
         >
-          {project.overview.problem.split(".")[0]}.
+          {project.overview.problemSummary ??
+            project.overview.problem.split(/[.?!]/)[0] + "."}
         </h2>
         <p
           className="text-base font-light leading-relaxed opacity-60"
@@ -190,7 +181,9 @@ function OverviewSection({ project }) {
           className="text-xl font-medium leading-snug mb-5"
           style={{ color: "var(--accent-text)" }}
         >
-          {project.overview.solution.split(".")[0]}.
+          {/* Opt #12 fix: use summary field if present, otherwise fall back to first sentence safely */}
+          {project.overview.solutionSummary ??
+            project.overview.solution.split(/[.?!]/)[0] + "."}
         </h2>
         <p
           className="text-base font-light leading-relaxed opacity-60"
@@ -278,7 +271,6 @@ function UserFlowSection({ project }) {
 export default function ProjectDetail() {
   const { id } = useParams();
   const project = getProject(id);
-  const pageRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -297,7 +289,6 @@ export default function ProjectDetail() {
 
   return (
     <div
-      ref={pageRef}
       className={project.theme}
       style={{
         background: "var(--project-bg)",
@@ -315,8 +306,6 @@ export default function ProjectDetail() {
 }
 
 // ─── Next project nav ────────────────────────────────────────
-
-import { projects } from "../data/projects";
 
 function NextProject({ currentId }) {
   const idx = projects.findIndex((p) => p.id === currentId);

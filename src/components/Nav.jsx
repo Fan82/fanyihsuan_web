@@ -1,24 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-
-const CONTACT = [
-  {
-    label: "Resume",
-    href: "/FanYiH_resume.pdf",
-    download: "FanYiH_resume.pdf",
-  },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/in/fanyihsuan/",
-    external: true,
-  },
-  {
-    label: "Behance",
-    href: "https://www.behance.net/congee_88",
-    external: true,
-  },
-  { label: "Email", href: "mailto:fys840802@gmail.com" },
-];
+import { CONTACT } from "../data/contact";
 
 export default function Nav() {
   const { pathname } = useLocation();
