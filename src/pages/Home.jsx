@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import SlideShow from "../components/SlideShow";
 import ProjectList from "../components/ProjectList";
 
 export default function Home() {
-  const [slideDone, setSlideDone] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const skipToProjects = searchParams.get("scroll") === "projects";
+
+  const [slideDone, setSlideDone] = useState(skipToProjects);
 
   useEffect(() => {
     document.body.style.overflow = "";
@@ -12,29 +16,32 @@ export default function Home() {
     };
   }, []);
 
+  // Nav fires this event when user clicks "projects" while already on homepage
+  useEffect(() => {
+    const handler = () => {
+      document.body.style.overflow = "";
+      setSlideDone(true);
+    };
+    window.addEventListener("skipSlideshow", handler);
+    return () => window.removeEventListener("skipSlideshow", handler);
+  }, []);
+
+  // Once ProjectList is mounted, scroll to it
+  useEffect(() => {
+    if (!slideDone) return;
+    const t = setTimeout(() => {
+      document
+        .getElementById("projects")
+        ?.scrollIntoView({ behavior: "instant" });
+      setSearchParams({}, { replace: true });
+    }, 50);
+    return () => clearTimeout(t);
+  }, [slideDone]); // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <main className="relative">
-      {/* SlideShow handles its own visibility + sessionStorage */}
-      <SlideShow onComplete={() => setSlideDone(true)} />
-
-      {/* Final slide shown after completing slides (or on return visit) */}
-      {slideDone && (
-        <div className="h-screen flex items-center justify-start px-8 md:px-16">
-          <div>
-            <h4
-              className="font-sans font-bold text-display-xl text-ink m-0"
-              style={{ letterSpacing: "0.016em" }}
-            >
-              Startup Mindset.
-            </h4>
-            <p className="text-xl text-muted mt-4">
-              Agile Driven, Rapid Prototyping.
-            </p>
-          </div>
-        </div>
-      )}
-
-      <ProjectList />
+      {!slideDone && <SlideShow onComplete={() => setSlideDone(true)} />}
+      {slideDone && <ProjectList />}
     </main>
   );
 }

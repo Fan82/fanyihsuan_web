@@ -4,13 +4,13 @@ import { useScrollLock } from "../hooks/useScrollLock";
 
 const SLIDES = [
   {
-    title: "UI/UX Design.",
-    slogan: "Bridging Vision and Execution in Every Product.",
+    title: "Design + Code.",
+    slogan: "Not a handoff. A loop.",
   },
-  { title: "Front-End.", slogan: "100% Human-Centered, 0% Bootstrap." },
+  { title: "Product Thinking. ", slogan: "From problem to working prototype." },
   {
-    title: "Design Systems.",
-    slogan: "Half designer, half engineer — Full-time problem solver.",
+    title: "AI-Powered Tools.",
+    slogan: "Built with Claude. Shipped to users.",
   },
   { title: "Startup Mindset.", slogan: "Agile Driven, Rapid Prototyping." },
 ];

@@ -155,7 +155,7 @@
 
   .nav-pill:hover,
   .nav-pill.active {
-    @apply bg-ink text-chalk;
+    @apply border-ink/10 text-ink;
   }
 
   /* Accent-coloured pill — uses CSS var */
