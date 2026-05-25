@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
-import { useEffect, useState } from "react"; // Bug #5 fix: removed useRef (pageRef no longer used)
-import { getProject, projects } from "../data/projects"; // Bug #10 fix: moved import to top
+import { useEffect, useState } from "react";
+import { getProject, projects } from "../data/projects";
 import { useScrollLock } from "../hooks/useScrollLock";
 
 // ─── Phone Demo Modal ─────────────────────────────────────────
@@ -21,9 +21,8 @@ function PhoneModal({ url, onClose }) {
         >
           ✕ Close
         </button>
-
         <div
-          className="relative bg-zinc-900 rounded-[40px] 
+          className="relative bg-zinc-900 rounded-[40px]
           w-[310px] h-[620px]
           sm:w-[320px] sm:h-[640px]
           md:w-[390px] md:h-[760px]
@@ -46,11 +45,10 @@ function PhoneModal({ url, onClose }) {
   );
 }
 
-// ─── Sub-sections ────────────────────────────────────────────
+// ─── Hero ─────────────────────────────────────────────────────
 
 function HeroSection({ project }) {
   const [showDemo, setShowDemo] = useState(false);
-
   useScrollLock(showDemo);
 
   return (
@@ -60,7 +58,6 @@ function HeroSection({ project }) {
       )}
 
       <div className="px-6 pt-24 pb-8 mx-auto max-w-[1200px] grid items-center gap-16 relative overflow-hidden lg:grid-cols-2 lg:px-12">
-        {/* Left: copy */}
         <div className="pt-5 lg:pt-0">
           <div className="flex flex-wrap gap-2 mb-8">
             {project.tags.map((tag) => (
@@ -80,11 +77,13 @@ function HeroSection({ project }) {
           >
             {project.name}
           </h1>
+
           <p
-            className="font-serif italic mb-4"
+            className="mb-4"
             style={{
-              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
               color: "var(--accent)",
+              fontWeight: 300,
             }}
           >
             {project.tagline}
@@ -94,7 +93,6 @@ function HeroSection({ project }) {
 
           {project.demoUrl &&
             (project.demoMobile ? (
-              // 手機 app — 彈出手機框架
               <button onClick={() => setShowDemo(true)} className="btn-accent">
                 Try the demo
                 <svg
@@ -111,7 +109,6 @@ function HeroSection({ project }) {
                 </svg>
               </button>
             ) : (
-              // 其他專案 — 直接開新分頁
               <a
                 href={project.demoUrl}
                 target="_blank"
@@ -134,7 +131,6 @@ function HeroSection({ project }) {
               </a>
             ))}
 
-          {/* Meta row */}
           <div className="flex gap-8 mt-12">
             {Object.entries(project.meta).map(([key, val]) => (
               <div key={key}>
@@ -145,7 +141,6 @@ function HeroSection({ project }) {
           </div>
         </div>
 
-        {/* Right: hero image */}
         <img
           src={`/projects/${project.id}/hero-mockup.png`}
           alt={`${project.name} mockup`}
@@ -156,7 +151,82 @@ function HeroSection({ project }) {
   );
 }
 
+// ─── Story (new: for projects with a `story` array) ───────────
+
+function StorySection({ project }) {
+  if (!project.story?.length) return null;
+
+  return (
+    <section className="px-6 lg:px-12 mx-auto max-w-[1200px] pt-16 pb-4">
+      {project.story.map((beat, i) => (
+        <div
+          key={beat.label}
+          className="grid lg:grid-cols-[200px_1fr] gap-4 lg:gap-16 py-12"
+          style={{
+            borderTop: "1px solid rgba(255,255,255,0.07)",
+          }}
+        >
+          {/* Left: label + number */}
+          <div className="flex lg:flex-col items-baseline lg:items-start gap-3 lg:gap-2 pt-1">
+            <span
+              className="tabular-nums"
+              style={{
+                fontSize: 11,
+                fontWeight: 500,
+                letterSpacing: "0.1em",
+                color: "var(--accent)",
+                textTransform: "uppercase",
+              }}
+            >
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 600,
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                color: "var(--accent-text)",
+                opacity: 0.35,
+              }}
+            >
+              {beat.label}
+            </span>
+          </div>
+
+          {/* Right: heading + body */}
+          <div>
+            <h3
+              className="font-medium mb-4 leading-snug"
+              style={{
+                fontSize: "clamp(1.1rem, 2vw, 1.375rem)",
+                color: "var(--accent-text)",
+              }}
+            >
+              {beat.heading}
+            </h3>
+            <p
+              className="leading-relaxed"
+              style={{
+                fontSize: "0.9375rem",
+                color: "var(--accent-text)",
+                opacity: 0.6,
+                maxWidth: "64ch",
+              }}
+            >
+              {beat.body}
+            </p>
+          </div>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+// ─── Legacy sections (kept for older projects) ────────────────
+
 function OverviewSection({ project }) {
+  if (project.story?.length) return null; // replaced by StorySection
   return (
     <section className="px-6 pt-12 pb-8 max-w-[1200px] flex gap-6 lg:px-12 mx-auto">
       <div className="flex-1">
@@ -181,7 +251,6 @@ function OverviewSection({ project }) {
           className="text-xl font-medium leading-snug mb-5"
           style={{ color: "var(--accent-text)" }}
         >
-          {/* Opt #12 fix: use summary field if present, otherwise fall back to first sentence safely */}
           {project.overview.solutionSummary ??
             project.overview.solution.split(/[.?!]/)[0] + "."}
         </h2>
@@ -197,14 +266,16 @@ function OverviewSection({ project }) {
 }
 
 function InspirationSection({ project }) {
+  if (project.story?.length || !project.inspiration) return null;
   return (
     <div className="px-6 pt-12 pb-8 max-w-[1200px] mx-auto lg:px-12">
       <p className="key-title">INSPIRATION</p>
       <blockquote
-        className="font-serif italic text-2xl leading-relaxed pl-6 lg:text-4xl lg:leading-relaxed"
+        className="text-2xl leading-relaxed pl-6 lg:text-4xl lg:leading-relaxed"
         style={{
-          borderLeft: `2px solid var(--accent)`,
+          borderLeft: "2px solid var(--accent)",
           color: "var(--accent-text)",
+          fontWeight: 300,
         }}
       >
         {project.inspiration}
@@ -214,6 +285,7 @@ function InspirationSection({ project }) {
 }
 
 function ProcessSection({ project }) {
+  if (project.story?.length || !project.process?.length) return null;
   return (
     <section className="px-6 pt-12 pb-8 max-w-[1200px] gap-6 lg:px-12 mx-auto">
       <p className="key-title">PROCESS</p>
@@ -246,11 +318,12 @@ function ProcessSection({ project }) {
 }
 
 function UserFlowSection({ project }) {
+  if (!project.screenCount) return null;
   return (
     <section className="px-6 lg:px-12 py-24 max-w-[1200px] mx-auto space-y-8">
       <p className="key-title">Screens</p>
       <div className="flex gap-4 overflow-x-auto">
-        {Array.from({ length: project.screenCount ?? 0 }, (_, i) => {
+        {Array.from({ length: project.screenCount }, (_, i) => {
           const pageNum = String(i + 1).padStart(2, "0");
           return (
             <img
@@ -266,7 +339,7 @@ function UserFlowSection({ project }) {
   );
 }
 
-// ─── Page ────────────────────────────────────────────────────
+// ─── Page ─────────────────────────────────────────────────────
 
 export default function ProjectDetail() {
   const { id } = useParams();
@@ -296,21 +369,28 @@ export default function ProjectDetail() {
       }}
     >
       <HeroSection project={project} />
+
+      {/* New story format — shown when project has a `story` array */}
+      <StorySection project={project} />
+
+      {/* Legacy format — shown only when project has no `story` */}
       <OverviewSection project={project} />
       <InspirationSection project={project} />
       <ProcessSection project={project} />
+
+      {/* Screens — shown for both formats if screenCount > 0 */}
       <UserFlowSection project={project} />
+
       <NextProject currentId={id} />
     </div>
   );
 }
 
-// ─── Next project nav ────────────────────────────────────────
+// ─── Next project nav ──────────────────────────────────────────
 
 function NextProject({ currentId }) {
   const idx = projects.findIndex((p) => p.id === currentId);
-  const isLast = idx === projects.length - 1;
-  const next = !isLast ? projects[idx + 1] : null;
+  const next = idx < projects.length - 1 ? projects[idx + 1] : null;
 
   return (
     <div

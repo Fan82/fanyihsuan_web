@@ -85,6 +85,16 @@
 
 }
 
+.theme-rfa {
+  --accent: #f0f0f0;
+  --accent-btn: #030d17;
+  --accent-dim: #030d17;
+  --accent-text: #ffffff;
+  --project-bg: #030d17;
+  --project-mainbg: #030d17;
+
+}
+
 /* ─────────────────────────────────────────────
    Base reset & global styles
 ───────────────────────────────────────────── */

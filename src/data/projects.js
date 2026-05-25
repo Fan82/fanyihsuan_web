@@ -1,4 +1,70 @@
 export const projects = [
+  // ─── 01 Role Fit Analyzer ─────────────────────────────────────
+  {
+    id: "roleFitAnalyzer",
+    theme: "theme-rfa",
+    accent: "#05df72",
+    name: "Role Fit Analyzer",
+    tagline: "Know before you apply.",
+    tags: ["Claude API", "React", "AI Tool"],
+    meta: {
+      Role: "Solo — Design + Engineering",
+      Stack: "React · Claude API · Vite",
+      Year: "2026",
+      Status: "Shipped",
+    },
+    desc: "Built it while job hunting. Paste a JD, get a match score and skill-gap breakdown in seconds.",
+    demoUrl: "https://role-fit-analyzer.vercel.app/",
+    demoMobile: false,
+
+    // overview kept for HeroSection context
+    overview: {
+      problemSummary:
+        "Job hunting is slow because you can't tell fast enough if a role is worth pursuing.",
+      problem:
+        "Every application cycle looks the same: read a JD, vaguely sense whether you qualify, then spend 30 minutes writing a cover letter to find out. There's no fast way to know if a role is worth pursuing — you only find out after you've already invested time.",
+      solutionSummary:
+        "An AI tool that reads a JD and tells you your match score, strengths, and gaps in one shot.",
+      solution:
+        "Paste a JD and get back a match percentage, a breakdown of strong skills vs. gaps, a per-skill comparison against the JD's requirements, and a plain-English summary of whether to apply. Results are saved so you can compare roles over time.",
+    },
+
+    // story — triggers the new StorySection in ProjectDetail
+    story: [
+      {
+        label: "Problem",
+        heading:
+          "I was applying for jobs and couldn't tell fast enough if a role was worth it.",
+        body: "I was mid-career-pivot — background in UX/UI, trying to move into Design Engineer or Product Engineer roles. Every JD looked slightly different. Some wanted Figma, some wanted React, some wanted both. I kept spending 20–30 minutes writing cover letters for roles that turned out to be 40% matches. I needed a faster gut-check before committing.",
+      },
+      {
+        label: "Decision",
+        heading:
+          "Build a tool that does the comparison — not just a checklist.",
+        body: "The obvious version is a form where you tick which skills you have. I didn't want that — it's manual, it doesn't scale, and it doesn't give you nuance. I wanted to paste a JD and get an answer. That meant AI. I'd been looking for a real reason to use the Claude API, and this was it: a clear input, a clear output, and a problem I'd actually feel the answer to.",
+      },
+      {
+        label: "Trade-off",
+        heading:
+          "The prompt does most of the work — which made it both the hardest and most fragile part.",
+        body: "Because the analysis is entirely Claude's output, quality lives or dies in the prompt. Early versions returned inconsistent JSON that broke the UI. I went through about 8 prompt iterations — adding schema constraints, specifying score rubrics, handling vague JDs explicitly. The trade-off I accepted: if someone pastes a terrible JD with no requirements section, the analysis degrades. I handle that with an explicit 'no skills detected' state instead of pretending the output is still valid.",
+      },
+      {
+        label: "Build",
+        heading: "React frontend, Claude API, deployed on Vercel in a weekend.",
+        body: "Single-page React app. The main screen is a textarea + analyse button; results come back as structured JSON that drives the score ring, skill breakdown bars, and summary card. I added a History view (localStorage) so you can track and compare multiple JDs without re-analysing. The skill breakdown component shows your level vs. the JD requirement side-by-side — that came from realising 'gap' alone isn't useful, you want to know how big the gap is.",
+      },
+      {
+        label: "Result",
+        heading: "I actually used it. It changed which jobs I applied to.",
+        body: "Not metaphorically — I used it during the job search that prompted building it. Cut my application time by about half. More importantly it changed my selection criteria: I stopped applying to roles under 60% match and started focusing on roles where the gaps were learnable rather than fundamental. The history feature turned out to be the most useful part; seeing 15 results side-by-side told me more about the market than any individual JD did.",
+      },
+    ],
+
+    screenCount: 0,
+  },
+
+  // ─── 02 Running App ───────────────────────────────────────────
   {
     id: "runApp",
     theme: "theme-runApp",
@@ -6,286 +72,261 @@ export const projects = [
     name: "Running App",
     screenCount: 10,
     tagline: "Track your run. Share your pace.",
-    tags: ["React", "API Integration"],
-    meta: { client: "Fitness", role: "UI + Front-End", year: "2026" },
-    desc: "I started running and wanted an app that actually fit my life. So I built one. A full-stack running app with real Supabase authentication, live GPS tracking via Leaflet.js, and a social feed to share runs with friends.",
+    tags: ["React", "Supabase", "GPS"],
+    meta: {
+      Role: "Design + Front-End",
+      Stack: "React · Supabase · Leaflet.js",
+      Year: "2026",
+    },
+    desc: "Designed the full UX then built it end-to-end — real authentication, live GPS tracking, social feed. No third-party UI kit.",
     demoUrl: "https://fan82.github.io/runnnnn/",
     demoMobile: true,
-    overview: {
-      problem:
-        "Running apps often focus only on numbers. But motivation comes from emotion, connection, and shared experiences.",
 
+    overview: {
+      problemSummary:
+        "Running apps track numbers well. They're bad at making you want to run tomorrow.",
+      problem:
+        "I started running and kept trying apps that gave me great data but no reason to come back. The motivation to keep going came from friends, not metrics — but none of the apps made sharing a run feel natural.",
+      solutionSummary:
+        "A full-stack running app that combines GPS tracking with a social feed — built from scratch, no UI kit.",
       solution:
-        "A hybrid platform that combines performance tracking with social storytelling. Allowing users to not only measure their runs, but also share them, react, and grow together.",
+        "Real Supabase authentication, live GPS tracking via Leaflet.js, and a social feed where you can post runs, react, and follow friends. Designed and built solo — from Figma to deployed app.",
     },
 
-    inspiration:
-      '"Running is easier when you are not running alone, every step becomes more meaningful when it’s shared."',
+    inspiration: '"Running is easier when you\'re not running alone."',
 
     process: [
       {
         num: "01",
-        title: "Live Data Tracking",
-        desc: "Capture your distance, pace, and time. Every run becomes part of your story.",
+        title: "Design first, then build",
+        desc: "Started in Figma with the full user flow — tracking, posting, browsing — before writing a line of code. The design constraints shaped the component architecture.",
       },
       {
         num: "02",
-        title: "Social Feed Experience",
-        desc: "Share runs, post updates, and interact with others through likes, comments and engagement.",
+        title: "Real backend, not mock data",
+        desc: "Supabase for auth and database. Every run is actually stored, every user is real. Made the social features feel genuine rather than simulated.",
       },
       {
         num: "03",
-        title: "Seamless Interaction",
-        desc: "Smooth transitions between tracking, posting, and browsing. No interruption to the user flow.",
+        title: "Live GPS via Leaflet.js",
+        desc: "Browser geolocation API feeding into Leaflet.js for real-time map tracking. Had to handle the edge cases: permissions denied, GPS drift, background tracking.",
       },
       {
         num: "04",
-        title: "Responsive & Active Lifestyle Design",
-        desc: "Optimized for on-the-go use, adapting effortlessly across mobile and desktop devices.",
+        title: "Mobile-first throughout",
+        desc: "You're on your phone when you run. Every interaction — starting a run, posting, reacting — was designed for one hand, on the move.",
       },
     ],
 
-    screens: [
-      "Run Tracking",
-      "Activity Feed",
-      "Post Detail",
-      "User Profile",
-      "Mobile",
-    ],
+    screenCount: 10,
   },
+
+  // ─── 03 Plan Task ─────────────────────────────────────────────
   {
     id: "takeTask",
     theme: "theme-takeTask",
     accent: "#FFAE00",
     name: "Plan Task",
     tagline: "Track smarter, do more.",
-    tags: ["UX Design", "Mobile App"],
-    meta: { client: "Personal Project", role: "UX + Front-End", year: "2024" },
-    desc: "Started from a personal frustration too many tasks scattered across too many places. Went through 3 design iterations, used AI to help consolidate feature requirements, and landed on the simplest version that actually solves the problem.",
-    demoUrl: "/projects/takeTask/plan_task_app.html",
+    tags: ["UX Design", "React", "Mobile App"],
+    meta: { Role: "UX + Front-End", Year: "2024" },
+    desc: "Three rounds of redesign to strip it down to one thing: show me what to do next, nothing else.",
 
     overview: {
+      problemSummary:
+        "The problem isn't organisation. It's deciding what to do next.",
       problem:
-        "Most checklist tools lack intelligent prioritisation. After 3 rounds of redesign, the core insight was clear: the real problem isn't organisation. It's cognitive overload from deciding what to do next.",
+        "I had tasks in too many places and kept spending time organising instead of doing. After two redesigns that added features, I realised I was solving the wrong problem — the issue wasn't missing functionality, it was cognitive overhead.",
+      solutionSummary:
+        "A task app that surfaces what matters right now, automatically.",
       solution:
-        "Plan Task pulls from calendar, email and messages to build your daily list automatically. AI surfaces what actually matters right now, so you spend less time organising and more time doing.",
+        "Plan Task pulls from calendar, email, and messages to build your daily list automatically. AI surfaces what actually matters right now, so you spend less time organising and more time doing.",
     },
 
-    inspiration:
-      '"Get back to basics, focusing on doing which not organising. The best to-do list should be simple, intuitive, and automated. Reduce cognitive load, free up mental energy."',
+    inspiration: '"The best to-do list is the one you don\'t have to manage."',
 
     process: [
       {
         num: "01",
-        title: "Research & 3 Rounds of Redesign",
-        desc: "Iterated through 3 design versions which each one stripping away complexity until the core flow felt effortless.",
+        title: "3 rounds of redesign",
+        desc: "Each iteration stripped away a layer of complexity. The first version had too many features. The third version had one job.",
       },
       {
         num: "02",
-        title: "AI-Assisted Feature Scoping",
-        desc: "Had too many features I wanted to build. Used AI to help consolidate and prioritise requirements, keeping the product focused.",
+        title: "AI-assisted feature scoping",
+        desc: "Used AI to help consolidate requirements — not to generate ideas, but to kill them. Kept only what directly reduced cognitive load.",
       },
       {
         num: "03",
-        title: "Wireframe & Prototype",
-        desc: "Interactive prototypes to validate task creation, priority setting, and automation flows before writing any code.",
+        title: "Prototype to validate, then build",
+        desc: "Interactive prototypes to test task creation and priority flows before writing code. Caught two major UX problems before they became code problems.",
       },
       {
         num: "04",
-        title: "UI Design",
-        desc: "Dark-mode first. AI-powered priority badges. Minimal chrome, maximum clarity.",
-      },
-      {
-        num: "05",
-        title: "Front-End Dev",
-        desc: "Smooth task updates and automation hooks built in React with real-time state.",
+        title: "Dark-mode first UI",
+        desc: "AI-powered priority badges. Minimal chrome. The visual design choices all serve the same goal: get out of the user's way.",
       },
     ],
 
-    screens: [
-      "Welcome",
-      "Home",
-      "Weekly",
-      "Monthly",
-      "Add Task",
-      "Notifications",
-    ],
     screenCount: 6,
   },
 
+  // ─── 04 Easy Bank ─────────────────────────────────────────────
   {
     id: "easyBank",
     theme: "theme-easyBank",
     accent: "#2563eb",
     name: "Easy Bank",
     tagline: "Precision code for a trustworthy banking experience.",
-    tags: ["React/CSS", "UI Implementation", "Fintech Design"],
-    demoUrl: "/projects/easyBank/easy_bank_app.html",
-    meta: {
-      client: "Personal Project",
-      role: "UI + Front-End",
-      year: "2025",
-    },
-    desc: "After studying the design patterns of multiple banking apps, I built my own interpretation — exploring how typography, color, and micro-interactions communicate trust and security in financial products.",
+    tags: ["React", "CSS", "UI Implementation"],
+    meta: { Role: "UI + Front-End", Year: "2025" },
+    desc: "A frontend execution exercise — studying how banking apps use typography, colour, and micro-interactions to communicate trust, then building my own interpretation from scratch.",
 
     overview: {
+      problemSummary:
+        "Banking interfaces carry a unique burden: they must feel secure without feeling cold.",
       problem:
-        "Digital banking interfaces carry a unique design burden: they must feel secure and professional while remaining approachable. Studying real banking apps revealed how much visual language does the heavy lifting.",
+        "Digital banking interfaces must communicate trustworthiness through visual language alone. Studying real apps revealed how much work colour, hierarchy, and micro-interactions are quietly doing.",
+      solutionSummary:
+        "A modular React component system with a strict design token structure.",
       solution:
-        "Built a modular React component system with a strict CSS variable design token structure — translating observed patterns into code, and adding micro-interactions that reinforce confidence at every touchpoint.",
+        "Built from observed patterns rather than copied from them — a CSS variable design token system enforcing consistency across every component, with micro-interactions that reinforce confidence at each touchpoint.",
     },
 
     inspiration:
-      '"Exceptional front-end development is the intersection of technical precision and aesthetic sensibility."',
+      '"Good front-end development is where technical precision meets visual language."',
 
     process: [
       {
         num: "01",
-        title: "Competitive Research",
-        desc: "Studied multiple banking apps to identify shared visual patterns — how colour, spacing, and hierarchy build perceived trustworthiness.",
+        title: "Study before building",
+        desc: "Analysed multiple banking apps to understand how visual patterns create perceived trustworthiness — not just how they look, but why they work.",
       },
       {
         num: "02",
-        title: "Design Interpretation",
-        desc: "Rather than copying, distilled the research into my own design language — same trust signals, different aesthetic voice.",
+        title: "Design token system",
+        desc: "CSS variables for every colour, spacing step, and typography size. Enforced consistency without fighting the cascade.",
       },
       {
         num: "03",
-        title: "Design Token System",
-        desc: "Built a CSS variable system to enforce consistency across components — colours, spacing, and typography all driven by tokens.",
-      },
-      {
-        num: "04",
-        title: "Component Architecture",
-        desc: "Modular React components for balance cards, transaction lists, exchange modules, and transfer forms — each self-contained and reusable.",
+        title: "Component architecture",
+        desc: "Balance cards, transaction lists, exchange modules, transfer forms — each self-contained, each reusable, each testable in isolation.",
       },
     ],
 
-    screens: [
-      "Asset Overview",
-      "Quick Actions",
-      "Transaction History",
-      "Finance Hub",
-      "Mobile Optimization",
-    ],
     screenCount: 5,
   },
 
-  {
-    id: "goTravel",
-    theme: "theme-goTravel",
-    accent: "#ff6000",
-    name: "Let's Travel",
-    tagline: "Visual storytelling for explorers.",
-    tags: ["HTML/CSS", "CSS Grid"],
-    meta: {
-      client: "Personal Project",
-      role: "UI Design",
-      year: "2024",
-    },
-    desc: "Arriving somewhere unfamiliar and wanting to join a local tour that feeling inspired this project. A travel site designed to make destinations feel inviting and tours easy to discover, built with CSS Grid and a visual-first layout.",
-    demoUrl: "/projects/goTravel/goTravel-demo.html",
-
-    overview: {
-      problem:
-        "When you arrive somewhere new, the last thing you want is to dig through walls of text to find something to do. Travel sites often drown users in information instead of inspiring them to explore.",
-      solution:
-        "A card-based visual layout that lets destinations and tours speak for themselves. CSS Grid and Flexbox keep the content light and scannable mobile-first, so it works wherever you are.",
-    },
-
-    inspiration:
-      '"A travel website is more than information — it\'s the starting point for longing."',
-
-    process: [
-      {
-        num: "01",
-        title: "Designing for Arrival",
-        desc: "Focused on the mindset of someone already in a new place curious, a little lost, looking for the next experience rather than planning ahead.",
-      },
-      {
-        num: "02",
-        title: "Visual-First Layout",
-        desc: "Let imagery lead. Each destination card is designed to evoke a feeling before communicating information.",
-      },
-      {
-        num: "03",
-        title: "Modular Sections",
-        desc: "Broke content into independent sections — 'Why Choose Us', 'Top Destinations', 'Blog'. Each with its own visual rhythm.",
-      },
-      {
-        num: "04",
-        title: "Responsive Design",
-        desc: "Mobile first strategy: cards stack vertically on phones, expand to a full grid on desktop works wherever you are in the world.",
-      },
-    ],
-
-    screens: ["Hero", "Destinations", "Why Us", "Blog", "Mobile"],
-    screenCount: 5,
-  },
-
+  // ─── 05 Flight Booking ────────────────────────────────────────
   {
     id: "bookFlight",
     theme: "theme-bookFlight",
     accent: "#2563EB",
     name: "Flight Booking",
     tagline: "Booking your flight, enjoy your life.",
-    tags: ["React", "Front-End Dev"],
-    meta: { client: "Personal Project", role: "UX + Front-End", year: "2024" },
-    desc: "As someone who travels frequently, I've felt the frustration of clunky booking forms firsthand. This project explores how smart validation and conditional UI can turn a stressful process into a smooth one.",
-    demoUrl: "/projects/bookFlight/flight-booking-demo.html",
+    tags: ["React", "Form UX", "Front-End"],
+    meta: { Role: "UX + Front-End", Year: "2024" },
+    desc: "Flight booking forms have the same UX problems everywhere. Smart validation and conditional UI can fix most of them.",
 
     overview: {
+      problemSummary:
+        "Flight forms are full of errors users shouldn't be able to make.",
       problem:
-        "Flight booking forms are notorious for user errors — wrong return dates, missed passengers, confusing one-way vs return states. As a frequent traveller, I wanted to design the experience I wish existed.",
+        "As a frequent traveller I'd felt the frustration firsthand — wrong return dates, confusing one-way vs return states, submit buttons that activate before the form is actually valid. These aren't edge cases, they're the default experience.",
+      solutionSummary:
+        "A form system where the UI does the validation work so the user doesn't have to.",
       solution:
-        "A modular Vue component system with smart validation: return date locks before departure date, one-way mode hides irrelevant fields, and the submit button only activates when the form is genuinely complete.",
+        "Return date locks before departure date. One-way mode hides irrelevant fields. Submit only activates when the form is genuinely complete. Each component — Date Picker, City Picker, Passenger Counter — is self-contained with its own state and validation.",
     },
 
     inspiration:
-      '"A great application requires not only solid technical skills but also a deep understanding of user needs."',
+      '"A great form doesn\'t just collect data — it prevents mistakes before they happen."',
 
     process: [
       {
         num: "01",
-        title: "Designing from Personal Frustration",
-        desc: "Mapped out every pain point I'd experienced as a traveller booking flights — wrong dates, unclear passenger counts, confusing form states.",
+        title: "Map the failure modes",
+        desc: "Listed every booking error I'd personally made or seen. Wrong dates, wrong passenger counts, unclear one-way states. Each became a design constraint.",
       },
       {
         num: "02",
-        title: "Smart Validation",
-        desc: "Return date can never precede departure date, with instant visual feedback — eliminating the most common booking error.",
+        title: "Smart date validation",
+        desc: "Return date can never precede departure — enforced in the component, with instant visual feedback. Eliminates the most common booking error.",
       },
       {
         num: "03",
         title: "Conditional UI",
-        desc: "One-way mode hides the return date section entirely, reducing visual clutter and guiding users through only what's relevant.",
-      },
-      {
-        num: "04",
-        title: "Component Architecture",
-        desc: "Date Picker, City Picker, Passenger Counter — each a self-contained, reusable component with its own state and validation logic.",
+        desc: "One-way mode removes the return date section entirely. Showing only what's relevant at each step reduces errors and cognitive load simultaneously.",
       },
     ],
 
-    screens: ["Search", "Date Picker", "Passenger", "Results", "Confirm"],
     screenCount: 5,
   },
+
+  // ─── 06 Let's Travel ──────────────────────────────────────────
+  {
+    id: "goTravel",
+    theme: "theme-goTravel",
+    accent: "#ff6000",
+    name: "Let's Travel",
+    tagline: "Visual storytelling for explorers.",
+    tags: ["HTML/CSS", "CSS Grid", "Layout"],
+    meta: { Role: "UI Design", Year: "2024" },
+    desc: "A CSS Grid layout exercise focused on one question: can a travel site make you feel something before you read anything?",
+
+    overview: {
+      problemSummary: "Travel sites bury the feeling under information.",
+      problem:
+        "When you arrive somewhere new, the last thing you want is walls of text. Most travel sites prioritise completeness over experience — they tell you everything and make you feel nothing.",
+      solutionSummary:
+        "A visual-first layout where destinations speak before text does.",
+      solution:
+        "Card-based layout built with CSS Grid and Flexbox. Images lead. Text supports. Mobile-first so it works wherever you actually are.",
+    },
+
+    inspiration: '"A travel site is the starting point for longing."',
+
+    process: [
+      {
+        num: "01",
+        title: "Visual-first constraint",
+        desc: "Set a rule: every section should communicate its purpose through imagery before the user reads a word. Forced every layout decision to serve that goal.",
+      },
+      {
+        num: "02",
+        title: "CSS Grid as structure",
+        desc: "Used Grid for the destination cards and Flexbox for everything else. The layout itself communicates variety and abundance — core feelings for a travel product.",
+      },
+      {
+        num: "03",
+        title: "Mobile-first",
+        desc: "Cards stack on phones, expand to grid on desktop. Designed for someone who's already travelling — phone in hand, looking for what to do next.",
+      },
+    ],
+
+    screenCount: 5,
+  },
+
+  // ─── 07 Zei Qia ───────────────────────────────────────────────
   {
     id: "publicTransp",
     theme: "theme-publicTransp",
     accent: "#dc2626",
     name: "Zei Qia",
     tagline: "Navigate the city.",
-    tags: ["UI Design", "Figma", "Mobile App"],
-    meta: { client: "Personal Project", role: "UI + UX", year: "2025" },
-    desc: "Designed while living in Taiwan, where public transport is complex but reliable. Moving to London made the need feel even more real — a city with an incredible transit network, but an experience that still leaves a lot to be desired.",
-    demoUrl: "/projects/publicTransp/public-transport-demo.html",
+    tags: ["UI Design", "Figma", "Mobile"],
+    meta: { Role: "UI + UX Design", Year: "2025" },
+    desc: "Designed in Taiwan. Validated in London. A transit app focused on showing the right data at the right moment — not all of it.",
 
     overview: {
+      problemSummary:
+        "Transit apps show too much. The problem is filtering, not fetching.",
       problem:
-        "How to handle real-time data, asynchronous states, and multiple transport systems — bus, train, metro, high-speed rail, bike — while keeping the experience simple and stress-free for users on the move.",
+        "Living in Taiwan gave me daily exposure to a complex but reliable transit system. Moving to London made the same problem feel bigger — incredible network, overwhelming experience. The issue isn't missing data, it's that apps don't know what to hide.",
+      solutionSummary:
+        "A transit interface that prioritises information rather than displaying it all.",
       solution:
-        "Rather than displaying all available data, the approach focused on filtering and prioritising information. Clear hierarchy, real-time updates, and responsive search distil complex transport data into a calm, easy-to-navigate experience.",
+        "Clear hierarchy, real-time updates, and responsive search that distil complex transport data into a calm, easy-to-navigate experience — designed for someone on the move, not sitting at a desk.",
     },
 
     inspiration:
@@ -294,32 +335,26 @@ export const projects = [
     process: [
       {
         num: "01",
-        title: "Cross-Cultural Observation",
-        desc: "Observed transit UX in Taiwan daily, then moved to London and immediately noticed the same pain points at a larger scale — the problem was universal.",
+        title: "Cross-cultural observation",
+        desc: "Observed transit UX daily in Taiwan, then moved to London and immediately noticed the same pain points at a larger scale. The problem was universal.",
       },
       {
         num: "02",
-        title: "Information Architecture",
-        desc: "Structured multiple transport types into a consistent hierarchy — supporting quick scanning without overwhelming users with every available option.",
+        title: "Information hierarchy",
+        desc: "Structured multiple transport types — bus, train, metro, high-speed rail — into a consistent hierarchy that supports fast scanning without overwhelming.",
       },
       {
         num: "03",
-        title: "Designing for Real-Time Behaviour",
-        desc: "Mapped how live data should behave in the interface — updates that feel natural and reliable rather than disruptive or confusing.",
+        title: "Designing for real-time behaviour",
+        desc: "Mapped how live data should behave — updates that feel reliable rather than disruptive. Stability matters more than speed when you're trying to catch a train.",
       },
       {
         num: "04",
-        title: "Clarity in Complexity",
-        desc: "Refined layouts, spacing, and visual hierarchy to transform dense information into a calm, readable interface suitable for on-the-go use.",
-      },
-      {
-        num: "05",
-        title: "Interaction & Feedback",
-        desc: "Instant search and filtering that responds immediately to user input — reducing friction and supporting fast decision-making.",
+        title: "Instant search and filtering",
+        desc: "Responds immediately to input, reducing friction for fast decisions. The interaction model is built around someone who already knows where they want to go.",
       },
     ],
 
-    screens: ["Search", "Route List", "Stop Detail", "Arrival Times", "Mobile"],
     screenCount: 5,
   },
 ];
