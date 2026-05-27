@@ -131,6 +131,7 @@ export const projects = [
     tags: ["UX Design", "React", "Mobile App"],
     meta: { Role: "UX + Front-End", Year: "2024" },
     desc: "Three rounds of redesign to strip it down to one thing: show me what to do next, nothing else.",
+    demoUrl: "./takeTask/plan_task_app.html",
 
     overview: {
       problemSummary:
@@ -181,6 +182,7 @@ export const projects = [
     tags: ["React", "CSS", "UI Implementation"],
     meta: { Role: "UI + Front-End", Year: "2025" },
     desc: "A frontend execution exercise — studying how banking apps use typography, colour, and micro-interactions to communicate trust, then building my own interpretation from scratch.",
+    demoUrl: "./easyBank/easy_bank_app.html",
 
     overview: {
       problemSummary:
@@ -227,6 +229,7 @@ export const projects = [
     tags: ["React", "Form UX", "Front-End"],
     meta: { Role: "UX + Front-End", Year: "2024" },
     desc: "Flight booking forms have the same UX problems everywhere. Smart validation and conditional UI can fix most of them.",
+    demoUrl: "./bookFlight/flight_booking_app.html",
 
     overview: {
       problemSummary:
@@ -273,6 +276,7 @@ export const projects = [
     tags: ["HTML/CSS", "CSS Grid", "Layout"],
     meta: { Role: "UI Design", Year: "2024" },
     desc: "A CSS Grid layout exercise focused on one question: can a travel site make you feel something before you read anything?",
+    demoUrl: "./goTravel/go_travel_app.html",
 
     overview: {
       problemSummary: "Travel sites bury the feeling under information.",
@@ -317,6 +321,7 @@ export const projects = [
     tags: ["UI Design", "Figma", "Mobile"],
     meta: { Role: "UI + UX Design", Year: "2025" },
     desc: "Designed in Taiwan. Validated in London. A transit app focused on showing the right data at the right moment — not all of it.",
+    demoUrl: "./publicTransp/public_transport_app.html",
 
     overview: {
       problemSummary:
