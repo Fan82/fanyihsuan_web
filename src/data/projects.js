@@ -132,6 +132,7 @@ export const projects = [
     meta: { Role: "UX + Front-End", Year: "2024" },
     desc: "Three rounds of redesign to strip it down to one thing: show me what to do next, nothing else.",
     demoUrl: "./takeTask/plan_task_app.html",
+    demoMobile: true,
 
     overview: {
       problemSummary:
