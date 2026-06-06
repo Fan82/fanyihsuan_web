@@ -11,31 +11,90 @@
       rel="stylesheet"
     />
     <style>
+      :root {
+        --font-sans: "DM Sans", sans-serif;
+        --font-serif: "Fraunces", serif;
+        --page-bg: #f0f0f0;
+        --device-bg: #f5f5f7;
+        --device-shell: #1c1c2e;
+        --stage-bg: #1348c7;
+        --device-width: 390px;
+        --device-height: 844px;
+        --device-radius: 52px;
+      }
+
       * {
+        box-sizing: border-box;
         margin: 0;
         padding: 0;
-        box-sizing: border-box;
       }
+
+      html,
+      body,
+      #root {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
       body {
-        background: #f0f0f0;
+        min-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        min-height: 100vh;
-        padding: 28px 16px;
-        font-family: "DM Sans", sans-serif;
+        background: var(--page-bg);
+        font-family: var(--font-sans);
       }
+
       input,
       button,
       select {
-        font-family: "DM Sans", sans-serif;
+        font: inherit;
       }
+
       .fraunces {
-        font-family: "Fraunces", serif;
+        font-family: var(--font-serif);
       }
+
+      .phone-frame {
+        container-type: inline-size;
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden auto;
+        background: var(--device-bg);
+      }
+
       ::-webkit-scrollbar {
         width: 0;
         height: 0;
+      }
+
+      @media (min-width: 480px) {
+        body {
+          background: var(--stage-bg);
+        }
+
+        #root {
+          min-height: 100vh;
+          height: auto;
+        }
+
+        .phone-frame {
+          width: var(--device-width);
+          height: var(--device-height);
+          border: 10px solid var(--device-shell);
+          border-radius: var(--device-radius);
+          box-shadow:
+            0 40px 100px rgba(0, 0, 0, 0.8),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+        }
+
+        .date-scroller {
+          max-width: var(--device-width);
+        }
       }
     </style>
   </head>
@@ -66,6 +125,14 @@
         amberL: "#fbbf24",
         red: "#ff6000",
       };
+
+      const FONT = {
+        sans: "'DM Sans',sans-serif",
+        serif: "'Fraunces',serif",
+      };
+
+      const fs = (px, min = Math.max(px * 0.82, px - 5), max = px) =>
+        `clamp(${min.toFixed(2)}px, ${((px / 390) * 100).toFixed(3)}cqw, ${max}px)`;
 
       /* ─── DATA ─────────────────────────────────────── */
       const ATTRACTIONS = [
@@ -978,7 +1045,7 @@
             justifyContent: "space-between",
             alignItems: "center",
             padding: "20px 24px",
-            fontSize: 12,
+            fontSize: fs(12),
             color: "#fff",
             fontWeight: 600,
             background: "#ff9300",
@@ -1038,7 +1105,7 @@
           borderRadius: small ? 10 : 14,
           cursor: "pointer",
           fontWeight: 600,
-          fontFamily: "'DM Sans',sans-serif",
+          fontFamily: FONT.sans,
           lineHeight: 1,
           transition: "opacity .15s",
           width: full ? "100%" : undefined,
@@ -1048,7 +1115,7 @@
             background: `${C.primaryL}`,
             color: C.white,
             padding: small ? "8px 16px" : "14px 0",
-            fontSize: small ? 12 : 15,
+            fontSize: small ? fs(12) : fs(15),
             boxShadow: `0 4px 14px ${C.primary}44`,
           },
           outline: {
@@ -1056,14 +1123,14 @@
             border: `1.5px solid ${C.primary}`,
             color: C.primary,
             padding: small ? "7px 15px" : "13px 0",
-            fontSize: small ? 12 : 14,
+            fontSize: small ? fs(12) : fs(14),
           },
           ghost: {
             background: "#f3f4f6",
             color: C.ink2,
             border: "1px solid #e5e7eb",
             padding: small ? "7px 14px" : "13px 0",
-            fontSize: small ? 12 : 14,
+            fontSize: small ? fs(12) : fs(14),
           },
         };
         return (
@@ -1085,7 +1152,7 @@
             border: `1px solid ${color}66`,
             borderRadius: 99,
             padding: "3px 9px",
-            fontSize: 10,
+            fontSize: fs(10),
             color,
             fontWeight: 600,
             whiteSpace: "nowrap",
@@ -1102,7 +1169,7 @@
             display: "inline-flex",
             alignItems: "center",
             gap: 3,
-            fontSize: 12,
+            fontSize: fs(12),
             color: C.amber,
             fontWeight: 600,
           }}
@@ -1249,10 +1316,10 @@
                   alignItems: "center",
                   gap: 4,
                   color: active === t.id ? C.primary : C.muted,
-                  fontSize: 9.5,
+                  fontSize: fs(9.5),
                   fontWeight: active === t.id ? 600 : 400,
                   letterSpacing: 0.3,
-                  fontFamily: "'DM Sans',sans-serif",
+                  fontFamily: FONT.sans,
                 }}
               >
                 {t.ic}
@@ -1323,7 +1390,7 @@
             </div>
             <p
               style={{
-                fontSize: 13,
+                fontSize: fs(13),
                 fontWeight: 600,
                 color: C.ink,
                 marginBottom: 2,
@@ -1334,7 +1401,7 @@
             </p>
             <p
               style={{
-                fontSize: 11,
+                fontSize: fs(11),
                 color: C.muted,
                 marginBottom: 6,
                 display: "flex",
@@ -1349,9 +1416,11 @@
             </p>
             <div style={{ display: "flex", alignItems: "baseline", gap: 5 }}>
               {a.was && (
-                <s style={{ fontSize: 10, color: C.muted }}>${a.was}</s>
+                <s style={{ fontSize: fs(10), color: C.muted }}>${a.was}</s>
               )}
-              <span style={{ fontSize: 14, fontWeight: 700, color: C.primary }}>
+              <span
+                style={{ fontSize: fs(14), fontWeight: 700, color: C.primary }}
+              >
                 from ${a.price}
               </span>
             </div>
@@ -1406,12 +1475,18 @@
               <Tag text={a.cat} color={C.primary} />
               <div style={{ textAlign: "right" }}>
                 {a.was && (
-                  <s style={{ fontSize: 10, color: C.muted, marginRight: 3 }}>
+                  <s
+                    style={{ fontSize: fs(10), color: C.muted, marginRight: 3 }}
+                  >
                     ${a.was}
                   </s>
                 )}
                 <span
-                  style={{ fontSize: 13, fontWeight: 700, color: C.primary }}
+                  style={{
+                    fontSize: fs(13),
+                    fontWeight: 700,
+                    color: C.primary,
+                  }}
                 >
                   from ${a.price}
                 </span>
@@ -1419,7 +1494,7 @@
             </div>
             <p
               style={{
-                fontSize: 13,
+                fontSize: fs(13),
                 fontWeight: 600,
                 color: C.ink,
                 marginBottom: 3,
@@ -1436,7 +1511,7 @@
             >
               <p
                 style={{
-                  fontSize: 11,
+                  fontSize: fs(11),
                   color: C.muted,
                   display: "flex",
                   alignItems: "center",
@@ -1468,7 +1543,6 @@
               height: 812,
               display: "flex",
               flexDirection: "column",
-              overflow: "hidden",
             }}
           >
             <StatusBar onRed />
@@ -1477,7 +1551,6 @@
                 background: `${C.primaryL}`,
                 padding: "28px",
                 position: "relative",
-                overflow: "hidden",
                 flexShrink: 0,
               }}
             >
@@ -1496,10 +1569,10 @@
                   <Ico name="ticket" size={22} color="#fff" strokeWidth={1.6} />
                   <span
                     style={{
-                      fontSize: 16,
+                      fontSize: fs(16),
                       fontWeight: 700,
                       color: "#fff",
-                      fontFamily: "'Fraunces',serif",
+                      fontFamily: FONT.serif,
                       letterSpacing: -0.3,
                     }}
                   >
@@ -1509,7 +1582,7 @@
                 <h1
                   className="fraunces"
                   style={{
-                    fontSize: 36,
+                    fontSize: fs(36),
                     color: "#fff",
                     lineHeight: 1.15,
                     marginBottom: 12,
@@ -1523,7 +1596,7 @@
                 </h1>
                 <p
                   style={{
-                    fontSize: 13,
+                    fontSize: fs(13),
                     color: "rgba(255,255,255,.8)",
                     lineHeight: 1.8,
                     maxWidth: 260,
@@ -1579,7 +1652,7 @@
                       </div>
                       <p
                         style={{
-                          fontSize: 12,
+                          fontSize: fs(12),
                           fontWeight: 600,
                           color: C.ink,
                           marginBottom: 1,
@@ -1587,14 +1660,14 @@
                       >
                         {nm}
                       </p>
-                      <p style={{ fontSize: 10, color: C.muted }}>{sub}</p>
+                      <p style={{ fontSize: fs(10), color: C.muted }}>{sub}</p>
                     </div>
                   ))}
                 </div>
                 <p
                   style={{
                     textAlign: "center",
-                    fontSize: 11,
+                    fontSize: fs(11),
                     color: C.muted,
                     letterSpacing: 0.4,
                   }}
@@ -1652,18 +1725,22 @@
                 </div>
                 <span
                   className="fraunces"
-                  style={{ fontSize: 18, color: "#fff", letterSpacing: -0.3 }}
+                  style={{
+                    fontSize: fs(18),
+                    color: "#fff",
+                    letterSpacing: -0.3,
+                  }}
                 >
                   goTravel
                 </span>
               </div>
               <h1
                 className="fraunces"
-                style={{ fontSize: 28, color: "#fff", marginBottom: 4 }}
+                style={{ fontSize: fs(28), color: "#fff", marginBottom: 4 }}
               >
                 Welcome back
               </h1>
-              <p style={{ fontSize: 13, color: "rgba(255,255,255,.75)" }}>
+              <p style={{ fontSize: fs(13), color: "rgba(255,255,255,.75)" }}>
                 Sign in to access your bookings
               </p>
             </div>
@@ -1675,7 +1752,7 @@
                 <div key={f.lbl} style={{ marginBottom: 14 }}>
                   <label
                     style={{
-                      fontSize: 12,
+                      fontSize: fs(12),
                       color: C.ink2,
                       fontWeight: 500,
                       marginBottom: 7,
@@ -1696,7 +1773,7 @@
                         borderRadius: 12,
                         padding: "12px 44px 12px 14px",
                         color: C.ink,
-                        fontSize: 14,
+                        fontSize: fs(14),
                         outline: "none",
                       }}
                     />
@@ -1759,13 +1836,13 @@
                       />
                     </svg>
                   </div>
-                  <span style={{ fontSize: 12, color: C.ink2 }}>
+                  <span style={{ fontSize: fs(12), color: C.ink2 }}>
                     Keep me signed in
                   </span>
                 </label>
                 <span
                   style={{
-                    fontSize: 12,
+                    fontSize: fs(12),
                     color: C.primary,
                     cursor: "pointer",
                     fontWeight: 500,
@@ -1788,7 +1865,7 @@
                 }}
               >
                 <div style={{ flex: 1, height: 1, background: C.border }} />
-                <span style={{ fontSize: 12, color: C.muted }}>
+                <span style={{ fontSize: fs(12), color: C.muted }}>
                   or continue with
                 </span>
                 <div style={{ flex: 1, height: 1, background: C.border }} />
@@ -1820,7 +1897,13 @@
                 ))}
               </div>
 
-              <p style={{ textAlign: "center", fontSize: 13, color: C.muted }}>
+              <p
+                style={{
+                  textAlign: "center",
+                  fontSize: fs(13),
+                  color: C.muted,
+                }}
+              >
                 New here?{" "}
                 <span
                   onClick={onSignup}
@@ -1853,14 +1936,14 @@
                 <BackBtn onBack={onBack} dark />
                 <h1
                   className="fraunces"
-                  style={{ fontSize: 24, color: "#fff" }}
+                  style={{ fontSize: fs(24), color: "#fff" }}
                 >
                   Create Account
                 </h1>
               </div>
               <p
                 style={{
-                  fontSize: 13,
+                  fontSize: fs(13),
                   color: "rgba(255,255,255,.75)",
                   marginTop: 4,
                   marginLeft: 46,
@@ -1870,7 +1953,7 @@
               </p>
             </div>
             <div style={{ padding: "20px 24px 32px" }}>
-              <p style={{ fontSize: 13, color: C.muted, marginBottom: 20 }}>
+              <p style={{ fontSize: fs(13), color: C.muted, marginBottom: 20 }}>
                 Already have an account?{" "}
                 <span
                   onClick={onSignup}
@@ -1892,7 +1975,7 @@
                 <div key={f.lbl} style={{ marginBottom: 14 }}>
                   <label
                     style={{
-                      fontSize: 12,
+                      fontSize: fs(12),
                       color: C.ink2,
                       fontWeight: 500,
                       marginBottom: 7,
@@ -1911,7 +1994,7 @@
                         borderRadius: 12,
                         padding: "12px 14px",
                         color: C.ink,
-                        fontSize: 14,
+                        fontSize: fs(14),
                         outline: "none",
                       }}
                     />
@@ -1940,7 +2023,7 @@
               <div style={{ marginBottom: 22 }}>
                 <label
                   style={{
-                    fontSize: 12,
+                    fontSize: fs(12),
                     color: C.ink2,
                     fontWeight: 500,
                     marginBottom: 7,
@@ -1957,7 +2040,7 @@
                       borderRadius: 12,
                       padding: "12px 12px",
                       color: C.ink,
-                      fontSize: 13,
+                      fontSize: fs(13),
                       display: "flex",
                       alignItems: "center",
                       gap: 5,
@@ -1981,7 +2064,7 @@
                       borderRadius: 12,
                       padding: "12px 14px",
                       color: C.ink,
-                      fontSize: 14,
+                      fontSize: fs(14),
                       outline: "none",
                     }}
                   />
@@ -2040,7 +2123,7 @@
                   <div>
                     <p
                       style={{
-                        fontSize: 11,
+                        fontSize: fs(11),
                         color: "rgba(255,255,255,.7)",
                         letterSpacing: 0.8,
                         fontWeight: 500,
@@ -2051,7 +2134,11 @@
                     </p>
                     <h2
                       className="fraunces"
-                      style={{ fontSize: 22, color: "#fff", lineHeight: 1.2 }}
+                      style={{
+                        fontSize: fs(22),
+                        color: "#fff",
+                        lineHeight: 1.2,
+                      }}
                     >
                       Find Your Next
                       <br />
@@ -2110,7 +2197,7 @@
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        fontSize: 17,
+                        fontSize: fs(17),
                         cursor: "pointer",
                         border: "1px solid rgba(255,255,255,.3)",
                         display: "flex",
@@ -2159,7 +2246,7 @@
                       border: "none",
                       background: "transparent",
                       color: C.ink,
-                      fontSize: 13,
+                      fontSize: fs(13),
                       outline: "none",
                     }}
                   />
@@ -2197,12 +2284,12 @@
                       border: `1px solid ${city === c ? C.primary : C.border}`,
                       borderRadius: 99,
                       padding: "5px 14px",
-                      fontSize: 12,
+                      fontSize: fs(12),
                       color: city === c ? "#fff" : C.ink2,
                       cursor: "pointer",
                       fontWeight: city === c ? 600 : 400,
                       whiteSpace: "nowrap",
-                      fontFamily: "'DM Sans',sans-serif",
+                      fontFamily: FONT.sans,
                     }}
                   >
                     {c}
@@ -2226,7 +2313,7 @@
                   <h3
                     className="fraunces"
                     style={{
-                      fontSize: 20,
+                      fontSize: fs(20),
                       color: C.white,
                       margin: "8px 0 5px",
                     }}
@@ -2237,7 +2324,7 @@
                   </h3>
                   <p
                     style={{
-                      fontSize: 12,
+                      fontSize: fs(12),
                       color: "rgba(255,255,255,.8)",
                       marginBottom: 14,
                     }}
@@ -2295,10 +2382,10 @@
                     />
                     <span
                       style={{
-                        fontSize: 9.5,
+                        fontSize: fs(9.5),
                         color: cat === c.id ? "#fff" : C.muted,
                         fontWeight: 600,
-                        fontFamily: "'DM Sans',sans-serif",
+                        fontFamily: FONT.sans,
                       }}
                     >
                       {c.lab}
@@ -2311,7 +2398,7 @@
                 <>
                   <p
                     style={{
-                      fontSize: 13,
+                      fontSize: fs(13),
                       fontWeight: 600,
                       color: C.ink,
                       padding: "0 22px 10px",
@@ -2339,7 +2426,7 @@
                   >
                     <p
                       style={{
-                        fontSize: 13,
+                        fontSize: fs(13),
                         fontWeight: 600,
                         color: C.ink,
                         display: "flex",
@@ -2362,7 +2449,7 @@
                     <span
                       onClick={() => setSearch(" ")}
                       style={{
-                        fontSize: 12,
+                        fontSize: fs(12),
                         color: C.primary,
                         cursor: "pointer",
                         fontWeight: 500,
@@ -2393,11 +2480,17 @@
                       padding: "0 22px 10px",
                     }}
                   >
-                    <p style={{ fontSize: 13, fontWeight: 600, color: C.ink }}>
+                    <p
+                      style={{
+                        fontSize: fs(13),
+                        fontWeight: 600,
+                        color: C.ink,
+                      }}
+                    >
                       {CAT_MAP[cat] || "All Experiences"}
                       <span
                         style={{
-                          fontSize: 11,
+                          fontSize: fs(11),
                           color: C.muted,
                           fontWeight: 400,
                           marginLeft: 6,
@@ -2447,7 +2540,7 @@
                     <div style={{ flex: 1 }}>
                       <p
                         style={{
-                          fontSize: 13,
+                          fontSize: fs(13),
                           fontWeight: 600,
                           color: C.ink,
                           marginBottom: 3,
@@ -2457,7 +2550,7 @@
                       </p>
                       <p
                         style={{
-                          fontSize: 11,
+                          fontSize: fs(11),
                           color: C.muted,
                           lineHeight: 1.6,
                         }}
@@ -2522,11 +2615,11 @@
             >
               <h2
                 className="fraunces"
-                style={{ fontSize: 24, color: "#fff", marginBottom: 2 }}
+                style={{ fontSize: fs(24), color: "#fff", marginBottom: 2 }}
               >
                 Explore
               </h2>
-              <p style={{ fontSize: 13, color: "rgba(255,255,255,.75)" }}>
+              <p style={{ fontSize: fs(13), color: "rgba(255,255,255,.75)" }}>
                 Unique experiences around the world
               </p>
             </div>
@@ -2553,13 +2646,13 @@
                         ? `2px solid ${C.primary}`
                         : "2px solid transparent",
                     padding: "10px 10px",
-                    fontSize: 12,
+                    fontSize: fs(12),
                     cursor: "pointer",
                     color: sub === t ? C.primary : C.muted,
                     fontWeight: sub === t ? 600 : 400,
                     marginBottom: "-1px",
                     whiteSpace: "nowrap",
-                    fontFamily: "'DM Sans',sans-serif",
+                    fontFamily: FONT.sans,
                   }}
                 >
                   {t}
@@ -2579,7 +2672,13 @@
                       marginBottom: 16,
                     }}
                   >
-                    <p style={{ fontSize: 13, color: C.ink2, lineHeight: 1.8 }}>
+                    <p
+                      style={{
+                        fontSize: fs(13),
+                        color: C.ink2,
+                        lineHeight: 1.8,
+                      }}
+                    >
                       Upon landing at the airport, we've got all kinds of
                       transfers — private cars, shared shuttles, luxury vans and
                       more.
@@ -2623,18 +2722,20 @@
                       <div style={{ flex: 1 }}>
                         <p
                           style={{
-                            fontSize: 13,
+                            fontSize: fs(13),
                             fontWeight: 600,
                             color: C.ink,
                           }}
                         >
                           {t.name}
                         </p>
-                        <p style={{ fontSize: 11, color: C.muted }}>{t.sub}</p>
+                        <p style={{ fontSize: fs(11), color: C.muted }}>
+                          {t.sub}
+                        </p>
                       </div>
                       <span
                         style={{
-                          fontSize: 13,
+                          fontSize: fs(13),
                           fontWeight: 700,
                           color: C.primary,
                         }}
@@ -2671,7 +2772,7 @@
             }}
           >
             <StatusBar onRed />
-            <div style={{ position: "relative", flexShrink: 0 }}>
+            <div style={{ position: "relative" }}>
               <HeroImg a={item} h={250} />
 
               <div
@@ -2749,7 +2850,7 @@
                 <h2
                   className="fraunces"
                   style={{
-                    fontSize: 22,
+                    fontSize: fs(22),
                     color: C.white,
                     textShadow: "0 1px 4px rgba(0,0,0,.4)",
                   }}
@@ -2766,7 +2867,7 @@
                 >
                   <p
                     style={{
-                      fontSize: 12,
+                      fontSize: fs(12),
                       color: "rgba(255,255,255,.85)",
                       display: "flex",
                       alignItems: "center",
@@ -2826,7 +2927,7 @@
                   <Ico name={ic} size={16} color={C.green} strokeWidth={2} />
                   <p
                     style={{
-                      fontSize: 9.5,
+                      fontSize: fs(9.5),
                       color: C.ink2,
                       lineHeight: 1.4,
                       textAlign: "center",
@@ -2859,12 +2960,12 @@
                         ? `2px solid ${C.primary}`
                         : "2px solid transparent",
                     padding: "10px 10px",
-                    fontSize: 12,
+                    fontSize: fs(12),
                     cursor: "pointer",
                     color: tab === t ? C.primary : C.muted,
                     fontWeight: tab === t ? 600 : 400,
                     marginBottom: "-1px",
-                    fontFamily: "'DM Sans',sans-serif",
+                    fontFamily: FONT.sans,
                   }}
                 >
                   {t}
@@ -2877,7 +2978,7 @@
                 <>
                   <p
                     style={{
-                      fontSize: 13,
+                      fontSize: fs(13),
                       color: C.ink2,
                       lineHeight: 1.8,
                       marginBottom: 16,
@@ -2889,7 +2990,7 @@
                   </p>
                   <p
                     style={{
-                      fontSize: 13,
+                      fontSize: fs(13),
                       fontWeight: 600,
                       color: C.ink,
                       marginBottom: 10,
@@ -2920,7 +3021,7 @@
                         <div>
                           <p
                             style={{
-                              fontSize: 13,
+                              fontSize: fs(13),
                               fontWeight: 600,
                               color: C.ink,
                             }}
@@ -2929,7 +3030,7 @@
                           </p>
                           <p
                             style={{
-                              fontSize: 11,
+                              fontSize: fs(11),
                               color: C.muted,
                               marginTop: 2,
                             }}
@@ -2940,7 +3041,7 @@
                         <div style={{ textAlign: "right" }}>
                           <p
                             style={{
-                              fontSize: 14,
+                              fontSize: fs(14),
                               fontWeight: 700,
                               color: C.primary,
                             }}
@@ -2950,7 +3051,7 @@
                           {pkg === i && (
                             <p
                               style={{
-                                fontSize: 10,
+                                fontSize: fs(10),
                                 color: C.green,
                                 marginTop: 2,
                                 display: "flex",
@@ -2978,7 +3079,7 @@
                 <>
                   <p
                     style={{
-                      fontSize: 13,
+                      fontSize: fs(13),
                       fontWeight: 600,
                       color: C.ink,
                       marginBottom: 12,
@@ -3024,12 +3125,12 @@
                           />
                         </svg>
                       </div>
-                      <p style={{ fontSize: 13, color: C.ink2 }}>{it}</p>
+                      <p style={{ fontSize: fs(13), color: C.ink2 }}>{it}</p>
                     </div>
                   ))}
                   <p
                     style={{
-                      fontSize: 13,
+                      fontSize: fs(13),
                       fontWeight: 600,
                       color: C.ink,
                       margin: "16px 0 10px",
@@ -3071,7 +3172,7 @@
                           strokeWidth={2.5}
                         />
                       </div>
-                      <p style={{ fontSize: 13, color: C.muted }}>{it}</p>
+                      <p style={{ fontSize: fs(13), color: C.muted }}>{it}</p>
                     </div>
                   ))}
                 </>
@@ -3092,7 +3193,7 @@
                   >
                     <span
                       className="fraunces"
-                      style={{ fontSize: 44, color: C.ink }}
+                      style={{ fontSize: fs(44), color: C.ink }}
                     >
                       {item.rating.toFixed(1)}
                     </span>
@@ -3110,7 +3211,7 @@
                           ),
                         )}
                       </div>
-                      <p style={{ fontSize: 12, color: C.muted }}>
+                      <p style={{ fontSize: fs(12), color: C.muted }}>
                         {item.rev.toLocaleString()} reviews
                       </p>
                     </div>
@@ -3127,7 +3228,7 @@
                         >
                           <span
                             style={{
-                              fontSize: 10,
+                              fontSize: fs(10),
                               color: C.muted,
                               width: 8,
                               display: "flex",
@@ -3189,10 +3290,10 @@
                           border: `1px solid ${f === "All" ? C.primary : C.border}`,
                           borderRadius: 99,
                           padding: "4px 12px",
-                          fontSize: 11,
+                          fontSize: fs(11),
                           cursor: "pointer",
                           color: f === "All" ? C.primary : C.muted,
-                          fontFamily: "'DM Sans',sans-serif",
+                          fontFamily: FONT.sans,
                         }}
                       >
                         {f}
@@ -3218,14 +3319,14 @@
                       >
                         <span
                           style={{
-                            fontSize: 13,
+                            fontSize: fs(13),
                             fontWeight: 600,
                             color: C.ink,
                           }}
                         >
                           {r.name}
                         </span>
-                        <span style={{ fontSize: 11, color: C.muted }}>
+                        <span style={{ fontSize: fs(11), color: C.muted }}>
                           {r.ago}
                         </span>
                       </div>
@@ -3241,7 +3342,11 @@
                         ))}
                       </div>
                       <p
-                        style={{ fontSize: 13, color: C.ink2, lineHeight: 1.6 }}
+                        style={{
+                          fontSize: fs(13),
+                          color: C.ink2,
+                          lineHeight: 1.6,
+                        }}
                       >
                         {r.text}
                       </p>
@@ -3296,20 +3401,26 @@
               }}
             >
               <div>
-                <p style={{ fontSize: 11, color: C.muted }}>Starting from</p>
+                <p style={{ fontSize: fs(11), color: C.muted }}>
+                  Starting from
+                </p>
                 <div
                   style={{ display: "flex", alignItems: "baseline", gap: 6 }}
                 >
                   {item.was && (
-                    <s style={{ fontSize: 12, color: C.muted }}>${item.was}</s>
+                    <s style={{ fontSize: fs(12), color: C.muted }}>
+                      ${item.was}
+                    </s>
                   )}
                   <span
                     className="fraunces"
-                    style={{ fontSize: 24, color: C.primary }}
+                    style={{ fontSize: fs(24), color: C.primary }}
                   >
                     ${Math.round(item.price * PACKAGES[pkg].mult)}
                   </span>
-                  <span style={{ fontSize: 11, color: C.muted }}>/person</span>
+                  <span style={{ fontSize: fs(11), color: C.muted }}>
+                    /person
+                  </span>
                 </div>
               </div>
               <Btn onClick={onBook} style={{ padding: "13px 28px" }}>
@@ -3349,7 +3460,7 @@
                 <BackBtn onBack={onBack} dark />
                 <h2
                   className="fraunces"
-                  style={{ fontSize: 22, color: "#fff" }}
+                  style={{ fontSize: fs(22), color: "#fff" }}
                 >
                   Confirm Booking
                 </h2>
@@ -3368,13 +3479,13 @@
                 <div style={{ background: C.surface, padding: "11px 13px" }}>
                   <p
                     className="fraunces"
-                    style={{ fontSize: 15, color: C.ink }}
+                    style={{ fontSize: fs(15), color: C.ink }}
                   >
                     {item.title}
                   </p>
                   <p
                     style={{
-                      fontSize: 11,
+                      fontSize: fs(11),
                       color: C.muted,
                       marginTop: 2,
                       display: "flex",
@@ -3398,7 +3509,7 @@
 
               <p
                 style={{
-                  fontSize: 12,
+                  fontSize: fs(12),
                   fontWeight: 600,
                   color: C.ink2,
                   letterSpacing: 0.3,
@@ -3424,17 +3535,23 @@
                   }}
                 >
                   <div>
-                    <p style={{ fontSize: 13, fontWeight: 500, color: C.ink }}>
+                    <p
+                      style={{
+                        fontSize: fs(13),
+                        fontWeight: 500,
+                        color: C.ink,
+                      }}
+                    >
                       {p.name}
                     </p>
-                    <p style={{ fontSize: 11, color: C.muted }}>{p.sub}</p>
+                    <p style={{ fontSize: fs(11), color: C.muted }}>{p.sub}</p>
                   </div>
                   <div
                     style={{ display: "flex", alignItems: "center", gap: 8 }}
                   >
                     <span
                       style={{
-                        fontSize: 13,
+                        fontSize: fs(13),
                         fontWeight: 700,
                         color: C.primary,
                       }}
@@ -3442,7 +3559,7 @@
                       ${Math.round(item.price * p.mult)}
                       <span
                         style={{
-                          fontSize: 10,
+                          fontSize: fs(10),
                           fontWeight: 400,
                           color: C.muted,
                         }}
@@ -3484,7 +3601,7 @@
               {/* details */}
               <p
                 style={{
-                  fontSize: 12,
+                  fontSize: fs(12),
                   fontWeight: 600,
                   color: C.ink2,
                   letterSpacing: 0.3,
@@ -3516,9 +3633,15 @@
                       marginBottom: 10,
                     }}
                   >
-                    <span style={{ fontSize: 13, color: C.muted }}>{k}</span>
+                    <span style={{ fontSize: fs(13), color: C.muted }}>
+                      {k}
+                    </span>
                     <span
-                      style={{ fontSize: 13, fontWeight: 500, color: C.ink }}
+                      style={{
+                        fontSize: fs(13),
+                        fontWeight: 500,
+                        color: C.ink,
+                      }}
                     >
                       {v}
                     </span>
@@ -3532,7 +3655,9 @@
                     marginBottom: 10,
                   }}
                 >
-                  <span style={{ fontSize: 13, color: C.muted }}>Persons</span>
+                  <span style={{ fontSize: fs(13), color: C.muted }}>
+                    Persons
+                  </span>
                   <div
                     style={{ display: "flex", alignItems: "center", gap: 12 }}
                   >
@@ -3545,19 +3670,19 @@
                         background: "#f1f5f9",
                         border: `1px solid #e2e8f0`,
                         color: C.ink,
-                        fontSize: 16,
+                        fontSize: fs(16),
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        fontFamily: "'DM Sans',sans-serif",
+                        fontFamily: FONT.sans,
                       }}
                     >
                       −
                     </button>
                     <span
                       style={{
-                        fontSize: 14,
+                        fontSize: fs(14),
                         fontWeight: 600,
                         color: C.ink,
                         minWidth: 18,
@@ -3575,12 +3700,12 @@
                         background: `${C.primary}10`,
                         border: `1px solid ${C.primary}44`,
                         color: C.primary,
-                        fontSize: 16,
+                        fontSize: fs(16),
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        fontFamily: "'DM Sans',sans-serif",
+                        fontFamily: FONT.sans,
                       }}
                     >
                       +
@@ -3593,12 +3718,14 @@
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <span style={{ fontSize: 14, fontWeight: 600, color: C.ink }}>
+                  <span
+                    style={{ fontSize: fs(14), fontWeight: 600, color: C.ink }}
+                  >
                     Total
                   </span>
                   <span
                     className="fraunces"
-                    style={{ fontSize: 20, color: C.primary }}
+                    style={{ fontSize: fs(20), color: C.primary }}
                   >
                     ${prc}
                   </span>
@@ -3608,7 +3735,7 @@
               {/* payment */}
               <p
                 style={{
-                  fontSize: 12,
+                  fontSize: fs(12),
                   fontWeight: 600,
                   color: C.ink2,
                   letterSpacing: 0.3,
@@ -3656,10 +3783,16 @@
                     />
                   </div>
                   <div style={{ flex: 1 }}>
-                    <p style={{ fontSize: 13, fontWeight: 500, color: C.ink }}>
+                    <p
+                      style={{
+                        fontSize: fs(13),
+                        fontWeight: 500,
+                        color: C.ink,
+                      }}
+                    >
                       {nm}
                     </p>
-                    <p style={{ fontSize: 11, color: C.muted }}>{sub}</p>
+                    <p style={{ fontSize: fs(11), color: C.muted }}>{sub}</p>
                   </div>
                   {payIdx === i && (
                     <div
@@ -3702,12 +3835,12 @@
                   marginBottom: 12,
                 }}
               >
-                <p style={{ fontSize: 12, color: C.muted }}>
+                <p style={{ fontSize: fs(12), color: C.muted }}>
                   Total for {persons} person{persons > 1 ? "s" : ""}
                 </p>
                 <span
                   className="fraunces"
-                  style={{ fontSize: 20, color: C.primary }}
+                  style={{ fontSize: fs(20), color: C.primary }}
                 >
                   ${prc}
                 </span>
@@ -3742,7 +3875,7 @@
                 <Ico name="ticket" size={20} color="#fff" strokeWidth={1.6} />
                 <span
                   className="fraunces"
-                  style={{ fontSize: 18, color: "#fff" }}
+                  style={{ fontSize: fs(18), color: "#fff" }}
                 >
                   goTravel
                 </span>
@@ -3780,13 +3913,13 @@
                 </div>
                 <h2
                   className="fraunces"
-                  style={{ fontSize: 28, color: C.ink, marginBottom: 8 }}
+                  style={{ fontSize: fs(28), color: C.ink, marginBottom: 8 }}
                 >
                   Booking Confirmed!
                 </h2>
                 <p
                   style={{
-                    fontSize: 14,
+                    fontSize: fs(14),
                     color: C.muted,
                     lineHeight: 1.8,
                     marginBottom: 6,
@@ -3796,7 +3929,9 @@
                 >
                   {item?.title} is all set. Get ready for an amazing experience!
                 </p>
-                <p style={{ fontSize: 12, color: C.muted, marginBottom: 32 }}>
+                <p
+                  style={{ fontSize: fs(12), color: C.muted, marginBottom: 32 }}
+                >
                   Confirmation sent to your email.
                 </p>
 
@@ -3825,9 +3960,15 @@
                         marginBottom: 8,
                       }}
                     >
-                      <span style={{ fontSize: 12, color: C.muted }}>{k}</span>
+                      <span style={{ fontSize: fs(12), color: C.muted }}>
+                        {k}
+                      </span>
                       <span
-                        style={{ fontSize: 12, fontWeight: 600, color: C.ink }}
+                        style={{
+                          fontSize: fs(12),
+                          fontWeight: 600,
+                          color: C.ink,
+                        }}
                       >
                         {v}
                       </span>
@@ -3897,11 +4038,11 @@
             >
               <h2
                 className="fraunces"
-                style={{ fontSize: 24, color: "#fff", marginBottom: 2 }}
+                style={{ fontSize: fs(24), color: "#fff", marginBottom: 2 }}
               >
                 My Trips
               </h2>
-              <p style={{ fontSize: 13, color: "rgba(255,255,255,.75)" }}>
+              <p style={{ fontSize: fs(13), color: "rgba(255,255,255,.75)" }}>
                 {TRIPS.length} bookings total
               </p>
 
@@ -3919,11 +4060,11 @@
                       border: `1px solid ${filter === f ? "rgba(255,255,255,.6)" : "rgba(255,255,255,.25)"}`,
                       borderRadius: 99,
                       padding: "5px 14px",
-                      fontSize: 12,
+                      fontSize: fs(12),
                       color: "#fff",
                       cursor: "pointer",
                       fontWeight: filter === f ? 600 : 400,
-                      fontFamily: "'DM Sans',sans-serif",
+                      fontFamily: FONT.sans,
                     }}
                   >
                     {f}
@@ -3958,7 +4099,11 @@
                       }}
                     >
                       <p
-                        style={{ fontSize: 13, fontWeight: 600, color: C.ink }}
+                        style={{
+                          fontSize: fs(13),
+                          fontWeight: 600,
+                          color: C.ink,
+                        }}
                       >
                         {t.a.title}
                       </p>
@@ -3970,7 +4115,7 @@
                     {/* 修正後的合併 Style */}
                     <p
                       style={{
-                        fontSize: 11,
+                        fontSize: fs(11),
                         color: C.muted,
                         marginTop: 3,
                         display: "flex",
@@ -4029,7 +4174,7 @@
                       strokeWidth={1.2}
                     />
                   </div>
-                  <p style={{ color: C.muted, fontSize: 15 }}>
+                  <p style={{ color: C.muted, fontSize: fs(15) }}>
                     No {filter.toLowerCase()} trips
                   </p>
                 </div>
@@ -4093,11 +4238,13 @@
                 <div style={{ flex: 1 }}>
                   <p
                     className="fraunces"
-                    style={{ fontSize: 19, color: "#fff" }}
+                    style={{ fontSize: fs(19), color: "#fff" }}
                   >
                     Jang Beom
                   </p>
-                  <p style={{ fontSize: 12, color: "rgba(255,255,255,.75)" }}>
+                  <p
+                    style={{ fontSize: fs(12), color: "rgba(255,255,255,.75)" }}
+                  >
                     jangBeom@gmail.com
                   </p>
                 </div>
@@ -4107,10 +4254,10 @@
                     border: "1px solid rgba(255,255,255,.35)",
                     borderRadius: 10,
                     padding: "6px 12px",
-                    fontSize: 12,
+                    fontSize: fs(12),
                     color: "#fff",
                     cursor: "pointer",
-                    fontFamily: "'DM Sans',sans-serif",
+                    fontFamily: FONT.sans,
                     fontWeight: 500,
                   }}
                 >
@@ -4144,13 +4291,13 @@
                   >
                     <p
                       className="fraunces"
-                      style={{ fontSize: 20, color: "#fff" }}
+                      style={{ fontSize: fs(20), color: "#fff" }}
                     >
                       {n}
                     </p>
                     <p
                       style={{
-                        fontSize: 9,
+                        fontSize: fs(9),
                         color: "rgba(255,255,255,.7)",
                         letterSpacing: 0.5,
                         fontWeight: 500,
@@ -4210,7 +4357,7 @@
                     <div style={{ flex: 1 }}>
                       <p
                         style={{
-                          fontSize: 13,
+                          fontSize: fs(13),
                           fontWeight: 500,
                           color: i === 7 ? "#ef4444" : C.ink,
                         }}
@@ -4219,7 +4366,11 @@
                       </p>
                       {sub && (
                         <p
-                          style={{ fontSize: 11, color: C.muted, marginTop: 1 }}
+                          style={{
+                            fontSize: fs(11),
+                            color: C.muted,
+                            marginTop: 1,
+                          }}
                         >
                           {sub}
                         </p>
@@ -4267,7 +4418,7 @@
                   <BackBtn onBack={onBack} dark />
                   <h2
                     className="fraunces"
-                    style={{ fontSize: 22, color: "#fff" }}
+                    style={{ fontSize: fs(22), color: "#fff" }}
                   >
                     Notifications
                   </h2>
@@ -4275,7 +4426,7 @@
                 <span
                   onClick={() => setRead(NOTIFS.map((n) => n.id))}
                   style={{
-                    fontSize: 12,
+                    fontSize: fs(12),
                     color: "rgba(255,255,255,.85)",
                     cursor: "pointer",
                     fontWeight: 500,
@@ -4318,7 +4469,13 @@
                         flexShrink: 0,
                       }}
                     />
-                    <p style={{ fontSize: 13, color: C.ink2, lineHeight: 1.6 }}>
+                    <p
+                      style={{
+                        fontSize: fs(13),
+                        color: C.ink2,
+                        lineHeight: 1.6,
+                      }}
+                    >
                       {n.text}
                     </p>
                   </div>
@@ -4444,52 +4601,9 @@
               flexDirection: "column",
               alignItems: "center",
               gap: 18,
-              padding: "20px 0",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                gap: 7,
-                flexWrap: "wrap",
-                justifyContent: "center",
-                maxWidth: 560,
-              }}
-            >
-              {Object.entries(LABELS).map(([s, lb]) => (
-                <button
-                  key={s}
-                  onClick={() => setScreen(s)}
-                  style={{
-                    background: screen === s ? C.primary : "#f1f5f9",
-                    border: `1px solid ${screen === s ? C.primary : "#e2e8f0"}`,
-                    borderRadius: 10,
-                    padding: "5px 12px",
-                    color: screen === s ? "#fff" : "#64748b",
-                    fontSize: 12,
-                    cursor: "pointer",
-                    fontWeight: screen === s ? 600 : 400,
-                    fontFamily: "'DM Sans',sans-serif",
-                  }}
-                >
-                  {lb}
-                </button>
-              ))}
-            </div>
-            <div
-              style={{
-                width: 375,
-                background: C.bg,
-                borderRadius: 46,
-                height: 812,
-                overflow: "hidden",
-                overflowY: "auto",
-                boxShadow: `0 0 0 10px #d1d5db, 0 32px 80px rgba(0,0,0,.15)`,
-                border: `1px solid ${C.border}`,
-              }}
-            >
-              {SCREENS[screen]}
-            </div>
+            <div className="phone-frame">{SCREENS[screen]}</div>
           </div>
         );
       }

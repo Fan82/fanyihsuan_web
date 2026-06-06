@@ -24,42 +24,71 @@
         font-family:
           -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       }
+      html,
       body {
-        background: #092360;
+        height: 100%;
+      }
+      body {
+        background: #1348c7;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        padding: 20px;
-        overflow: hidden;
+        min-height: 100vh;
       }
-
-      /* ── Phone Shell ── */
-      .phone {
-        width: 375px;
-        height: 812px;
+      #root {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .phone-frame {
+        width: 100%;
+        height: 100vh;
         background: #f5f5f7;
-        border-radius: 44px;
         overflow: hidden;
         position: relative;
         display: flex;
         flex-direction: column;
-        box-shadow:
-          0 0 0 2px #444,
-          0 0 0 12px #1c1c1e,
-          0 40px 80px rgba(0, 0, 0, 0.7);
       }
+      @media (min-width: 480px) {
+        body {
+          background: #1348c7;
+        }
+        #root {
+          min-height: 100vh;
+          height: auto;
+        }
+        .phone-frame {
+          width: 390px;
+          height: 844px;
+          border-radius: 52px;
+          border: 10px solid #1c1c2e;
+          box-shadow:
+            0 40px 100px rgba(0, 0, 0, 0.8),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+        }
+        .date-scroller {
+          max-width: 390px;
+        }
+      }
+
       .status-bar {
         width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
-        padding: 20px 24px;
+        padding: 14px 24px 10px;
         font-size: 12px;
         font-weight: 600;
         color: #111;
         flex-shrink: 0;
+        background: #f5f5f7;
+      }
+      .status-bar.light {
+        color: #fff;
+        background: transparent;
       }
       .screen {
         flex: 1;
@@ -67,6 +96,10 @@
         display: flex;
         flex-direction: column;
         background: #fff;
+        position: relative;
+      }
+      .screen.dark {
+        background: linear-gradient(160deg, #0a0a2e 0%, #1248c7 100%);
       }
       .header {
         display: flex;
@@ -95,6 +128,7 @@
         overflow-y: auto;
         padding: 16px 20px 90px;
         -webkit-overflow-scrolling: touch;
+        min-height: 0;
       }
       .content::-webkit-scrollbar {
         display: none;
@@ -134,13 +168,12 @@
 
       /* ── Welcome ── */
       .welcome {
-        height: 100%;
+        flex: 1;
         background: #1248c7;
-        /* background: linear-gradient(180deg, #0a0a1a 0%, #1248c7 100%); */
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
-        padding: 80px 28px 50px;
+        justify-content: space-between;
+        padding: 24px 28px 44px;
         position: relative;
         overflow: hidden;
       }
@@ -176,13 +209,9 @@
         opacity: 0.8;
       }
 
-      /* 氣流粒子樣式 */
       .steam {
         height: 120px;
         width: 10px;
-        /* background: linear-gradient(transparent, #fff); */
-        /* border-radius: 5px; */
-        /* animation: steam 2s ease-in-out infinite; */
       }
       .steam div {
         opacity: 0;
@@ -679,6 +708,7 @@
       /* ── Confirmation ── */
       .confirm-screen {
         flex: 1;
+        overflow-y: auto;
         background: linear-gradient(180deg, #ecfdf5, #d1fae5);
         display: flex;
         flex-direction: column;
@@ -686,6 +716,7 @@
         justify-content: center;
         padding: 40px 24px;
         text-align: center;
+        min-height: 0;
       }
       .check-circle {
         width: 80px;
@@ -726,33 +757,6 @@
       }
       .payment-method:active {
         transform: scale(0.98);
-      }
-
-      /* ── Debug nav ── */
-      .debug-panel {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-        justify-content: center;
-        max-width: 500px;
-        margin-bottom: 16px;
-      }
-      .debug-btn {
-        background: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        color: rgba(255, 255, 255, 0.7);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        border-radius: 8px;
-        padding: 6px 12px;
-        font-size: 12px;
-        cursor: pointer;
-        font-weight: 400;
-      }
-      .debug-btn.active {
-        background: #fff;
-        color: var(--primary);
-        border-color: #fff;
       }
     </style>
   </head>
@@ -1093,7 +1097,7 @@
         );
       };
       /* ── Status Bar (live clock) ── */
-      function StatusBar() {
+      function StatusBar({ light }) {
         const [t, setT] = useState(new Date());
         useEffect(() => {
           const id = setInterval(() => setT(new Date()), 1000);
@@ -1102,7 +1106,7 @@
         const hh = String(t.getHours()).padStart(2, "0");
         const mm = String(t.getMinutes()).padStart(2, "0");
         return (
-          <div className="status-bar">
+          <div className={`status-bar${light ? " light" : ""}`}>
             <span>
               {hh}:{mm}
             </span>
@@ -1277,14 +1281,7 @@
 
       function WelcomePage({ next }) {
         return (
-          <div
-            className="welcome"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
+          <div className="welcome">
             {/* 1. 飛機動畫直接放在上方作為視覺主體 */}
             <div
               style={{
@@ -1302,7 +1299,6 @@
               style={{
                 position: "relative",
                 zIndex: 10,
-                paddingBottom: "40px",
               }}
             >
               <h1
@@ -2872,12 +2868,7 @@
         }).join("");
 
         return (
-          <div
-            className="screen page-enter"
-            style={{
-              background: "linear-gradient(160deg,#0a0a2e 0%,#1248c7 100%)",
-            }}
-          >
+          <div className="screen dark page-enter">
             <div
               style={{
                 display: "flex",
@@ -3153,97 +3144,75 @@
           to: null,
         });
 
+        const isLight = page === "welcome" || page === "ticket";
         return (
           <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              padding: "20px 0",
-              gap: 16,
-            }}
+            className="phone-frame"
+            style={{ background: isLight ? "#1248c7" : "#f5f5f7" }}
           >
-            {/* Debug nav */}
-            <div className="debug-panel">
-              {ALL_PAGES.map((p) => (
-                <button
-                  key={p}
-                  className={`debug-btn ${page === p ? "active" : ""}`}
-                  onClick={() => setPage(p)}
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
+            <StatusBar light={isLight} />
 
-            {/* Phone */}
-            <div className="phone">
-              <StatusBar />
-
-              {page === "welcome" && (
-                <WelcomePage next={() => setPage("home")} />
-              )}
-              {page === "home" && (
-                <HomeBooking
-                  next={() => setPage("results")}
-                  booking={booking}
-                  setBooking={setBooking}
-                />
-              )}
-              {page === "results" && (
-                <FlightResults
-                  next={() => setPage("class")}
-                  back={() => setPage("home")}
-                  booking={booking}
-                  setBooking={setBooking}
-                />
-              )}
-              {page === "class" && (
-                <ClassOptions
-                  next={() => setPage("seat")}
-                  back={() => setPage("results")}
-                  booking={booking}
-                  setBooking={setBooking}
-                />
-              )}
-              {page === "seat" && (
-                <SeatSelection
-                  next={() => setPage("extra")}
-                  back={() => setPage("class")}
-                  booking={booking}
-                  setBooking={setBooking}
-                />
-              )}
-              {page === "extra" && (
-                <ExtraService
-                  next={() => setPage("info")}
-                  back={() => setPage("seat")}
-                  booking={booking}
-                  setBooking={setBooking}
-                />
-              )}
-              {page === "info" && (
-                <PassengerInfo
-                  next={() => setPage("payment")}
-                  back={() => setPage("extra")}
-                  booking={booking}
-                  setBooking={setBooking}
-                />
-              )}
-              {page === "payment" && (
-                <PaymentPage
-                  next={() => setPage("confirmed")}
-                  back={() => setPage("info")}
-                  booking={booking}
-                />
-              )}
-              {page === "confirmed" && (
-                <BookingConfirmed next={() => setPage("ticket")} />
-              )}
-              {page === "ticket" && (
-                <FinalTicket back={() => setPage("home")} booking={booking} />
-              )}
-            </div>
+            {page === "welcome" && <WelcomePage next={() => setPage("home")} />}
+            {page === "home" && (
+              <HomeBooking
+                next={() => setPage("results")}
+                booking={booking}
+                setBooking={setBooking}
+              />
+            )}
+            {page === "results" && (
+              <FlightResults
+                next={() => setPage("class")}
+                back={() => setPage("home")}
+                booking={booking}
+                setBooking={setBooking}
+              />
+            )}
+            {page === "class" && (
+              <ClassOptions
+                next={() => setPage("seat")}
+                back={() => setPage("results")}
+                booking={booking}
+                setBooking={setBooking}
+              />
+            )}
+            {page === "seat" && (
+              <SeatSelection
+                next={() => setPage("extra")}
+                back={() => setPage("class")}
+                booking={booking}
+                setBooking={setBooking}
+              />
+            )}
+            {page === "extra" && (
+              <ExtraService
+                next={() => setPage("info")}
+                back={() => setPage("seat")}
+                booking={booking}
+                setBooking={setBooking}
+              />
+            )}
+            {page === "info" && (
+              <PassengerInfo
+                next={() => setPage("payment")}
+                back={() => setPage("extra")}
+                booking={booking}
+                setBooking={setBooking}
+              />
+            )}
+            {page === "payment" && (
+              <PaymentPage
+                next={() => setPage("confirmed")}
+                back={() => setPage("info")}
+                booking={booking}
+              />
+            )}
+            {page === "confirmed" && (
+              <BookingConfirmed next={() => setPage("ticket")} />
+            )}
+            {page === "ticket" && (
+              <FinalTicket back={() => setPage("home")} booking={booking} />
+            )}
           </div>
         );
       }

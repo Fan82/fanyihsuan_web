@@ -15,7 +15,7 @@ export const projects = [
     },
     desc: "Built it while job hunting. Paste a JD, get a match score and skill-gap breakdown in seconds.",
     demoUrl: "https://role-fit-analyzer.vercel.app/",
-    demoMobile: false,
+    demoMobile: true,
 
     // overview kept for HeroSection context
     overview: {
@@ -184,6 +184,7 @@ export const projects = [
     meta: { Role: "UI + Front-End", Year: "2025" },
     desc: "A frontend execution exercise — studying how banking apps use typography, colour, and micro-interactions to communicate trust, then building my own interpretation from scratch.",
     demoUrl: "./easyBank/easy_bank_app.html",
+    demoMobile: true,
 
     overview: {
       problemSummary:
@@ -231,6 +232,7 @@ export const projects = [
     meta: { Role: "UX + Front-End", Year: "2024" },
     desc: "Flight booking forms have the same UX problems everywhere. Smart validation and conditional UI can fix most of them.",
     demoUrl: "./bookFlight/flight_booking_app.html",
+    demoMobile: true,
 
     overview: {
       problemSummary:
@@ -278,6 +280,7 @@ export const projects = [
     meta: { Role: "UI Design", Year: "2024" },
     desc: "A CSS Grid layout exercise focused on one question: can a travel site make you feel something before you read anything?",
     demoUrl: "./goTravel/go_travel_app.html",
+    demoMobile: true,
 
     overview: {
       problemSummary: "Travel sites bury the feeling under information.",
@@ -323,6 +326,7 @@ export const projects = [
     meta: { Role: "UI + UX Design", Year: "2025" },
     desc: "Designed in Taiwan. Validated in London. A transit app focused on showing the right data at the right moment — not all of it.",
     demoUrl: "./publicTransp/public_transport_app.html",
+    demoMobile: true,
 
     overview: {
       problemSummary:

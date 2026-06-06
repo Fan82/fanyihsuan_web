@@ -33,26 +33,55 @@
         margin: 0;
         padding: 0;
       }
+      html,
+      body,
+      #root {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
       body {
         font-family: "DM Sans", sans-serif;
-        background: #fffefc;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        padding: 20px;
+        background: #f8fafc;
       }
       .phone-frame {
-        width: 375px;
-        height: 812px;
-        background: linear-gradient(180deg, #ffffff 0%, #fff5e6 100%);
-        border-radius: 44px;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, #fff 0%, #fff5e6 100%);
         overflow: hidden;
         position: relative;
-        border: 8px solid #2a2a3e;
-        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
         display: flex;
         flex-direction: column;
+      }
+      @media (min-width: 480px) {
+        body {
+          background: #1a1a2e;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+        }
+        html,
+        body,
+        #root {
+          overflow: auto;
+          height: auto;
+        }
+        #root {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+        }
+        .phone-frame {
+          width: 390px;
+          height: 844px;
+          border-radius: 52px;
+          border: 10px solid #1c1c2e;
+          box-shadow:
+            0 40px 100px rgba(0, 0, 0, 0.8),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+        }
       }
       .topnav {
         background: var(--white);
@@ -71,30 +100,6 @@
       }
       .logo span {
         color: var(--dark);
-      }
-      .nav-container {
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-        justify-content: center;
-        max-width: 560px;
-      }
-      .tab {
-        padding: 5px 10px;
-        font-size: 11px;
-        cursor: pointer;
-        font-weight: 400;
-        color: var(--dark);
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid var(--dark);
-        border-radius: 8px;
-        transition: 0.2s;
-        font-family: "DM Sans", sans-serif;
-      }
-      .tab.active {
-        color: #fff;
-        background: var(--blue);
-        border-color: var(--blue);
       }
       .main-content {
         flex: 1;
@@ -398,8 +403,6 @@
           transform: translateY(0);
         }
       }
-
-      /* ===== TX LIST ===== */
       .tx-group {
         font-size: 11px;
         font-weight: 600;
@@ -459,8 +462,6 @@
       .credit {
         color: var(--green);
       }
-
-      /* ===== DEPOSIT TABS ===== */
       .deposit-tabs {
         display: flex;
         border-radius: 10px;
@@ -484,8 +485,6 @@
         background: var(--blue);
         color: white;
       }
-
-      /* ===== TRANSFER TABS ===== */
       .transfer-tabs {
         display: flex;
         background: var(--blue-light);
@@ -511,8 +510,6 @@
         background: var(--blue);
         color: white;
       }
-
-      /* ===== ACCOUNT CARD ===== */
       .account-card {
         border: 1.5px solid var(--border);
         border-radius: 14px;
@@ -550,8 +547,6 @@
         text-transform: uppercase;
         letter-spacing: 0.06em;
       }
-
-      /* ===== CREDIT CARD VISUAL ===== */
       .cc-visual {
         background: linear-gradient(
           135deg,
@@ -608,8 +603,6 @@
         position: relative;
         z-index: 1;
       }
-
-      /* ===== BILL CARD ===== */
       .bill-hero {
         background: var(--gradient);
         border-radius: 20px;
@@ -628,8 +621,6 @@
         font-size: 12px;
         opacity: 0.65;
       }
-
-      /* ===== FILTER CHIPS ===== */
       .filter-bar {
         display: flex;
         gap: 8px;
@@ -659,8 +650,6 @@
         border-color: var(--blue);
         color: white;
       }
-
-      /* ===== QR ===== */
       .qr-box {
         width: 180px;
         height: 180px;
@@ -672,8 +661,6 @@
         font-size: 90px;
         margin: 0 auto 16px;
       }
-
-      /* ===== REGISTER ===== */
       .register-banner {
         background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
         border-radius: 20px;
@@ -744,8 +731,6 @@
         color: var(--mid);
         line-height: 1.5;
       }
-
-      /* ===== TOGGLE ===== */
       .toggle-row {
         display: flex;
         align-items: center;
@@ -779,14 +764,19 @@
       .toggle.on::after {
         transform: translateX(17px);
       }
-
-      /* ===== NOTIFY ===== */
       .notify-row {
         display: flex;
         align-items: flex-start;
         gap: 12px;
         padding: 12px 0;
         border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        transition: background 0.15s;
+        border-radius: 8px;
+        padding-left: 4px;
+      }
+      .notify-row:hover {
+        background: var(--blue-light);
       }
       .notify-dot {
         width: 8px;
@@ -814,8 +804,6 @@
         color: var(--muted);
         margin-top: 3px;
       }
-
-      /* ===== SETTING ===== */
       .setting-row {
         display: flex;
         align-items: center;
@@ -847,8 +835,6 @@
         color: var(--muted);
         font-size: 16px;
       }
-
-      /* ===== EXCHANGE RATE ===== */
       .rate-input-row {
         display: flex;
         gap: 10px;
@@ -864,16 +850,12 @@
         font-weight: 600;
         white-space: nowrap;
       }
-
-      /* ===== INPUT HINT ===== */
       .input-hint {
         font-size: 10px;
         color: var(--muted);
         text-align: right;
         margin-top: 3px;
       }
-
-      /* ===== SUCCESS STATE ===== */
       .success-ring {
         width: 72px;
         height: 72px;
@@ -886,20 +868,27 @@
         font-size: 32px;
         box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
       }
+      .error-msg {
+        font-size: 12px;
+        color: var(--red);
+        margin-top: 4px;
+      }
+      .balance-hidden {
+        letter-spacing: 3px;
+      }
     </style>
   </head>
   <body>
     <div id="root"></div>
-
     <script type="text/babel">
-      const { useState } = React;
+      const { useState, useRef } = React;
 
-      /* ========== SVG ICONS ========== */
-      const EyeIcon = () => (
+      /* ===== ICONS ===== */
+      const EyeIcon = ({ size = 14 }) => (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
+          width={size}
+          height={size}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -909,6 +898,24 @@
         >
           <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
           <circle cx="12" cy="12" r="3" />
+        </svg>
+      );
+      const EyeOffIcon = ({ size = 14 }) => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={size}
+          height={size}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49" />
+          <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242" />
+          <path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143" />
+          <path d="m2 2 20 20" />
         </svg>
       );
       const HouseIcon = () => (
@@ -985,7 +992,7 @@
           <rect x="7" y="7" width="5" height="5" rx="1" />
         </svg>
       );
-      const BellIcon = () => (
+      const BellIcon = ({ dot }) => (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="22"
@@ -999,7 +1006,7 @@
         >
           <path d="M10.268 21a2 2 0 0 0 3.464 0" />
           <path d="M11.68 2.009A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673c-.824-.85-1.678-1.731-2.21-3.348" />
-          <circle cx="18" cy="5" r="3" fill="#ef4444" stroke="none" />
+          {dot && <circle cx="18" cy="5" r="3" fill="#ef4444" stroke="none" />}
         </svg>
       );
       const TransferIcon = () => (
@@ -1103,10 +1110,9 @@
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-piggy-bank-icon lucide-piggy-bank"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
           <path d="M11 17h3v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-3a3.16 3.16 0 0 0 2-2h1a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1h-1a5 5 0 0 0-2-4V3a4 4 0 0 0-3.2 1.6l-.3.4H11a6 6 0 0 0-6 6v1a5 5 0 0 0 2 4v3a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1z" />
           <path d="M16 10h.01" />
@@ -1128,6 +1134,21 @@
           <path d="M20 6 9 17l-5-5" />
         </svg>
       );
+      const ActivityIcon = () => (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
+        </svg>
+      );
 
       const icons = {
         personal: (
@@ -1142,11 +1163,10 @@
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
+            <circle cx="12" cy="8" r="5" />
+            <path d="M20 21a8 8 0 0 0-16 0" />
           </svg>
         ),
-        // 修正了拼字 scurity -> security
         security: (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -1251,7 +1271,6 @@
         ),
       };
 
-      // 2. 渲染部分
       const settingsItems = [
         { icon: icons.personal, label: "Personal Information" },
         { icon: icons.security, label: "Security Settings" },
@@ -1262,124 +1281,548 @@
         { icon: icons.appearance, label: "Appearance" },
       ];
 
-      /* ========== STATUS BAR ========== */
-      const StatusBar = () => (
+      const RATES = {
+        USD: { buy: 32.04, sell: 32.1, flag: "🇺🇸" },
+        JPY: { buy: 0.2099, sell: 0.2129, flag: "🇯🇵" },
+        EUR: { buy: 34.55, sell: 34.93, flag: "🇪🇺" },
+        CNY: { buy: 4.392, sell: 4.773, flag: "🇨🇳" },
+      };
+
+      /* ===== STATUS BAR ===== */
+      const StatusBar = () => {
+        const [time, setTime] = useState(() =>
+          new Date().toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          }),
+        );
+        React.useEffect(() => {
+          const t = setInterval(
+            () =>
+              setTime(
+                new Date().toLocaleTimeString("en-US", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                }),
+              ),
+            30000,
+          );
+          return () => clearInterval(t);
+        }, []);
+        return (
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "16px 22px 8px",
+              fontSize: 12,
+              color: "var(--dark)",
+              fontWeight: 600,
+              background: "var(--bg)",
+              flexShrink: 0,
+            }}
+          >
+            <span>{time}</span>
+            <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
+              <svg
+                width="16"
+                height="12"
+                viewBox="0 0 16 12"
+                fill="currentColor"
+              >
+                <rect x="0" y="4" width="3" height="8" rx="1" />
+                <rect x="4.5" y="2.5" width="3" height="9.5" rx="1" />
+                <rect x="9" y="1" width="3" height="11" rx="1" />
+                <rect
+                  x="13.5"
+                  y="0"
+                  width="2.5"
+                  height="12"
+                  rx="1"
+                  opacity="0.35"
+                />
+              </svg>
+              <svg
+                width="16"
+                height="12"
+                viewBox="0 0 16 12"
+                fill="currentColor"
+              >
+                <path d="M8 2C5 2 2.5 3.5 1 5.7L2.5 7.2C3.7 5.4 5.7 4.2 8 4.2C10.3 4.2 12.3 5.4 13.5 7.2L15 5.7C13.5 3.5 11 2 8 2Z" />
+                <path d="M8 6C6.3 6 4.8 6.8 3.8 8.1L5.3 9.5C6 8.6 6.9 8 8 8C9.1 8 10 8.6 10.7 9.5L12.2 8.1C11.2 6.8 9.7 6 8 6Z" />
+                <circle cx="8" cy="11" r="1.5" />
+              </svg>
+              <svg
+                width="25"
+                height="12"
+                viewBox="0 0 25 12"
+                fill="currentColor"
+              >
+                <rect
+                  x="0.5"
+                  y="0.5"
+                  width="21"
+                  height="11"
+                  rx="3.5"
+                  stroke="currentColor"
+                  strokeOpacity="0.35"
+                  fill="none"
+                />
+                <rect x="2" y="2" width="17" height="8" rx="2" />
+                <path
+                  d="M23 4.5V7.5C23.8 7.2 24.5 6.5 24.5 6C24.5 5.5 23.8 4.8 23 4.5Z"
+                  opacity="0.4"
+                />
+              </svg>
+            </div>
+          </div>
+        );
+      };
+
+      /* ===== TOGGLE ===== */
+      const Toggle = ({ value, onChange }) => (
         <div
+          className={`toggle ${value ? "on" : ""}`}
+          onClick={() => onChange && onChange(!value)}
+        />
+      );
+
+      /* ===== SUCCESS VIEW ===== */
+      const SuccessView = ({ label, sub }) => (
+        <div
+          className="animate-fade"
           style={{
             display: "flex",
-            width: "100%",
-            justifyContent: "space-between",
+            flexDirection: "column",
             alignItems: "center",
-            padding: "16px 22px 8px",
-            fontSize: 12,
-            color: "var(--dark)",
-            fontWeight: 600,
-            background: "var(--bg)",
-            flexShrink: 0,
+            justifyContent: "center",
+            padding: "60px 20px",
+            textAlign: "center",
           }}
         >
-          <span>9:41</span>
-          <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
-            <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
-              <rect x="0" y="4" width="3" height="8" rx="1" />
-              <rect x="4.5" y="2.5" width="3" height="9.5" rx="1" />
-              <rect x="9" y="1" width="3" height="11" rx="1" />
-              <rect
-                x="13.5"
-                y="0"
-                width="2.5"
-                height="12"
-                rx="1"
-                opacity="0.35"
-              />
-            </svg>
-            <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
-              <path d="M8 2C5 2 2.5 3.5 1 5.7L2.5 7.2C3.7 5.4 5.7 4.2 8 4.2C10.3 4.2 12.3 5.4 13.5 7.2L15 5.7C13.5 3.5 11 2 8 2Z" />
-              <path d="M8 6C6.3 6 4.8 6.8 3.8 8.1L5.3 9.5C6 8.6 6.9 8 8 8C9.1 8 10 8.6 10.7 9.5L12.2 8.1C11.2 6.8 9.7 6 8 6Z" />
-              <circle cx="8" cy="11" r="1.5" />
-            </svg>
-            <svg width="25" height="12" viewBox="0 0 25 12" fill="currentColor">
-              <rect
-                x="0.5"
-                y="0.5"
-                width="21"
-                height="11"
-                rx="3.5"
-                stroke="currentColor"
-                strokeOpacity="0.35"
-                fill="none"
-              />
-              <rect x="2" y="2" width="17" height="8" rx="2" />
-              <path
-                d="M23 4.5V7.5C23.8 7.2 24.5 6.5 24.5 6C24.5 5.5 23.8 4.8 23 4.5Z"
-                opacity="0.4"
-              />
-            </svg>
+          <div className="success-ring">
+            <CheckIcon />
           </div>
+          <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
+            {label}
+          </div>
+          {sub && (
+            <div style={{ fontSize: 13, color: "var(--muted)" }}>{sub}</div>
+          )}
         </div>
       );
 
-      /* ========== NAV TAB BAR (outside phone) ========== */
-      const NavTabBar = ({ currentScreen, setCurrentScreen }) => {
-        const tabs = [
-          { id: "loginPage", label: "Login" },
-          { id: "registerPage", label: "Register" },
-          { id: "homePage", label: "Home" },
-          { id: "depositPage", label: "Deposit" },
-          { id: "foreignPage", label: "Foreign" },
-          { id: "transferPage", label: "Transfer" },
-          { id: "billPage", label: "Bill" },
-          { id: "creditPage", label: "Credit Card" },
-          { id: "exchangePage", label: "Exchange" },
-          { id: "notifyPage", label: "Notify" },
-          { id: "scanPage", label: "Scan" },
-          { id: "settingPage", label: "Setting" },
-        ];
-        return (
-          <div className="nav-container">
-            {tabs.map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setCurrentScreen(t.id)}
-                className={`tab ${currentScreen === t.id ? "active" : ""}`}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-        );
-      };
-
-      /* ========== TOGGLE COMPONENT ========== */
-      const Toggle = () => {
-        const [on, setOn] = useState(false);
-        return (
-          <div
-            className={`toggle ${on ? "on" : ""}`}
-            onClick={() => setOn(!on)}
-          />
-        );
-      };
-
-      /* ========== APP ========== */
+      /* ===== MAIN APP ===== */
       function App() {
+        /* ---- Core state ---- */
         const [screen, setScreen] = useState("loginPage");
+        const [loginId, setLoginId] = useState("");
+        const [loginUser, setLoginUser] = useState("");
+        const [loginPass, setLoginPass] = useState("");
+        const [loginErr, setLoginErr] = useState("");
+        const [rememberMe, setRememberMe] = useState(false);
+        const [balanceVisible, setBalanceVisible] = useState(true);
+        const [twdBalance, setTwdBalance] = useState(32238);
+        const [usdBalance, setUsdBalance] = useState(120);
+        const [creditPending, setCreditPending] = useState(6450);
+        const [twdDeposit, setTwdDeposit] = useState(12000);
+        const [billAmount, setBillAmount] = useState(290);
+        const [billPaid, setBillPaid] = useState(false);
+        const [billSuccess, setBillSuccess] = useState(false);
+
+        /* ---- Transactions ---- */
+        const [transactions, setTransactions] = useState([
+          {
+            id: 1,
+            icon: "🏦",
+            name: "Salary",
+            date: "06/01",
+            amount: 50000,
+            type: "credit",
+          },
+          {
+            id: 2,
+            icon: "🍟",
+            name: "mcdonald's",
+            date: "06/01",
+            amount: -185,
+            type: "debit",
+          },
+          {
+            id: 3,
+            icon: "🚇",
+            name: "MRT Top Up",
+            date: "05/31",
+            amount: -500,
+            type: "debit",
+          },
+          {
+            id: 4,
+            icon: "🍽",
+            name: "Restaurant",
+            date: "05/30",
+            amount: -320,
+            type: "debit",
+          },
+          {
+            id: 5,
+            icon: "🛍",
+            name: "Store",
+            date: "05/29",
+            amount: -890,
+            type: "debit",
+          },
+          {
+            id: 6,
+            icon: "💳",
+            name: "Credit Card Bill",
+            date: "05/25",
+            amount: -2900,
+            type: "debit",
+          },
+        ]);
+
+        /* ---- Notifications ---- */
+        const [notifications, setNotifications] = useState([
+          {
+            id: 1,
+            read: false,
+            title: "Transfer Successful",
+            body: "You transferred $2,000 to account 00012345678901. The recipient has received the funds.",
+            time: "5 mins ago",
+          },
+          {
+            id: 2,
+            read: false,
+            title: "Bill Payment Reminder",
+            body: "Your credit card statement is due on 06/25. Unpaid amount: $290.",
+            time: "2 hours ago",
+          },
+          {
+            id: 3,
+            read: true,
+            title: "Currency Rate Alert",
+            body: "USD/TWD has reached your target rate of 32.10. You can proceed with exchange now.",
+            time: "Yesterday",
+          },
+          {
+            id: 4,
+            read: true,
+            title: "Login Notification",
+            body: "New login detected from iPhone in Taipei at 09:41 AM. If this was not you, please contact us.",
+            time: "2 days ago",
+          },
+          {
+            id: 5,
+            read: true,
+            title: "Fixed Deposit Matured",
+            body: "Your fixed deposit (123-456-789) has matured. Funds have been transferred to your current account.",
+            time: "3 days ago",
+          },
+        ]);
+        const unreadCount = notifications.filter((n) => !n.read).length;
+
+        /* ---- Transfer state ---- */
         const [transferTab, setTransferTab] = useState(0);
+        const [txRecipient, setTxRecipient] = useState("");
+        const [txAmount, setTxAmount] = useState("");
+        const [txNote, setTxNote] = useState("");
+        const [txPass, setTxPass] = useState("");
+        const [txPassConfirm, setTxPassConfirm] = useState("");
+        const [txErr, setTxErr] = useState("");
+        const [txSuccess, setTxSuccess] = useState(false);
+        const [txSuccessAmount, setTxSuccessAmount] = useState(0);
+
+        /* ---- Exchange state ---- */
+        const [exchFrom, setExchFrom] = useState("TWD");
+        const [exchTo, setExchTo] = useState("USD");
+        const [exchAmount, setExchAmount] = useState("");
+        const [exchResult, setExchResult] = useState(null);
+        const [exchSuccess, setExchSuccess] = useState(false);
+        const [exchErr, setExchErr] = useState("");
+
+        /* ---- Deposit currency tab ---- */
         const [depositCurrency, setDepositCurrency] = useState("tw");
         const [filterChip, setFilterChip] = useState("7d");
-        const [showSuccess, setShowSuccess] = useState(false);
-        const [billPaid, setBillPaid] = useState(false);
+
+        /* ---- Foreign deposit state ---- */
+        const [fxCurrency, setFxCurrency] = useState("USD");
+        const [fxAmount, setFxAmount] = useState("");
+        const [fxSuccess, setFxSuccess] = useState(false);
+        const [fxErr, setFxErr] = useState("");
+
+        /* ---- Scan page manual entry ---- */
+        const [scanInput, setScanInput] = useState("");
+        const [scanErr, setScanErr] = useState("");
+
+        /* ---- Notification toggles ---- */
+        const [notifyToggles, setNotifyToggles] = useState({
+          transfer: true,
+          bill: true,
+          rate: false,
+          login: true,
+        });
+
+        const fmt = (n) => n.toLocaleString();
 
         const go = (s) => {
           setScreen(s);
-          setShowSuccess(false);
+          setTxSuccess(false);
+          setExchSuccess(false);
+          setFxSuccess(false);
+          setBillSuccess(false);
+          setTxErr("");
+          setExchErr("");
+          setFxErr("");
+          setScanErr("");
+          setLoginErr("");
         };
 
-        const handleConfirm = (target) => {
-          setShowSuccess(true);
-          setTimeout(() => {
-            go(target);
-          }, 1800);
+        /* ---- Login logic ---- */
+        const handleLogin = () => {
+          if (!loginId.trim()) {
+            setLoginErr("Please enter your ID number.");
+            return;
+          }
+          if (!loginUser.trim()) {
+            setLoginErr("Please enter your user name.");
+            return;
+          }
+          if (!loginPass.trim()) {
+            setLoginErr("Please enter your password.");
+            return;
+          }
+          // Demo: any non-empty input logs in
+          setLoginErr("");
+          go("homePage");
+        };
+
+        /* ---- Transfer logic ---- */
+        const handleTransfer = () => {
+          const amt = parseFloat(txAmount);
+          if (!txRecipient.trim()) {
+            setTxErr("Please enter recipient account.");
+            return;
+          }
+          if (!amt || amt <= 0) {
+            setTxErr("Please enter a valid amount.");
+            return;
+          }
+          if (amt > twdBalance) {
+            setTxErr(`Insufficient balance. Available: $${fmt(twdBalance)}`);
+            return;
+          }
+          setTwdBalance((prev) => prev - amt);
+          setTransactions((prev) => [
+            {
+              id: Date.now(),
+              icon: "🏦",
+              name: `Transfer to ${txRecipient.slice(-5)}`,
+              date: new Date().toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+              }),
+              amount: -amt,
+              type: "debit",
+            },
+            ...prev,
+          ]);
+          const newNotif = {
+            id: Date.now(),
+            read: false,
+            title: "Transfer Successful",
+            body: `You transferred $${fmt(amt)} to account ${txRecipient}. The recipient has received the funds.`,
+            time: "Just now",
+          };
+          setNotifications((prev) => [newNotif, ...prev]);
+          setTxSuccessAmount(amt);
+          setTxSuccess(true);
+          setTxRecipient("");
+          setTxAmount("");
+          setTxNote("");
+          setTxPass("");
+          setTxPassConfirm("");
+        };
+
+        /* ---- Transfer (cardless password) logic ---- */
+        const handleCardlessTransfer = () => {
+          const amt = parseFloat(txAmount);
+          if (!amt || amt <= 0) {
+            setTxErr("Please enter a valid amount.");
+            return;
+          }
+          if (amt > twdBalance) {
+            setTxErr(`Insufficient balance.`);
+            return;
+          }
+          if (!txPass.trim()) {
+            setTxErr("Please set a withdraw password.");
+            return;
+          }
+          if (txPass !== txPassConfirm) {
+            setTxErr("Passwords don't match.");
+            return;
+          }
+          setTwdBalance((prev) => prev - amt);
+          setTxSuccessAmount(amt);
+          setTxSuccess(true);
+          setTxAmount("");
+          setTxPass("");
+          setTxPassConfirm("");
+        };
+
+        /* ---- Bill payment logic ---- */
+        const handleBillPay = () => {
+          if (billAmount > twdBalance) {
+            alert("Insufficient balance.");
+            return;
+          }
+          setTwdBalance((prev) => prev - billAmount);
+          setTransactions((prev) => [
+            {
+              id: Date.now(),
+              icon: "💳",
+              name: "Credit Card Bill",
+              date: new Date().toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+              }),
+              amount: -billAmount,
+              type: "debit",
+            },
+            ...prev,
+          ]);
+          setBillPaid(true);
+          setBillSuccess(true);
+          const newNotif = {
+            id: Date.now(),
+            read: false,
+            title: "Bill Payment Successful",
+            body: `Your credit card bill of $${fmt(billAmount)} has been paid.`,
+            time: "Just now",
+          };
+          setNotifications((prev) => [newNotif, ...prev]);
+        };
+
+        /* ---- Exchange logic ---- */
+        const computeExch = () => {
+          const amt = parseFloat(exchAmount);
+          if (!amt || amt <= 0) {
+            setExchErr("Please enter a valid amount.");
+            return;
+          }
+          let result;
+          if (exchFrom === "TWD" && exchTo !== "TWD") {
+            const rate = RATES[exchTo];
+            if (!rate) {
+              setExchErr("Unsupported currency.");
+              return;
+            }
+            const toAmt = amt / rate.sell;
+            if (amt > twdBalance) {
+              setExchErr("Insufficient TWD balance.");
+              return;
+            }
+            result = {
+              fromAmt: amt,
+              fromCcy: "TWD",
+              toAmt: toAmt.toFixed(2),
+              toCcy: exchTo,
+            };
+            setTwdBalance((prev) => prev - amt);
+            if (exchTo === "USD")
+              setUsdBalance((prev) => prev + parseFloat(toAmt.toFixed(2)));
+          } else if (exchFrom !== "TWD" && exchTo === "TWD") {
+            const rate = RATES[exchFrom];
+            if (!rate) {
+              setExchErr("Unsupported currency.");
+              return;
+            }
+            const toAmt = amt * rate.buy;
+            if (exchFrom === "USD" && amt > usdBalance) {
+              setExchErr("Insufficient USD balance.");
+              return;
+            }
+            result = {
+              fromAmt: amt,
+              fromCcy: exchFrom,
+              toAmt: toAmt.toFixed(2),
+              toCcy: "TWD",
+            };
+            if (exchFrom === "USD") setUsdBalance((prev) => prev - amt);
+            setTwdBalance((prev) => prev + parseFloat(toAmt.toFixed(2)));
+          } else {
+            setExchErr("Please select different currencies.");
+            return;
+          }
+          setExchResult(result);
+          setExchErr("");
+          setTransactions((prev) => [
+            {
+              id: Date.now(),
+              icon: "💱",
+              name: `${result.fromCcy}→${result.toCcy} Exchange`,
+              date: new Date().toLocaleDateString("en-US", {
+                month: "2-digit",
+                day: "2-digit",
+              }),
+              amount: exchFrom === "TWD" ? -result.fromAmt : result.toAmt,
+              type: exchFrom === "TWD" ? "debit" : "credit",
+            },
+            ...prev,
+          ]);
+          const newNotif = {
+            id: Date.now(),
+            read: false,
+            title: "Exchange Successful",
+            body: `Exchanged $${result.fromAmt} ${result.fromCcy} → $${result.toAmt} ${result.toCcy}`,
+            time: "Just now",
+          };
+          setNotifications((prev) => [newNotif, ...prev]);
+          setExchSuccess(true);
+          setExchAmount("");
+        };
+
+        /* ---- Foreign deposit logic ---- */
+        const handleFxDeposit = () => {
+          const amt = parseFloat(fxAmount);
+          if (!amt || amt <= 0) {
+            setFxErr("Please enter a valid amount.");
+            return;
+          }
+          const rate = RATES[fxCurrency];
+          if (!rate) return;
+          const cost = amt * rate.sell;
+          if (cost > twdBalance) {
+            setFxErr(`Insufficient TWD balance. Need $${fmt(cost.toFixed(0))}`);
+            return;
+          }
+          setTwdBalance((prev) => prev - cost);
+          if (fxCurrency === "USD") setUsdBalance((prev) => prev + amt);
+          setFxSuccess(true);
+          setFxAmount("");
+        };
+
+        /* ---- Notify mark all read ---- */
+        const markAllRead = () =>
+          setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+        const markRead = (id) =>
+          setNotifications((prev) =>
+            prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
+          );
+
+        /* ---- Scan to transfer ---- */
+        const handleScanProceed = () => {
+          if (!scanInput.trim()) {
+            setScanErr("Please enter account number or paste QR code.");
+            return;
+          }
+          setTxRecipient(scanInput);
+          go("transferPage");
         };
 
         const showTopNav = ![
@@ -1390,31 +1833,9 @@
           "settingPage",
         ].includes(screen);
 
-        /* ------ SUCCESS OVERLAY ------ */
-        const SuccessView = ({ label, target }) => (
-          <div
-            className="animate-fade"
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: "60px 20px",
-              textAlign: "center",
-            }}
-          >
-            <div className="success-ring">
-              <CheckIcon />
-            </div>
-            <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>
-              {label}
-            </div>
-          </div>
-        );
-
-        /* ------ SCREENS ------ */
+        /* ---- SCREENS ---- */
         const screens = {
-          /* ===== LOGIN ===== */
+          /* LOGIN */
           loginPage: (
             <div className="animate-fade">
               <h3
@@ -1428,7 +1849,8 @@
                 <div style={{ position: "relative" }}>
                   <input
                     className="form-input"
-                    defaultValue=""
+                    value={loginId}
+                    onChange={(e) => setLoginId(e.target.value)}
                     placeholder="A123456789"
                   />
                   <span
@@ -1442,7 +1864,9 @@
                       display: "flex",
                       alignItems: "center",
                       gap: 4,
+                      cursor: "pointer",
                     }}
+                    onClick={() => setRememberMe(!rememberMe)}
                   >
                     <span
                       style={{
@@ -1450,9 +1874,28 @@
                         height: 14,
                         border: "1.5px solid var(--muted)",
                         borderRadius: 3,
-                        display: "inline-block",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        background: rememberMe ? "var(--blue)" : "white",
+                        borderColor: rememberMe
+                          ? "var(--blue)"
+                          : "var(--muted)",
                       }}
-                    />{" "}
+                    >
+                      {rememberMe && (
+                        <svg width="10" height="10" viewBox="0 0 10 10">
+                          <path
+                            d="M1.5 5l2.5 2.5 4.5-4.5"
+                            stroke="white"
+                            strokeWidth="1.5"
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      )}
+                    </span>
                     Remember
                   </span>
                 </div>
@@ -1465,12 +1908,18 @@
                       fontSize: 11,
                       color: "var(--blue)",
                       fontWeight: 400,
+                      cursor: "pointer",
                     }}
                   >
                     Forgot user name
                   </span>
                 </label>
-                <input className="form-input" placeholder="Enter user name" />
+                <input
+                  className="form-input"
+                  value={loginUser}
+                  onChange={(e) => setLoginUser(e.target.value)}
+                  placeholder="Enter user name"
+                />
               </div>
               <div className="form-group">
                 <label className="form-label">
@@ -1480,6 +1929,7 @@
                       fontSize: 11,
                       color: "var(--blue)",
                       fontWeight: 400,
+                      cursor: "pointer",
                     }}
                   >
                     Forgot password
@@ -1488,10 +1938,14 @@
                 <input
                   className="form-input"
                   type="password"
+                  value={loginPass}
+                  onChange={(e) => setLoginPass(e.target.value)}
                   placeholder="••••••••"
+                  onKeyDown={(e) => e.key === "Enter" && handleLogin()}
                 />
               </div>
-              <button className="btn-primary" onClick={() => go("homePage")}>
+              {loginErr && <div className="error-msg">{loginErr}</div>}
+              <button className="btn-primary" onClick={handleLogin}>
                 Log In
               </button>
               <div
@@ -1528,6 +1982,7 @@
                   gap: 6,
                   cursor: "pointer",
                 }}
+                onClick={() => go("homePage")}
               >
                 <FaceIcon />
                 <span style={{ fontSize: 12, color: "var(--muted)" }}>
@@ -1537,12 +1992,14 @@
             </div>
           ),
 
-          /* ===== REGISTER ===== */
+          /* REGISTER */
           registerPage: (
             <div className="animate-fade">
               <div className="register-banner">
                 <h2>Create a new account</h2>
-                <p>you can choose create on line on bank</p>
+                <p>
+                  You can choose to open an account online or at a bank branch.
+                </p>
                 <div className="register-cta">
                   <span>Get Started</span>
                   <div className="circle-arrow">→</div>
@@ -1578,10 +2035,9 @@
             </div>
           ),
 
-          /* ===== HOME ===== */
+          /* HOME */
           homePage: (
             <div className="animate-fade" style={{ position: "relative" }}>
-              {/* Credit card layer */}
               <div
                 className="card-blue"
                 style={{ background: "var(--gradient)", cursor: "pointer" }}
@@ -1597,9 +2053,14 @@
                   <div className="balance-label">CREDIT CARD</div>
                   <div className="sm-arrow">→</div>
                 </div>
-                <div className="balance-amount">$6,450</div>
+                <div className="balance-amount">
+                  {balanceVisible ? (
+                    `$${fmt(creditPending)}`
+                  ) : (
+                    <span className="balance-hidden">••••••</span>
+                  )}
+                </div>
               </div>
-              {/* Balance layer (overlaps) */}
               <div
                 className="card-blue"
                 style={{
@@ -1609,8 +2070,15 @@
                 }}
                 onClick={() => go("depositPage")}
               >
-                <div className="balance-label">
-                  YOUR BALANCE <EyeIcon />
+                <div
+                  className="balance-label"
+                  style={{ cursor: "pointer" }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setBalanceVisible(!balanceVisible);
+                  }}
+                >
+                  YOUR BALANCE {balanceVisible ? <EyeIcon /> : <EyeOffIcon />}
                 </div>
                 <div
                   style={{
@@ -1619,11 +2087,16 @@
                     justifyContent: "space-between",
                   }}
                 >
-                  <div className="balance-amount">$32,238</div>
+                  <div className="balance-amount">
+                    {balanceVisible ? (
+                      `$${fmt(twdBalance)}`
+                    ) : (
+                      <span className="balance-hidden">••••••</span>
+                    )}
+                  </div>
                   <div className="sm-arrow">→</div>
                 </div>
               </div>
-              {/* Quick actions */}
               <div className="quick-actions">
                 <button
                   className="action-btn"
@@ -1659,27 +2132,25 @@
                   <span className="action-label">Cardless Withdrawal</span>
                 </button>
               </div>
-              {/* Currency table */}
               <div className="card">
                 <div className="section-header">
                   <span className="section-title">CURRENCIES</span>
-                  <span className="update-badge">Update 2025/04/11</span>
+                  <span className="update-badge">Updated today</span>
                 </div>
                 <div className="currency-header">
                   <span>Currency</span>
                   <span>Buy</span>
                   <span>Sell</span>
                 </div>
-                {[
-                  { flag: "🇺🇸", name: "USD", buy: "32.04", sell: "32.10" },
-                  { flag: "🇯🇵", name: "JPY", buy: "0.2099", sell: "0.2129" },
-                  { flag: "🇪🇺", name: "EUR", buy: "34.55", sell: "34.93" },
-                  { flag: "🇨🇳", name: "CNY", buy: "4.392", sell: "4.773" },
-                ].map((r) => (
-                  <div key={r.name} className="currency-row">
+                {Object.entries(RATES).map(([code, r]) => (
+                  <div
+                    key={code}
+                    className="currency-row"
+                    onClick={() => go("exchangePage")}
+                  >
                     <div className="currency-info">
                       <div className="currency-flag">{r.flag}</div>
-                      <div className="currency-name">{r.name}</div>
+                      <div className="currency-name">{code}</div>
                     </div>
                     <div className="currency-rate">{r.buy}</div>
                     <div className="currency-rate">{r.sell}</div>
@@ -1694,10 +2165,35 @@
                   </span>
                 </div>
               </div>
+              <div className="card">
+                <div className="section-header">
+                  <span className="section-title">RECENT TRANSACTIONS</span>
+                  <span className="more-link">All</span>
+                </div>
+                {transactions.slice(0, 4).map((tx) => (
+                  <div key={tx.id} className="tx-row">
+                    <div className="tx-left">
+                      <div className="tx-icon">{tx.icon}</div>
+                      <div>
+                        <div className="tx-name">{tx.name}</div>
+                        <div className="tx-date">{tx.date}</div>
+                      </div>
+                    </div>
+                    <div
+                      className={`tx-amount ${tx.amount > 0 ? "credit" : "debit"}`}
+                    >
+                      {tx.amount > 0 ? "+" : ""}
+                      {tx.amount < 0 ? "-" : ""}
+                      {tx.amount > 0 ? "$" : "$"}
+                      {fmt(Math.abs(tx.amount))}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           ),
 
-          /* ===== DEPOSIT (台幣 / 外幣 tabs) ===== */
+          /* DEPOSIT */
           depositPage: (
             <div className="animate-fade">
               <div className="deposit-tabs">
@@ -1720,10 +2216,21 @@
                     className="card-blue"
                     style={{ background: "var(--gradient)" }}
                   >
-                    <div className="balance-label">
-                      YOUR BALANCE <EyeIcon />
+                    <div
+                      className="balance-label"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => setBalanceVisible(!balanceVisible)}
+                    >
+                      YOUR BALANCE{" "}
+                      {balanceVisible ? <EyeIcon /> : <EyeOffIcon />}
                     </div>
-                    <div className="balance-amount">$12,200</div>
+                    <div className="balance-amount">
+                      {balanceVisible ? (
+                        `$${fmt(twdBalance)}`
+                      ) : (
+                        <span className="balance-hidden">••••••</span>
+                      )}
+                    </div>
                   </div>
                   <div className="quick-actions" style={{ marginTop: 0 }}>
                     <button
@@ -1737,20 +2244,7 @@
                     </button>
                     <button className="action-btn">
                       <div className="action-icon">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="lucide lucide-activity-icon lucide-activity"
-                        >
-                          <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
-                        </svg>
+                        <ActivityIcon />
                       </div>
                       <span className="action-label">Open Fixed</span>
                     </button>
@@ -1763,7 +2257,10 @@
                       </div>
                       <span className="action-label">Cardless Cash</span>
                     </button>
-                    <button className="action-btn">
+                    <button
+                      className="action-btn"
+                      onClick={() => go("foreignPage")}
+                    >
                       <div className="action-icon">
                         <DepositIcon />
                       </div>
@@ -1794,7 +2291,9 @@
                         ⋯
                       </span>
                     </div>
-                    <div className="account-balance">$12,000</div>
+                    <div className="account-balance">
+                      {balanceVisible ? `$${fmt(twdDeposit)}` : "••••••"}
+                    </div>
                   </div>
                   <div
                     style={{
@@ -1861,9 +2360,20 @@
                     >
                       <span style={{ fontSize: 13, fontWeight: 600 }}>USD</span>
                       <span style={{ fontSize: 12, opacity: 0.7 }}>–</span>
-                      <EyeIcon />
+                      <span
+                        style={{ cursor: "pointer" }}
+                        onClick={() => setBalanceVisible(!balanceVisible)}
+                      >
+                        {balanceVisible ? <EyeIcon /> : <EyeOffIcon />}
+                      </span>
                     </div>
-                    <div className="balance-amount">$120</div>
+                    <div className="balance-amount">
+                      {balanceVisible ? (
+                        `$${usdBalance.toFixed(2)}`
+                      ) : (
+                        <span className="balance-hidden">••••••</span>
+                      )}
+                    </div>
                   </div>
                   <div
                     className="quick-actions"
@@ -1893,20 +2403,7 @@
                     </button>
                     <button className="action-btn">
                       <div className="action-icon">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="lucide lucide-activity-icon lucide-activity"
-                        >
-                          <path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
-                        </svg>
+                        <ActivityIcon />
                       </div>
                       <span className="action-label">Open Fixed Deposit</span>
                     </button>
@@ -1935,18 +2432,28 @@
                         ⋯
                       </span>
                     </div>
-                    <div className="account-balance">$120</div>
+                    <div className="account-balance">
+                      {balanceVisible ? `$${usdBalance.toFixed(2)}` : "••••••"}
+                    </div>
                   </div>
                 </>
               )}
             </div>
           ),
 
-          /* ===== FOREIGN CURRENCY DEPOSIT ===== */
+          /* FOREIGN CURRENCY DEPOSIT */
           foreignPage: (
             <div className="animate-fade">
               <div className="deposit-tabs">
-                <button className="deposit-tab">Taiwanese</button>
+                <button
+                  className="deposit-tab"
+                  onClick={() => {
+                    setDepositCurrency("tw");
+                    go("depositPage");
+                  }}
+                >
+                  Taiwanese
+                </button>
                 <button className="deposit-tab active">Foreign Currency</button>
               </div>
               <div
@@ -1965,266 +2472,275 @@
                   <span style={{ fontSize: 12, opacity: 0.7 }}>–</span>
                   <EyeIcon />
                 </div>
-                <div className="balance-amount">$120</div>
+                <div className="balance-amount">${usdBalance.toFixed(2)}</div>
               </div>
-              <div className="card">
-                <div className="section-title" style={{ marginBottom: 14 }}>
-                  Foreign Currency Deposit
+              {fxSuccess ? (
+                <SuccessView
+                  label="Deposit Successful!"
+                  sub={`${fxCurrency} deposited into your account`}
+                />
+              ) : (
+                <div className="card">
+                  <div className="section-title" style={{ marginBottom: 14 }}>
+                    Foreign Currency Deposit
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Currency</label>
+                    <select
+                      className="form-input"
+                      value={fxCurrency}
+                      onChange={(e) => setFxCurrency(e.target.value)}
+                    >
+                      <option value="USD">USD — US Dollar</option>
+                      <option value="JPY">JPY — Japanese Yen</option>
+                      <option value="EUR">EUR — Euro</option>
+                      <option value="CNY">CNY — Chinese Yuan</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Amount ({fxCurrency})</label>
+                    <input
+                      className="form-input"
+                      type="number"
+                      placeholder="0"
+                      value={fxAmount}
+                      onChange={(e) => setFxAmount(e.target.value)}
+                    />
+                    <div className="input-hint">
+                      Reference rate: {RATES[fxCurrency]?.sell} TWD /{" "}
+                      {fxCurrency}
+                    </div>
+                    {fxAmount && !isNaN(fxAmount) && (
+                      <div className="input-hint">
+                        Cost: ~$
+                        {(
+                          parseFloat(fxAmount) * RATES[fxCurrency]?.sell
+                        ).toFixed(0)}{" "}
+                        TWD
+                      </div>
+                    )}
+                  </div>
+                  {fxErr && <div className="error-msg">{fxErr}</div>}
+                  <button className="btn-primary" onClick={handleFxDeposit}>
+                    Confirm Deposit
+                  </button>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Currency</label>
-                  <select className="form-input">
-                    <option>USD — US Dollar</option>
-                    <option>JPY — Japanese Yen</option>
-                    <option>EUR — Euro</option>
-                    <option>CNY — Chinese Yuan</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Amount (TWD)</label>
-                  <input className="form-input" type="number" placeholder="0" />
-                  <div className="input-hint">Reference rate: 32.04</div>
-                </div>
-                <button
-                  className="btn-primary"
-                  onClick={() => handleConfirm("depositPage")}
-                >
-                  {showSuccess ? (
-                    <>
-                      <CheckIcon /> Success
-                    </>
-                  ) : (
-                    "Confirm Deposit"
-                  )}
-                </button>
-              </div>
+              )}
             </div>
           ),
 
-          /* ===== TRANSFER ===== */
+          /* TRANSFER */
           transferPage: (() => {
-            if (showSuccess)
+            if (txSuccess)
               return (
-                <SuccessView label="Transfer Success！" target="homePage" />
+                <SuccessView
+                  label="Transfer Successful!"
+                  sub={`$${fmt(txSuccessAmount)} has been sent`}
+                />
               );
             return (
               <div className="animate-fade">
                 <div className="transfer-tabs">
-                  {["Transfer", "Cardless Transfer", "Scan QR Code"].map(
-                    (l, i) => (
+                  {["Bank Transfer", "Cardless Withdrawal", "QR Transfer"].map(
+                    (t, i) => (
                       <button
                         key={i}
                         className={`transfer-tab ${transferTab === i ? "active" : ""}`}
-                        onClick={() => setTransferTab(i)}
+                        onClick={() => {
+                          setTransferTab(i);
+                          setTxErr("");
+                        }}
                       >
-                        {l}
+                        {t}
                       </button>
                     ),
                   )}
                 </div>
-
-                {/* From account */}
-                <div
-                  className="card-blue"
-                  style={{
-                    background: "var(--gradient)",
-                    padding: "14px 18px",
-                    marginBottom: 14,
-                  }}
-                >
-                  <div style={{ fontSize: 11, opacity: 0.75, marginBottom: 4 }}>
-                    Transfer From Account
-                  </div>
-                  <div style={{ fontSize: 14, fontWeight: 600 }}>
-                    (123)123-456-789
-                  </div>
-                </div>
-
-                {transferTab === 0 && (
-                  <>
-                    <div className="form-group">
-                      <label className="form-label">
-                        Amount Transferred{" "}
-                        <span style={{ fontWeight: 400 }}>Balance 32,238</span>
-                      </label>
-                      <input
-                        className="form-input"
-                        type="number"
-                        placeholder="0"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">Transfer Recipient</label>
-                      <input className="form-input" placeholder="Bank Code" />
-                    </div>
-                    <div className="form-group">
-                      <input
-                        className="form-input"
-                        placeholder="Bank Account"
-                        style={{ marginTop: 6 }}
-                      />
-                    </div>
-                    <div className="toggle-row">
-                      <span
-                        style={{
-                          fontSize: 13,
-                          color: "var(--mid)",
-                          fontWeight: 500,
-                        }}
-                      >
-                        Transfer Reservation
-                      </span>
-                      <Toggle />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">Transfer Note</label>
-                      <input
-                        className="form-input"
-                        placeholder="For Yourself"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <input
-                        className="form-input"
-                        placeholder="For The Recipient"
-                        style={{ marginTop: 6 }}
-                      />
-                      <div className="input-hint">Same</div>
-                    </div>
-                    <button
-                      className="btn-primary"
-                      onClick={() => handleConfirm("homePage")}
-                    >
-                      Confirm Transfer
-                    </button>
-                  </>
-                )}
-
-                {transferTab === 1 && (
-                  <>
-                    <div className="form-group">
-                      <label className="form-label">
-                        Amount Transferred{" "}
-                        <span style={{ fontWeight: 400 }}>Balance 32,238</span>
-                      </label>
-                      <input
-                        className="form-input"
-                        type="number"
-                        placeholder="0"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">
-                        Setting Withdraw Password
-                      </label>
-                      <input
-                        className="form-input"
-                        type="password"
-                        placeholder="Withdraw Password To Recipient"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <input
-                        className="form-input"
-                        type="password"
-                        placeholder="Enter Again: Withdraw Password"
-                        style={{ marginTop: 6 }}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">Transfer Note</label>
-                      <input
-                        className="form-input"
-                        placeholder="For Yourself"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <input
-                        className="form-input"
-                        placeholder="For The Recipient"
-                        style={{ marginTop: 6 }}
-                      />
-                      <div className="input-hint">Same</div>
-                    </div>
-                    <button
-                      className="btn-primary"
-                      onClick={() => handleConfirm("homePage")}
-                    >
-                      Confirm Transfer
-                    </button>
-                  </>
-                )}
-
-                {transferTab === 2 && (
-                  <>
-                    <div style={{ textAlign: "center", margin: "10px 0 20px" }}>
-                      <div className="qr-box">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="100"
-                          height="100"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="white"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          class="lucide lucide-camera-icon lucide-camera"
-                        >
-                          <path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z" />
-                          <circle cx="12" cy="13" r="3" />
-                        </svg>
+                <div className="card">
+                  {transferTab === 0 && (
+                    <>
+                      <div className="form-group">
+                        <label className="form-label">Recipient Account</label>
+                        <input
+                          className="form-input"
+                          placeholder="Enter account number"
+                          value={txRecipient}
+                          onChange={(e) => setTxRecipient(e.target.value)}
+                        />
                       </div>
-                      <p
-                        style={{
-                          fontSize: 12,
-                          color: "var(--muted)",
-                          lineHeight: 1.5,
-                        }}
+                      <div className="form-group">
+                        <label className="form-label">
+                          Amount{" "}
+                          <span
+                            style={{ fontWeight: 400, color: "var(--muted)" }}
+                          >
+                            Balance ${fmt(twdBalance)}
+                          </span>
+                        </label>
+                        <input
+                          className="form-input"
+                          type="number"
+                          placeholder="0"
+                          value={txAmount}
+                          onChange={(e) => setTxAmount(e.target.value)}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">
+                          Transfer Note{" "}
+                          <span
+                            style={{ fontWeight: 400, color: "var(--muted)" }}
+                          >
+                            (optional)
+                          </span>
+                        </label>
+                        <input
+                          className="form-input"
+                          placeholder="For yourself"
+                          value={txNote}
+                          onChange={(e) => setTxNote(e.target.value)}
+                        />
+                      </div>
+                      {txErr && <div className="error-msg">{txErr}</div>}
+                      <button className="btn-primary" onClick={handleTransfer}>
+                        Confirm Transfer
+                      </button>
+                    </>
+                  )}
+                  {transferTab === 1 && (
+                    <>
+                      <div className="form-group">
+                        <label className="form-label">
+                          Amount{" "}
+                          <span
+                            style={{ fontWeight: 400, color: "var(--muted)" }}
+                          >
+                            Balance ${fmt(twdBalance)}
+                          </span>
+                        </label>
+                        <input
+                          className="form-input"
+                          type="number"
+                          placeholder="0"
+                          value={txAmount}
+                          onChange={(e) => setTxAmount(e.target.value)}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">
+                          Set Withdraw Password
+                        </label>
+                        <input
+                          className="form-input"
+                          type="password"
+                          placeholder="Withdraw password"
+                          value={txPass}
+                          onChange={(e) => setTxPass(e.target.value)}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <input
+                          className="form-input"
+                          type="password"
+                          placeholder="Confirm withdraw password"
+                          value={txPassConfirm}
+                          onChange={(e) => setTxPassConfirm(e.target.value)}
+                          style={{ marginTop: 6 }}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Transfer Note</label>
+                        <input
+                          className="form-input"
+                          placeholder="For yourself"
+                          value={txNote}
+                          onChange={(e) => setTxNote(e.target.value)}
+                        />
+                      </div>
+                      {txErr && <div className="error-msg">{txErr}</div>}
+                      <button
+                        className="btn-primary"
+                        onClick={handleCardlessTransfer}
                       >
-                        Align the QR code within the frame to scan
-                        <br />
-                        Auto-scan to complete the transfer
-                      </p>
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">Amount Transferred</label>
-                      <input
-                        className="form-input"
-                        type="number"
-                        placeholder="0"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">Transfer Recipient</label>
-                      <input
-                        className="form-input"
-                        defaultValue="(987)223-334-445"
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label className="form-label">Transfer Note</label>
-                      <input
-                        className="form-input"
-                        placeholder="For Yourself"
-                      />
-                    </div>
-                    <button
-                      className="btn-primary"
-                      onClick={() => handleConfirm("homePage")}
-                    >
-                      Confirm Transfer
-                    </button>
-                  </>
-                )}
+                        Confirm Cardless Withdrawal
+                      </button>
+                    </>
+                  )}
+                  {transferTab === 2 && (
+                    <>
+                      <div
+                        style={{ textAlign: "center", margin: "10px 0 20px" }}
+                      >
+                        <div className="qr-box">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="100"
+                            height="100"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="white"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z" />
+                            <circle cx="12" cy="13" r="3" />
+                          </svg>
+                        </div>
+                        <p
+                          style={{
+                            fontSize: 12,
+                            color: "var(--muted)",
+                            lineHeight: 1.5,
+                          }}
+                        >
+                          Align the QR code within the frame
+                          <br />
+                          Auto-scan to complete the transfer
+                        </p>
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Amount</label>
+                        <input
+                          className="form-input"
+                          type="number"
+                          placeholder="0"
+                          value={txAmount}
+                          onChange={(e) => setTxAmount(e.target.value)}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Transfer Recipient</label>
+                        <input
+                          className="form-input"
+                          value={txRecipient || "(987)223-334-445"}
+                          onChange={(e) => setTxRecipient(e.target.value)}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label className="form-label">Transfer Note</label>
+                        <input
+                          className="form-input"
+                          placeholder="For yourself"
+                          value={txNote}
+                          onChange={(e) => setTxNote(e.target.value)}
+                        />
+                      </div>
+                      {txErr && <div className="error-msg">{txErr}</div>}
+                      <button className="btn-primary" onClick={handleTransfer}>
+                        Confirm QR Transfer
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
             );
           })(),
 
-          /* ===== BILL PAYMENT ===== */
+          /* BILL PAYMENT */
           billPage: (
             <div className="animate-fade">
-              {billPaid ? (
+              {billSuccess ? (
                 <div
                   style={{
                     display: "flex",
@@ -2249,12 +2765,14 @@
                       marginBottom: 24,
                     }}
                   >
-                    Your payment of $290 has been completed
+                    Your payment of ${fmt(billAmount)} has been completed
                   </div>
                   <button
                     className="btn-primary"
                     style={{ maxWidth: 200 }}
-                    onClick={() => setBillPaid(false)}
+                    onClick={() => {
+                      setBillSuccess(false);
+                    }}
                   >
                     Back
                   </button>
@@ -2270,27 +2788,34 @@
                         textTransform: "uppercase",
                       }}
                     >
-                      STATEMENT BALANCE <EyeIcon />
+                      STATEMENT BALANCE <EyeIcon size={11} />
                     </div>
-                    <div className="bill-amount">$290</div>
+                    <div className="bill-amount">${fmt(billAmount)}</div>
                     <div className="bill-unbilled">
                       Unbilled amount &nbsp;$1,490
                     </div>
                     <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
-                      <button
-                        className="btn-outline"
-                        onClick={() => setBillPaid(true)}
-                      >
+                      <button className="btn-outline" onClick={handleBillPay}>
                         Pay By Cash
                       </button>
-                      <button
-                        className="btn-outline"
-                        onClick={() => setBillPaid(true)}
-                      >
+                      <button className="btn-outline" onClick={handleBillPay}>
                         Pay By Online
                       </button>
                     </div>
                   </div>
+                  {billPaid && (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        padding: "8px 0",
+                        fontSize: 12,
+                        color: "var(--green)",
+                        fontWeight: 600,
+                      }}
+                    >
+                      ✓ Already paid this period
+                    </div>
+                  )}
                   <div className="card">
                     <div
                       style={{
@@ -2303,55 +2828,31 @@
                     >
                       CONSUMPTION DETAILS FOR THIS PERIOD
                     </div>
-                    <div className="tx-group">April</div>
+                    <div className="tx-group">June</div>
                     {[
                       {
                         icon: "🍟",
                         name: "mcdonald's",
-                        date: "04/30",
-                        amount: "$10",
+                        date: "06/01",
+                        amount: "$185",
                       },
                       {
                         icon: "🚇",
                         name: "MRT Top Up",
-                        date: "04/29",
-                        amount: "$100",
+                        date: "05/31",
+                        amount: "$500",
                       },
                       {
                         icon: "🍽",
                         name: "Restaurant",
-                        date: "04/29",
-                        amount: "$30",
+                        date: "05/30",
+                        amount: "$320",
                       },
                       {
                         icon: "🛍",
                         name: "Store",
-                        date: "04/28",
-                        amount: "$5",
-                      },
-                      {
-                        icon: "🍟",
-                        name: "mcdonald's",
-                        date: "04/27",
-                        amount: "$10",
-                      },
-                      {
-                        icon: "🚇",
-                        name: "MRT Top Up",
-                        date: "04/26",
-                        amount: "$100",
-                      },
-                      {
-                        icon: "🍽",
-                        name: "Restaurant",
-                        date: "04/25",
-                        amount: "$30",
-                      },
-                      {
-                        icon: "🛍",
-                        name: "Store",
-                        date: "04/24",
-                        amount: "$5",
+                        date: "05/29",
+                        amount: "$890",
                       },
                     ].map((t, i) => (
                       <div key={i} className="tx-row">
@@ -2368,7 +2869,7 @@
                     <div className="tx-group" style={{ marginTop: 14 }}>
                       History
                     </div>
-                    {["2025/3", "2025/2"].map((m) => (
+                    {["2026/5", "2026/4", "2026/3"].map((m) => (
                       <div key={m} className="tx-row">
                         <span style={{ fontSize: 13, fontWeight: 500 }}>
                           {m}
@@ -2382,7 +2883,7 @@
             </div>
           ),
 
-          /* ===== CREDIT CARD ===== */
+          /* CREDIT CARD */
           creditPage: (
             <div className="animate-fade">
               <div
@@ -2405,7 +2906,19 @@
                     justifyContent: "space-between",
                   }}
                 >
-                  <div className="cc-amount">$12,200 ›</div>
+                  <div className="cc-amount">
+                    {balanceVisible ? `$${fmt(creditPending)}` : "••••••"} ›
+                  </div>
+                  <span
+                    style={{ cursor: "pointer", opacity: 0.7 }}
+                    onClick={() => setBalanceVisible(!balanceVisible)}
+                  >
+                    {balanceVisible ? (
+                      <EyeIcon size={16} />
+                    ) : (
+                      <EyeOffIcon size={16} />
+                    )}
+                  </span>
                 </div>
                 <div className="cc-number">123-456-789 ⊙</div>
               </div>
@@ -2426,27 +2939,27 @@
               </div>
               <div className="card">
                 <div className="tx-group" style={{ marginTop: 0 }}>
-                  April
+                  June
                 </div>
                 {[
                   {
                     icon: "💻",
                     name: "Electronic transactions",
-                    date: "04/13  XX Shop",
+                    date: "06/01  XX Shop",
                     amount: "-$586",
                     cls: "debit",
                   },
                   {
                     icon: "🏦",
                     name: "Interbank transfer",
-                    date: "04/12  00012345678901 2",
+                    date: "06/01  00012345678901 2",
                     amount: "$2000",
                     cls: "credit",
                   },
                   {
                     icon: "💳",
                     name: "Credit card fees",
-                    date: "04/12  9876543210",
+                    date: "05/28  9876543210",
                     amount: "$2000",
                     cls: "credit",
                   },
@@ -2462,27 +2975,27 @@
                     <div className={`tx-amount ${t.cls}`}>{t.amount} ›</div>
                   </div>
                 ))}
-                <div className="tx-group">March</div>
+                <div className="tx-group">May</div>
                 {[
                   {
                     icon: "💻",
                     name: "Electronic transactions",
-                    date: "03/29  XX Shop",
+                    date: "05/29  XX Shop",
                     amount: "-$1286",
                     cls: "debit",
                   },
                   {
                     icon: "🏦",
                     name: "Interbank transfer",
-                    date: "03/29  0001234567890 12",
+                    date: "05/29  000123456789",
                     amount: "$200",
                     cls: "credit",
                   },
                   {
                     icon: "💳",
                     name: "Credit card fees",
-                    date: "03/29  9876543210",
-                    amount: "$20,000",
+                    date: "05/28  9876543210",
+                    amount: "-$20,000",
                     cls: "debit",
                   },
                 ].map((t, i) => (
@@ -2501,10 +3014,26 @@
             </div>
           ),
 
-          /* ===== CURRENCY EXCHANGE ===== */
+          /* EXCHANGE */
           exchangePage: (() => {
-            if (showSuccess)
-              return <SuccessView label="Exchange Success" target="homePage" />;
+            if (exchSuccess && exchResult)
+              return (
+                <SuccessView
+                  label="Exchange Successful!"
+                  sub={`${exchResult.fromAmt} ${exchResult.fromCcy} → ${exchResult.toAmt} ${exchResult.toCcy}`}
+                />
+              );
+            const fromRate = RATES[exchFrom];
+            const toRate = RATES[exchTo];
+            let previewResult = null;
+            const amt = parseFloat(exchAmount);
+            if (amt > 0) {
+              if (exchFrom === "TWD" && RATES[exchTo])
+                previewResult =
+                  (amt / RATES[exchTo].sell).toFixed(2) + " " + exchTo;
+              else if (RATES[exchFrom] && exchTo === "TWD")
+                previewResult = (amt * RATES[exchFrom].buy).toFixed(2) + " TWD";
+            }
             return (
               <div className="animate-fade">
                 <div
@@ -2512,7 +3041,7 @@
                   style={{ background: "var(--gradient)" }}
                 >
                   <div className="balance-label">
-                    YOUR BALANCE <EyeIcon />
+                    TWD BALANCE <EyeIcon />
                   </div>
                   <div
                     style={{
@@ -2521,10 +3050,10 @@
                       justifyContent: "space-between",
                     }}
                   >
-                    <div className="balance-amount">$32,238</div>
-                    <div className="sm-arrow" style={{ marginBottom: 2 }}>
-                      →
+                    <div className="balance-amount">
+                      {balanceVisible ? `$${fmt(twdBalance)}` : "••••••"}
                     </div>
+                    <div className="sm-arrow">→</div>
                   </div>
                 </div>
                 <div className="card">
@@ -2533,11 +3062,16 @@
                   </div>
                   <div className="form-group">
                     <label className="form-label">From Currency</label>
-                    <select className="form-input">
-                      <option>TWD — Taiwan Dollar</option>
-                      <option>USD — US Dollar</option>
-                      <option>JPY — Japanese Yen</option>
-                      <option>EUR — Euro</option>
+                    <select
+                      className="form-input"
+                      value={exchFrom}
+                      onChange={(e) => setExchFrom(e.target.value)}
+                    >
+                      <option value="TWD">TWD — Taiwan Dollar</option>
+                      <option value="USD">USD — US Dollar</option>
+                      <option value="JPY">JPY — Japanese Yen</option>
+                      <option value="EUR">EUR — Euro</option>
+                      <option value="CNY">CNY — Chinese Yuan</option>
                     </select>
                   </div>
                   <div className="form-group">
@@ -2546,7 +3080,12 @@
                       className="form-input"
                       type="number"
                       placeholder="0"
+                      value={exchAmount}
+                      onChange={(e) => setExchAmount(e.target.value)}
                     />
+                    {previewResult && (
+                      <div className="input-hint">≈ {previewResult}</div>
+                    )}
                   </div>
                   <div
                     style={{
@@ -2558,17 +3097,28 @@
                       color: "var(--blue)",
                       fontSize: 18,
                       fontWeight: 700,
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      const tmp = exchFrom;
+                      setExchFrom(exchTo);
+                      setExchTo(tmp);
                     }}
                   >
                     ↕
                   </div>
                   <div className="form-group">
                     <label className="form-label">To Currency</label>
-                    <select className="form-input">
-                      <option>USD — US Dollar</option>
-                      <option>JPY — Japanese Yen</option>
-                      <option>EUR — Euro</option>
-                      <option>CNY — Chinese Yuan</option>
+                    <select
+                      className="form-input"
+                      value={exchTo}
+                      onChange={(e) => setExchTo(e.target.value)}
+                    >
+                      <option value="USD">USD — US Dollar</option>
+                      <option value="JPY">JPY — Japanese Yen</option>
+                      <option value="EUR">EUR — Euro</option>
+                      <option value="CNY">CNY — Chinese Yuan</option>
+                      <option value="TWD">TWD — Taiwan Dollar</option>
                     </select>
                   </div>
                   <div
@@ -2600,19 +3150,9 @@
                       <span style={{ textAlign: "center" }}>Buy</span>
                       <span style={{ textAlign: "center" }}>Sell</span>
                     </div>
-                    {[
-                      { flag: "🇺🇸", name: "USD", buy: "32.04", sell: "32.10" },
-                      {
-                        flag: "🇯🇵",
-                        name: "JPY",
-                        buy: "0.2099",
-                        sell: "0.2129",
-                      },
-                      { flag: "🇪🇺", name: "EUR", buy: "34.55", sell: "34.93" },
-                      { flag: "🇨🇳", name: "CNY", buy: "4.392", sell: "4.773" },
-                    ].map((r) => (
+                    {Object.entries(RATES).map(([code, r]) => (
                       <div
-                        key={r.name}
+                        key={code}
                         style={{
                           display: "grid",
                           gridTemplateColumns: "1fr 60px 60px",
@@ -2630,7 +3170,7 @@
                           }}
                         >
                           <span>{r.flag}</span>
-                          <span style={{ fontWeight: 600 }}>{r.name}</span>
+                          <span style={{ fontWeight: 600 }}>{code}</span>
                         </div>
                         <span
                           style={{ textAlign: "center", color: "var(--mid)" }}
@@ -2645,10 +3185,8 @@
                       </div>
                     ))}
                   </div>
-                  <button
-                    className="btn-primary"
-                    onClick={() => handleConfirm("homePage")}
-                  >
+                  {exchErr && <div className="error-msg">{exchErr}</div>}
+                  <button className="btn-primary" onClick={computeExch}>
                     Confirm Exchange
                   </button>
                 </div>
@@ -2656,7 +3194,7 @@
             );
           })(),
 
-          /* ===== NOTIFICATION ===== */
+          /* NOTIFICATIONS */
           notifyPage: (
             <div className="animate-fade">
               <div
@@ -2667,50 +3205,40 @@
                   marginBottom: 16,
                 }}
               >
-                <h3 style={{ fontSize: 18, fontWeight: 700 }}>Notifications</h3>
+                <h3 style={{ fontSize: 18, fontWeight: 700 }}>
+                  Notifications{" "}
+                  {unreadCount > 0 && (
+                    <span
+                      style={{
+                        background: "var(--red)",
+                        color: "white",
+                        borderRadius: "99px",
+                        fontSize: 11,
+                        padding: "2px 7px",
+                        marginLeft: 6,
+                      }}
+                    >
+                      {unreadCount}
+                    </span>
+                  )}
+                </h3>
                 <span
                   style={{
                     fontSize: 12,
                     color: "var(--blue)",
                     cursor: "pointer",
                   }}
+                  onClick={markAllRead}
                 >
                   Mark all read
                 </span>
               </div>
-              {[
-                {
-                  read: false,
-                  title: "Transfer Successful",
-                  body: "You transferred $2,000 to account 00012345678901. The recipient has received the funds.",
-                  time: "5 mins ago",
-                },
-                {
-                  read: false,
-                  title: "Bill Payment Reminder",
-                  body: "Your credit card statement is due on 04/25. Unpaid amount: $290.",
-                  time: "2 hours ago",
-                },
-                {
-                  read: true,
-                  title: "Currency Rate Alert",
-                  body: "USD/TWD has reached your target rate of 32.10. You can proceed with exchange now.",
-                  time: "Yesterday",
-                },
-                {
-                  read: true,
-                  title: "Login Notification",
-                  body: "New login detected from iPhone in Taipei at 09:41 AM. If this was not you, please contact us.",
-                  time: "2 days ago",
-                },
-                {
-                  read: true,
-                  title: "Fixed Deposit Matured",
-                  body: "Your fixed deposit (123-456-789) has matured. Funds have been transferred to your current account.",
-                  time: "3 days ago",
-                },
-              ].map((n, i) => (
-                <div key={i} className="notify-row">
+              {notifications.map((n) => (
+                <div
+                  key={n.id}
+                  className="notify-row"
+                  onClick={() => markRead(n.id)}
+                >
                   <div className={`notify-dot ${n.read ? "read" : ""}`} />
                   <div style={{ flex: 1 }}>
                     <div className="notify-title">{n.title}</div>
@@ -2719,10 +3247,31 @@
                   </div>
                 </div>
               ))}
+              <div className="card" style={{ marginTop: 16 }}>
+                <div className="section-title" style={{ marginBottom: 12 }}>
+                  Notification Settings
+                </div>
+                {[
+                  ["transfer", "Transfer alerts"],
+                  ["bill", "Bill reminders"],
+                  ["rate", "Exchange rate alerts"],
+                  ["login", "Login notifications"],
+                ].map(([key, label]) => (
+                  <div key={key} className="toggle-row">
+                    <span style={{ fontSize: 13 }}>{label}</span>
+                    <Toggle
+                      value={notifyToggles[key]}
+                      onChange={(v) =>
+                        setNotifyToggles((p) => ({ ...p, [key]: v }))
+                      }
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           ),
 
-          /* ===== SCAN QR ===== */
+          /* SCAN QR */
           scanPage: (
             <div className="animate-fade">
               <div
@@ -2758,23 +3307,20 @@
                     gap: 12,
                   }}
                 >
-                  <div style={{ fontSize: 60 }}>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="100"
-                      height="100"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="white"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="lucide lucide-camera-icon lucide-camera"
-                    >
-                      <path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z" />
-                      <circle cx="12" cy="13" r="3" />
-                    </svg>
-                  </div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="100"
+                    height="100"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="white"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M13.997 4a2 2 0 0 1 1.76 1.05l.486.9A2 2 0 0 0 18.003 7H20a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.997a2 2 0 0 0 1.759-1.048l.489-.904A2 2 0 0 1 10.004 4z" />
+                    <circle cx="12" cy="13" r="3" />
+                  </svg>
                   <p
                     style={{
                       fontSize: 13,
@@ -2788,7 +3334,6 @@
                     Supports transfers and bill payments
                   </p>
                 </div>
-                {/* Corner guides */}
                 {[
                   { top: 12, left: 12 },
                   { top: 12, right: 12 },
@@ -2825,22 +3370,21 @@
                   <input
                     className="form-input"
                     placeholder="Paste or type account number"
+                    value={scanInput}
+                    onChange={(e) => setScanInput(e.target.value)}
                   />
+                  {scanErr && <div className="error-msg">{scanErr}</div>}
                 </div>
-                <button
-                  className="btn-primary"
-                  onClick={() => go("transferPage")}
-                >
+                <button className="btn-primary" onClick={handleScanProceed}>
                   Proceed to Transfer
                 </button>
               </div>
             </div>
           ),
 
-          /* ===== SETTING ===== */
+          /* SETTINGS */
           settingPage: (
             <div className="animate-fade">
-              {/* Profile */}
               <div
                 style={{
                   display: "flex",
@@ -2905,82 +3449,63 @@
         };
 
         return (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 16,
-              padding: "20px 0",
-            }}
-          >
-            <NavTabBar currentScreen={screen} setCurrentScreen={go} />
-            <div className="phone-frame">
-              <StatusBar />
-              {showTopNav && (
-                <nav className="topnav">
-                  <div className="logo">
-                    Easy<span>Bank</span>
-                  </div>
-                  <div style={{ display: "flex", gap: 10 }}>
-                    <button
-                      onClick={() => go("scanPage")}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        color: "var(--dark)",
-                      }}
-                    >
-                      <ScanIcon />
-                    </button>
-                    <button
-                      onClick={() => go("notifyPage")}
-                      style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        color: "var(--dark)",
-                        position: "relative",
-                      }}
-                    >
-                      <BellIcon />
-                    </button>
-                  </div>
-                </nav>
-              )}
-              <main className="main-content">
-                {screens[screen] || (
-                  <div style={{ padding: 20, color: "var(--muted)" }}>
-                    Page loading…
-                  </div>
-                )}
-              </main>
-              <nav className="bottom-nav">
-                {[
-                  { id: "homePage", icon: <HouseIcon />, label: "Home" },
-                  {
-                    id: "depositPage",
-                    icon: <LandmarkIcon />,
-                    label: "Finance",
-                  },
-                  {
-                    id: "settingPage",
-                    icon: <SettingsIcon />,
-                    label: "Setting",
-                  },
-                ].map((n) => (
+          <div className="phone-frame">
+            <StatusBar />
+            {showTopNav && (
+              <nav className="topnav">
+                <div className="logo">
+                  Easy<span>Bank</span>
+                </div>
+                <div style={{ display: "flex", gap: 10 }}>
                   <button
-                    key={n.id}
-                    className={`nav-item ${screen === n.id ? "active" : ""}`}
-                    onClick={() => go(n.id)}
+                    onClick={() => go("scanPage")}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      color: "var(--dark)",
+                    }}
                   >
-                    <span>{n.icon}</span>
-                    <span style={{ fontSize: 10 }}>{n.label}</span>
+                    <ScanIcon />
                   </button>
-                ))}
+                  <button
+                    onClick={() => go("notifyPage")}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      color: "var(--dark)",
+                      position: "relative",
+                    }}
+                  >
+                    <BellIcon dot={unreadCount > 0} />
+                  </button>
+                </div>
               </nav>
-            </div>
+            )}
+            <main className="main-content">
+              {screens[screen] || (
+                <div style={{ padding: 20, color: "var(--muted)" }}>
+                  Page loading…
+                </div>
+              )}
+            </main>
+            <nav className="bottom-nav">
+              {[
+                { id: "homePage", icon: <HouseIcon />, label: "Home" },
+                { id: "depositPage", icon: <LandmarkIcon />, label: "Finance" },
+                { id: "settingPage", icon: <SettingsIcon />, label: "Setting" },
+              ].map((n) => (
+                <button
+                  key={n.id}
+                  className={`nav-item ${screen === n.id ? "active" : ""}`}
+                  onClick={() => go(n.id)}
+                >
+                  <span>{n.icon}</span>
+                  <span style={{ fontSize: 10 }}>{n.label}</span>
+                </button>
+              ))}
+            </nav>
           </div>
         );
       }
