@@ -2,10 +2,14 @@ import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getProject, projects } from "../data/projects";
 import { useScrollLock } from "../hooks/useScrollLock";
+import { UI_COPY, useLanguage } from "../i18n/LanguageContext";
+import { localizeProject } from "../i18n/projectCh";
 
 // ─── Phone Demo Modal ─────────────────────────────────────────
 
 function PhoneModal({ url, onClose }) {
+  const { t } = useLanguage();
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
@@ -19,7 +23,7 @@ function PhoneModal({ url, onClose }) {
           onClick={onClose}
           className="mb-4 text-white/60 hover:text-white text-sm transition-colors"
         >
-          ✕ Close
+          ✕ {t(UI_COPY.project.closeDemo)}
         </button>
         <div
           className="relative bg-zinc-900 rounded-[40px]
@@ -45,15 +49,64 @@ function PhoneModal({ url, onClose }) {
   );
 }
 
+function DesktopModal({ url, onClose }) {
+  const { t } = useLanguage();
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm px-4 py-6"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-[1440px]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <button
+            onClick={onClose}
+            className="text-white/60 hover:text-white text-sm transition-colors"
+          >
+            ✕ {t(UI_COPY.project.closeDemo)}
+          </button>
+          <a
+            href={url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-white/70 hover:text-white text-sm transition-colors"
+          >
+            {t(UI_COPY.project.openInNewTab)}
+          </a>
+        </div>
+        <div className="overflow-hidden rounded-2xl border border-white/15 bg-zinc-950 shadow-[0_40px_100px_rgba(0,0,0,0.55)]">
+          <iframe
+            src={url}
+            title="demo"
+            className="h-[78vh] min-h-[620px] w-full"
+            style={{ border: "none" }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Hero ─────────────────────────────────────────────────────
 
 function HeroSection({ project }) {
+  const { t } = useLanguage();
   const [showDemo, setShowDemo] = useState(false);
   useScrollLock(showDemo);
+  const isDesktopDemo = project.demoMode === "desktop";
 
   return (
     <>
-      {showDemo && (
+      {showDemo && isDesktopDemo && (
+        <DesktopModal
+          url={project.demoUrl}
+          onClose={() => setShowDemo(false)}
+        />
+      )}
+      {showDemo && !isDesktopDemo && (
         <PhoneModal url={project.demoUrl} onClose={() => setShowDemo(false)} />
       )}
 
@@ -92,9 +145,9 @@ function HeroSection({ project }) {
           <p className="text-muted leading-relaxed mb-12">{project.desc}</p>
 
           {project.demoUrl &&
-            (project.demoMobile ? (
+            (isDesktopDemo || project.demoMobile ? (
               <button onClick={() => setShowDemo(true)} className="btn-accent">
-                Try the demo
+                {t(UI_COPY.project.tryDemo)}
                 <svg
                   width="16"
                   height="16"
@@ -115,7 +168,7 @@ function HeroSection({ project }) {
                 rel="noreferrer"
                 className="btn-accent"
               >
-                Try the demo
+                {t(UI_COPY.project.tryDemo)}
                 <svg
                   width="16"
                   height="16"
@@ -134,7 +187,9 @@ function HeroSection({ project }) {
           <div className="flex gap-8 mt-12">
             {Object.entries(project.meta).map(([key, val]) => (
               <div key={key}>
-                <small className="block key-title mb-1">{key}</small>
+                <small className="block key-title mb-1">
+                  {t(UI_COPY.project.meta[key] ?? { en: key, zh: key })}
+                </small>
                 <span className="font-light">{val}</span>
               </div>
             ))}
@@ -223,14 +278,61 @@ function StorySection({ project }) {
   );
 }
 
+// ─── Product lens ─────────────────────────────────────────────
+
+function ProductLensSection({ project }) {
+  const { t } = useLanguage();
+  if (!project.productLens?.length) return null;
+
+  return (
+    <section className="px-6 lg:px-12 mx-auto max-w-[1200px] pt-12 pb-8">
+      <p className="key-title">{t(UI_COPY.project.productLens)}</p>
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {project.productLens.map((item) => (
+          <div
+            key={item.label}
+            className="rounded-lg border p-5"
+            style={{
+              borderColor:
+                "color-mix(in srgb, var(--accent-text) 10%, transparent)",
+              background:
+                "color-mix(in srgb, var(--accent-text) 4%, transparent)",
+            }}
+          >
+            <p
+              className="text-xs uppercase mb-3"
+              style={{
+                color: "var(--accent)",
+                letterSpacing: "0.1em",
+              }}
+            >
+              {item.label}
+            </p>
+            <p
+              className="text-sm leading-relaxed"
+              style={{
+                color: "var(--accent-text)",
+                opacity: 0.62,
+              }}
+            >
+              {item.value}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 // ─── Legacy sections (kept for older projects) ────────────────
 
 function OverviewSection({ project }) {
+  const { t } = useLanguage();
   if (project.story?.length) return null; // replaced by StorySection
   return (
     <section className="px-6 pt-12 pb-8 max-w-[1200px] flex gap-6 lg:px-12 mx-auto">
       <div className="flex-1">
-        <p className="key-title">PROBLEM</p>
+        <p className="key-title">{t(UI_COPY.project.problem)}</p>
         <h2
           className="text-xl font-medium leading-snug mb-5"
           style={{ color: "var(--accent-text)" }}
@@ -246,7 +348,7 @@ function OverviewSection({ project }) {
         </p>
       </div>
       <div className="flex-1">
-        <p className="key-title">SOLUTION</p>
+        <p className="key-title">{t(UI_COPY.project.solution)}</p>
         <h2
           className="text-xl font-medium leading-snug mb-5"
           style={{ color: "var(--accent-text)" }}
@@ -266,10 +368,11 @@ function OverviewSection({ project }) {
 }
 
 function InspirationSection({ project }) {
+  const { t } = useLanguage();
   if (project.story?.length || !project.inspiration) return null;
   return (
     <div className="px-6 pt-12 pb-8 max-w-[1200px] mx-auto lg:px-12">
-      <p className="key-title">INSPIRATION</p>
+      <p className="key-title">{t(UI_COPY.project.inspiration)}</p>
       <blockquote
         className="text-2xl leading-relaxed pl-6 lg:text-4xl lg:leading-relaxed"
         style={{
@@ -285,10 +388,11 @@ function InspirationSection({ project }) {
 }
 
 function ProcessSection({ project }) {
+  const { t } = useLanguage();
   if (project.story?.length || !project.process?.length) return null;
   return (
     <section className="px-6 pt-12 pb-8 max-w-[1200px] gap-6 lg:px-12 mx-auto">
-      <p className="key-title">PROCESS</p>
+      <p className="key-title">{t(UI_COPY.project.process)}</p>
       <div className="grid md:grid-cols-3 gap-10">
         {project.process.map((step) => (
           <div key={step.num}>
@@ -318,10 +422,11 @@ function ProcessSection({ project }) {
 }
 
 function UserFlowSection({ project }) {
+  const { t } = useLanguage();
   if (!project.screenCount) return null;
   return (
     <section className="px-6 lg:px-12 py-24 max-w-[1200px] mx-auto space-y-8">
-      <p className="key-title">Screens</p>
+      <p className="key-title">{t(UI_COPY.project.screens)}</p>
       <div className="flex gap-4 overflow-x-auto">
         {Array.from({ length: project.screenCount }, (_, i) => {
           const pageNum = String(i + 1).padStart(2, "0");
@@ -343,7 +448,9 @@ function UserFlowSection({ project }) {
 
 export default function ProjectDetail() {
   const { id } = useParams();
-  const project = getProject(id);
+  const { language, t } = useLanguage();
+  const baseProject = getProject(id);
+  const project = baseProject ? localizeProject(baseProject, language) : null;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -352,9 +459,9 @@ export default function ProjectDetail() {
   if (!project) {
     return (
       <main className="min-h-screen flex flex-col items-center justify-center gap-4">
-        <p className="text-muted text-lg">Project not found.</p>
+        <p className="text-muted text-lg">{t(UI_COPY.project.notFound)}</p>
         <Link to="/" className="underline text-sm">
-          ← Back home
+          ← {t(UI_COPY.project.backHome)}
         </Link>
       </main>
     );
@@ -375,6 +482,7 @@ export default function ProjectDetail() {
 
       {/* Legacy format — shown only when project has no `story` */}
       <OverviewSection project={project} />
+      <ProductLensSection project={project} />
       <InspirationSection project={project} />
       <ProcessSection project={project} />
 
@@ -389,6 +497,7 @@ export default function ProjectDetail() {
 // ─── Next project nav ──────────────────────────────────────────
 
 function NextProject({ currentId }) {
+  const { t } = useLanguage();
   const idx = projects.findIndex((p) => p.id === currentId);
   const next = idx < projects.length - 1 ? projects[idx + 1] : null;
 
@@ -413,14 +522,16 @@ function NextProject({ currentId }) {
           <path d="M6 8L2 12L6 16" />
           <path d="M2 12H22" />
         </svg>
-        <span className="text-sm inline">Back</span>
+        <span className="text-sm inline">{t(UI_COPY.project.back)}</span>
       </Link>
       {next && (
         <Link
           to={`/projects/${next.id}`}
           className="text-sm flex items-center gap-2 group"
         >
-          <span className="text-sm inline">Next project</span>
+          <span className="text-sm inline">
+            {t(UI_COPY.project.nextProject)}
+          </span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="16"

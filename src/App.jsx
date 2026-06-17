@@ -3,17 +3,20 @@ import Nav from "./components/Nav";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import ProjectDetail from "./pages/ProjectDetail";
+import { LanguageProvider } from "./i18n/LanguageContext";
 
 export default function App() {
   return (
     // BrowserRouter works on GitHub Pages without a server-side redirect
-    <BrowserRouter>
-      <Nav />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/projects/:id" element={<ProjectDetail />} />
-      </Routes>
-    </BrowserRouter>
+    <LanguageProvider>
+      <BrowserRouter>
+        <Nav />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/projects/:id" element={<ProjectDetail />} />
+        </Routes>
+      </BrowserRouter>
+    </LanguageProvider>
   );
 }

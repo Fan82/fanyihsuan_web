@@ -6,14 +6,15 @@ export const projects = [
     accent: "#05df72",
     name: "Role Fit Analyzer",
     tagline: "Know before you apply.",
-    tags: ["Claude API", "React", "AI Tool"],
+    tags: ["Claude API", "React", "Product Tool"],
     meta: {
-      Role: "Solo — Design + Engineering",
+      Role: "Product + Design + Engineering",
       Stack: "React · Claude API · Vite",
       Year: "2026",
       Status: "Shipped",
     },
-    desc: "Built it while job hunting. Paste a JD, get a match score and skill-gap breakdown in seconds.",
+    desc: "A decision-support tool built from a real job-search pain point: paste a job description, get a match score, strengths, and skill gaps in seconds.",
+    focus: "AI product strategy · Decision support",
     demoUrl: "https://role-fit-analyzer.vercel.app/",
     demoMobile: true,
 
@@ -22,11 +23,11 @@ export const projects = [
       problemSummary:
         "Job hunting is slow because you can't tell fast enough if a role is worth pursuing.",
       problem:
-        "Every application cycle looks the same: read a JD, vaguely sense whether you qualify, then spend 30 minutes writing a cover letter to find out. There's no fast way to know if a role is worth pursuing — you only find out after you've already invested time.",
+        "Every application cycle looks the same: read a job description, guess whether you qualify, then spend time writing a cover letter. By the time you realise the match is low, you've already paid the decision cost.",
       solutionSummary:
-        "An AI tool that reads a JD and tells you your match score, strengths, and gaps in one shot.",
+        "An AI tool that reads a job description and returns your match score, strengths, and skill gaps.",
       solution:
-        "Paste a JD and get back a match percentage, a breakdown of strong skills vs. gaps, a per-skill comparison against the JD's requirements, and a plain-English summary of whether to apply. Results are saved so you can compare roles over time.",
+        "Paste a job description and get back a match percentage, strengths and gaps, per-skill comparisons, and a clear summary of whether the role is worth applying to. Results are saved so you can compare different roles.",
     },
 
     // story — triggers the new StorySection in ProjectDetail
@@ -35,29 +36,52 @@ export const projects = [
         label: "Problem",
         heading:
           "I was applying for jobs and couldn't tell fast enough if a role was worth it.",
-        body: "I was mid-career-pivot — background in UX/UI, trying to move into Design Engineer or Product Engineer roles. Every JD looked slightly different. Some wanted Figma, some wanted React, some wanted both. I kept spending 20–30 minutes writing cover letters for roles that turned out to be 40% matches. I needed a faster gut-check before committing.",
+        body: "I was in a career transition with a UX/UI background, aiming for Design Engineer or Product Engineer roles. Every job description asked for something slightly different, and I often spent 20–30 minutes preparing an application before realising the match was low. I needed a faster way to judge whether a role was worth it.",
       },
       {
         label: "Decision",
         heading:
           "Build a tool that does the comparison — not just a checklist.",
-        body: "The obvious version is a form where you tick which skills you have. I didn't want that — it's manual, it doesn't scale, and it doesn't give you nuance. I wanted to paste a JD and get an answer. That meant AI. I'd been looking for a real reason to use the Claude API, and this was it: a clear input, a clear output, and a problem I'd actually feel the answer to.",
+        body: "A manual checklist would have been easy, but it would not match the real job-search situation. I wanted users to paste a job description and receive a contextual judgment. That made Claude API a good fit: the input was clear, the output could be structured, and the problem was real enough to matter.",
       },
       {
         label: "Trade-off",
         heading:
-          "The prompt does most of the work — which made it both the hardest and most fragile part.",
-        body: "Because the analysis is entirely Claude's output, quality lives or dies in the prompt. Early versions returned inconsistent JSON that broke the UI. I went through about 8 prompt iterations — adding schema constraints, specifying score rubrics, handling vague JDs explicitly. The trade-off I accepted: if someone pastes a terrible JD with no requirements section, the analysis degrades. I handle that with an explicit 'no skills detected' state instead of pretending the output is still valid.",
+          "The prompt is the core, which also makes it the easiest place for things to go wrong.",
+        body: "The analysis quality depends heavily on the prompt. Early versions returned inconsistent results that broke the UI. If a job description lacks clear requirements, the tool shows unmatched skills instead of pretending the analysis is still reliable.",
       },
       {
         label: "Build",
         heading: "React frontend, Claude API, deployed on Vercel in a weekend.",
-        body: "Single-page React app. The main screen is a textarea + analyse button; results come back as structured JSON that drives the score ring, skill breakdown bars, and summary card. I added a History view (localStorage) so you can track and compare multiple JDs without re-analysing. The skill breakdown component shows your level vs. the JD requirement side-by-side — that came from realising 'gap' alone isn't useful, you want to know how big the gap is.",
+        body: "This is a single-page React app. The main screen is a textarea and analyse button; structured JSON drives the score ring, skill bars, and summary card. I also added localStorage history so multiple job descriptions can be compared.",
       },
       {
         label: "Result",
         heading: "I actually used it. It changed which jobs I applied to.",
-        body: "Not metaphorically — I used it during the job search that prompted building it. Cut my application time by about half. More importantly it changed my selection criteria: I stopped applying to roles under 60% match and started focusing on roles where the gaps were learnable rather than fundamental. The history feature turned out to be the most useful part; seeing 15 results side-by-side told me more about the market than any individual JD did.",
+        body: "Not metaphorically — I used it during the job search that prompted building it. It cut my application time by about half. More importantly, it changed my selection criteria: I stopped applying to roles under 60% match and started focusing on roles where the gaps were learnable rather than fundamental. Comparing saved results also helped me understand the market more clearly.",
+      },
+    ],
+
+    productLens: [
+      {
+        label: "User",
+        value:
+          "Career switchers and job seekers who need to decide quickly whether a role is worth applying to.",
+      },
+      {
+        label: "Product Goal",
+        value:
+          "Reduce decision time before applying and make skill gaps explicit enough to act on.",
+      },
+      {
+        label: "Key Decision",
+        value:
+          "Use AI to compare a full job description against a candidate profile instead of forcing users through a manual checklist.",
+      },
+      {
+        label: "Measure",
+        value:
+          "Application time saved, confidence in apply/skip decisions, and repeat usage across multiple job descriptions.",
       },
     ],
 
@@ -71,14 +95,15 @@ export const projects = [
     accent: "#05df72",
     name: "Running App",
     screenCount: 10,
-    tagline: "Track your run. Share your pace.",
-    tags: ["React", "Supabase", "GPS"],
+    tagline: "Run together, even from different places.",
+    tags: ["React", "Supabase", "Product Flow"],
     meta: {
-      Role: "Design + Front-End",
+      Role: "Product Design + Front-End",
       Stack: "React · Supabase · Leaflet.js",
       Year: "2026",
     },
-    desc: "Designed the full UX then built it end-to-end — real authentication, live GPS tracking, social feed. No third-party UI kit.",
+    desc: "Designed and built an end-to-end running product with authentication, live GPS tracking, and a social loop to support motivation.",
+    focus: "End-to-end product flow · Social loop",
     demoUrl: "https://fan82.github.io/runnnnn/",
     demoMobile: true,
 
@@ -93,7 +118,7 @@ export const projects = [
         "Real Supabase authentication, live GPS tracking via Leaflet.js, and a social feed where you can post runs, react, and follow friends. Designed and built solo — from Figma to deployed app.",
     },
 
-    inspiration: '"Running is easier when you\'re not running alone."',
+    inspiration: '"One message: want to go for a run together?"',
 
     process: [
       {
@@ -118,59 +143,111 @@ export const projects = [
       },
     ],
 
+    productLens: [
+      {
+        label: "User",
+        value:
+          "Casual runners who track progress but need social motivation to keep the habit going.",
+      },
+      {
+        label: "Product Goal",
+        value:
+          "Move beyond tracking metrics by creating a lightweight feedback loop between running, posting, and encouragement.",
+      },
+      {
+        label: "Key Decision",
+        value:
+          "Prioritize real auth, saved runs, and a social feed so the demo behaves like a real product, not a static prototype.",
+      },
+      {
+        label: "Measure",
+        value:
+          "Run completion, post creation, return visits, and how often users interact with friends' activity.",
+      },
+    ],
+
     screenCount: 10,
   },
 
-  // ─── 03 Plan Task ─────────────────────────────────────────────
+  // ─── 03 Planify ───────────────────────────────────────────────
   {
-    id: "takeTask",
-    theme: "theme-takeTask",
+    id: "planify",
+    theme: "theme-planify",
     accent: "#FFAE00",
-    name: "Plan Task",
-    tagline: "Track smarter, do more.",
-    tags: ["UX Design", "React", "Mobile App"],
-    meta: { Role: "UX + Front-End", Year: "2024" },
-    desc: "Three rounds of redesign to strip it down to one thing: show me what to do next, nothing else.",
-    demoUrl: "./takeTask/plan_task_app.html",
-    demoMobile: true,
+    name: "Planify",
+    tagline: "Turn goals into action.",
+    tags: ["Vue", "Productivity"],
+    meta: {
+      Role: "Product UX + Front-End",
+      Stack: "Vue · Vite",
+      Year: "2026",
+    },
+    desc: "A workspace planning tool that turns goals into execution steps, then keeps team tasks, owners, deadlines, and focus work in one place.",
+    focus: "Goal planning · Team execution",
+    demoUrl: "https://planify-gilt-theta.vercel.app/",
+    demoMode: "desktop",
+    demoMobile: false,
 
     overview: {
       problemSummary:
-        "The problem isn't organisation. It's deciding what to do next.",
+        "Team task tools often track work, but they do not always help people decide what to do next.",
       problem:
-        "I had tasks in too many places and kept spending time organising instead of doing. After two redesigns that added features, I realised I was solving the wrong problem — the issue wasn't missing functionality, it was cognitive overhead.",
+        "When goals, project boards, owners, due dates, and personal priorities live in separate mental spaces, planning becomes another task. The real issue is not only tracking work, but turning a goal into clear steps and helping each person focus on the next useful action.",
       solutionSummary:
-        "A task app that surfaces what matters right now, automatically.",
+        "Planify connects goal planning, kanban execution, personal focus, and calendar timing in one workspace.",
       solution:
-        "Plan Task pulls from calendar, email, and messages to build your daily list automatically. AI surfaces what actually matters right now, so you spend less time organising and more time doing.",
+        "Users can create a goal plan, and Planify breaks it into success criteria, first milestone, next action, and review tasks. The same work then appears across project boards, personal focus lists, and timeline views so teams can move from planning to execution without losing context.",
     },
 
-    inspiration: '"The best to-do list is the one you don\'t have to manage."',
+    inspiration: '"A plan is only useful when it tells you what to do next."',
 
     process: [
       {
         num: "01",
-        title: "3 rounds of redesign",
-        desc: "Each iteration stripped away a layer of complexity. The first version had too many features. The third version had one job.",
+        title: "Goal-first task creation",
+        desc: "Designed a creation flow that lets users start with an outcome, then generates the first execution steps instead of asking them to manually invent every task.",
       },
       {
         num: "02",
-        title: "AI-assisted feature scoping",
-        desc: "Used AI to help consolidate requirements — not to generate ideas, but to kill them. Kept only what directly reduced cognitive load.",
+        title: "Workspace-level structure",
+        desc: "Built project selection, members, owners, priorities, and statuses so the board can support team planning rather than only personal task tracking.",
       },
       {
         num: "03",
-        title: "Prototype to validate, then build",
-        desc: "Interactive prototypes to test task creation and priority flows before writing code. Caught two major UX problems before they became code problems.",
+        title: "Focus view for personal execution",
+        desc: "Added a My Tasks view that recommends the next task based on status, priority, and due date, then separates due today, upcoming, review, and completed work.",
       },
       {
         num: "04",
-        title: "Dark-mode first UI",
-        desc: "AI-powered priority badges. Minimal chrome. The visual design choices all serve the same goal: get out of the user's way.",
+        title: "Delivery views beyond the board",
+        desc: "Connected board, list, timeline, and settings views so work can be reviewed from different planning angles without duplicating task data.",
       },
     ],
 
-    screenCount: 6,
+    productLens: [
+      {
+        label: "User",
+        value:
+          "Small teams and solo builders who need to turn goals into visible tasks, ownership, and next actions.",
+      },
+      {
+        label: "Product Goal",
+        value:
+          "Reduce the gap between planning and execution by keeping goals, team boards, and personal focus in one system.",
+      },
+      {
+        label: "Key Decision",
+        value:
+          "Make goal planning the starting point, then distribute generated work into board, personal, and timeline contexts.",
+      },
+      {
+        label: "Measure",
+        value:
+          "Time from goal creation to first action, open task progress, overdue tasks, and whether users can identify their next task quickly.",
+      },
+    ],
+
+    screenCount: 0,
   },
 
   // ─── 04 Easy Bank ─────────────────────────────────────────────
@@ -179,26 +256,27 @@ export const projects = [
     theme: "theme-easyBank",
     accent: "#2563eb",
     name: "Easy Bank",
-    tagline: "Precision code for a trustworthy banking experience.",
-    tags: ["React", "CSS", "UI Implementation"],
-    meta: { Role: "UI + Front-End", Year: "2025" },
-    desc: "A frontend execution exercise — studying how banking apps use typography, colour, and micro-interactions to communicate trust, then building my own interpretation from scratch.",
+    tagline: "Precise front-end for a banking experience people can trust.",
+    tags: ["React", "CSS", "Trust UX"],
+    meta: { Role: "UI Strategy + Front-End", Year: "2025" },
+    desc: "A product-interface study on how banking apps communicate trust through hierarchy, feedback, and consistent implementation.",
+    focus: "Trust UX · Design systems",
     demoUrl: "./easyBank/easy_bank_app.html",
     demoMobile: true,
 
     overview: {
       problemSummary:
-        "Banking interfaces carry a unique burden: they must feel secure without feeling cold.",
+        "Banking has to feel secure and trustworthy, without feeling distant.",
       problem:
         "Digital banking interfaces must communicate trustworthiness through visual language alone. Studying real apps revealed how much work colour, hierarchy, and micro-interactions are quietly doing.",
       solutionSummary:
         "A modular React component system with a strict design token structure.",
       solution:
-        "Built from observed patterns rather than copied from them — a CSS variable design token system enforcing consistency across every component, with micro-interactions that reinforce confidence at each touchpoint.",
+        "I did not copy existing banking apps directly. Instead, I started from what I would want to improve as a user, then used CSS variables to keep every component consistent.",
     },
 
     inspiration:
-      '"Good front-end development is where technical precision meets visual language."',
+      '"Good front-end implementation makes prosperity feel unstoppable."',
 
     process: [
       {
@@ -218,6 +296,29 @@ export const projects = [
       },
     ],
 
+    productLens: [
+      {
+        label: "User",
+        value:
+          "Banking customers who need to understand account status, transactions, and actions without second-guessing the interface.",
+      },
+      {
+        label: "Product Goal",
+        value:
+          "Make financial actions feel clear, consistent, and trustworthy through visual hierarchy and interaction feedback.",
+      },
+      {
+        label: "Key Decision",
+        value:
+          "Build a token-based component system so trust signals stay consistent across cards, lists, and transaction flows.",
+      },
+      {
+        label: "Measure",
+        value:
+          "Task clarity, error prevention, perceived trust, and speed of locating key account information.",
+      },
+    ],
+
     screenCount: 5,
   },
 
@@ -227,10 +328,11 @@ export const projects = [
     theme: "theme-bookFlight",
     accent: "#2563EB",
     name: "Flight Booking",
-    tagline: "Booking your flight, enjoy your life.",
-    tags: ["React", "Form UX", "Front-End"],
-    meta: { Role: "UX + Front-End", Year: "2024" },
-    desc: "Flight booking forms have the same UX problems everywhere. Smart validation and conditional UI can fix most of them.",
+    tagline: "Book the flight, take the leave, and go.",
+    tags: ["React", "Form UX", "Error Prevention"],
+    meta: { Role: "UI/UX + Front-End", Year: "2024" },
+    desc: "A booking-flow prototype focused on preventing common user errors through validation rules and conditional interface states.",
+    focus: "Business rules · Error prevention",
     demoUrl: "./bookFlight/flight_booking_app.html",
     demoMobile: true,
 
@@ -246,7 +348,7 @@ export const projects = [
     },
 
     inspiration:
-      '"A great form doesn\'t just collect data — it prevents mistakes before they happen."',
+      '"Endless waiting for the next long weekend. I want to go now."',
 
     process: [
       {
@@ -266,6 +368,29 @@ export const projects = [
       },
     ],
 
+    productLens: [
+      {
+        label: "User",
+        value:
+          "Travelers who need to complete a booking flow quickly without making date, route, or passenger mistakes.",
+      },
+      {
+        label: "Product Goal",
+        value:
+          "Lower booking friction by preventing invalid inputs before the user reaches submission.",
+      },
+      {
+        label: "Key Decision",
+        value:
+          "Encode business rules directly into UI states, including one-way trips, date order, and completion requirements.",
+      },
+      {
+        label: "Measure",
+        value:
+          "Form completion rate, validation errors avoided, time to booking readiness, and field correction frequency.",
+      },
+    ],
+
     screenCount: 5,
   },
 
@@ -275,10 +400,11 @@ export const projects = [
     theme: "theme-goTravel",
     accent: "#ff6000",
     name: "Let's Travel",
-    tagline: "Visual storytelling for explorers.",
-    tags: ["HTML/CSS", "CSS Grid", "Layout"],
-    meta: { Role: "UI Design", Year: "2024" },
-    desc: "A CSS Grid layout exercise focused on one question: can a travel site make you feel something before you read anything?",
+    tagline: "Travel that feels close enough to imagine.",
+    tags: ["HTML/CSS", "Content Strategy", "Layout"],
+    meta: { Role: "UI/UX + Design System", Year: "2024" },
+    desc: "A travel interface study on how imagery, content hierarchy, and screen layout can guide exploration.",
+    focus: "Content hierarchy · Exploration UX",
     demoUrl: "./goTravel/go_travel_app.html",
     demoMobile: true,
 
@@ -292,7 +418,7 @@ export const projects = [
         "Card-based layout built with CSS Grid and Flexbox. Images lead. Text supports. Mobile-first so it works wherever you actually are.",
     },
 
-    inspiration: '"A travel site is the starting point for longing."',
+    inspiration: '"The place I long for is always the next stop."',
 
     process: [
       {
@@ -312,6 +438,29 @@ export const projects = [
       },
     ],
 
+    productLens: [
+      {
+        label: "User",
+        value:
+          "Travelers browsing destinations who need quick emotional and practical signals before reading details.",
+      },
+      {
+        label: "Product Goal",
+        value:
+          "Help users scan destination options by letting imagery lead and content support decision-making.",
+      },
+      {
+        label: "Key Decision",
+        value:
+          "Use a visual-first grid so destination variety is understood at a glance across desktop and mobile.",
+      },
+      {
+        label: "Measure",
+        value:
+          "Destination click-through, scroll depth, saved destinations, and whether users can compare options quickly.",
+      },
+    ],
+
     screenCount: 5,
   },
 
@@ -321,10 +470,11 @@ export const projects = [
     theme: "theme-publicTransp",
     accent: "#dc2626",
     name: "Zei Qia",
-    tagline: "Navigate the city.",
-    tags: ["UI Design", "Figma", "Mobile"],
-    meta: { Role: "UI + UX Design", Year: "2025" },
-    desc: "Designed in Taiwan. Validated in London. A transit app focused on showing the right data at the right moment — not all of it.",
+    tagline: "Know exactly where you are.",
+    tags: ["UI Design", "Information Architecture", "Mobile"],
+    meta: { Role: "Product UI/UX + Design System", Year: "2025" },
+    desc: "A transit product concept shaped by cross-city observation: show the right real-time information at the moment of decision. Good transit design is not about showing more data, but showing the right data at the right time.",
+    focus: "Information architecture · Real-time UX",
     demoUrl: "./publicTransp/public_transport_app.html",
     demoMobile: true,
 
@@ -339,8 +489,7 @@ export const projects = [
         "Clear hierarchy, real-time updates, and responsive search that distil complex transport data into a calm, easy-to-navigate experience — designed for someone on the move, not sitting at a desk.",
     },
 
-    inspiration:
-      '"Good transit design is not about showing more data — it\'s about showing the right data at the right moment."',
+    inspiration: '"Please stop striking. I just want to get home."',
 
     process: [
       {
@@ -362,6 +511,29 @@ export const projects = [
         num: "04",
         title: "Instant search and filtering",
         desc: "Responds immediately to input, reducing friction for fast decisions. The interaction model is built around someone who already knows where they want to go.",
+      },
+    ],
+
+    productLens: [
+      {
+        label: "User",
+        value:
+          "Commuters and travelers navigating dense transit systems under time pressure.",
+      },
+      {
+        label: "Product Goal",
+        value:
+          "Make real-time transit information easier to trust and act on by filtering what the user sees.",
+      },
+      {
+        label: "Key Decision",
+        value:
+          "Design around information priority instead of data volume, especially for search, live updates, and route scanning.",
+      },
+      {
+        label: "Measure",
+        value:
+          "Time to route decision, search success, missed-transfer reduction, and confidence in live status updates.",
       },
     ],
 

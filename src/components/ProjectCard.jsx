@@ -79,6 +79,14 @@ export default function ProjectCard({ project, variant = "full" }) {
         >
           {project.desc}
         </p>
+        {project.focus && (
+          <p
+            className="mt-5 text-chalk/80 uppercase tracking-[0.14em]"
+            style={{ fontSize: variant === "half" ? "0.65rem" : "0.72rem" }}
+          >
+            {project.focus}
+          </p>
+        )}
       </div>
 
       {/* Touch fallback — always visible on mobile */}
@@ -92,6 +100,11 @@ export default function ProjectCard({ project, variant = "full" }) {
         <p className="text-chalk/60 text-sm leading-relaxed truncate max-w-md text-center mr-auto ml-auto">
           {project.desc}
         </p>
+        {project.focus && (
+          <p className="text-chalk/80 text-[0.65rem] uppercase tracking-[0.14em] mt-3">
+            {project.focus}
+          </p>
+        )}
       </div>
     </Link>
   );

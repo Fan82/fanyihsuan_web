@@ -26,10 +26,10 @@
 
 /* ─────────────────────────────────────────────
    Per-project colour tokens
-   Apply class="theme-takeTask" on the project
+   Apply class="theme-planify" on the project
    page wrapper to activate the right palette.
 ───────────────────────────────────────────── */
-.theme-takeTask {
+.theme-planify {
   --accent: #FFAE00;
   --accent-btn: #0e0f1c;
   --accent-dim: rgba(255, 174, 0, 0.12);

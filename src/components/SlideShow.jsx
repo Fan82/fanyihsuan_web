@@ -1,21 +1,50 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import Slide from "./Slide";
 import { useScrollLock } from "../hooks/useScrollLock";
+import { useLanguage } from "../i18n/LanguageContext";
 
 const SLIDES = [
   {
-    title: "Design + Code.",
-    slogan: "Not a handoff. A loop.",
+    title: {
+      en: "Product-Minded UI Engineer.",
+      zh: "產品思維 UI Engineer.",
+    },
+    slogan: {
+      en: "Turning needs into working product experiences.",
+      zh: "把需求轉化成清楚、可使用、可落地的產品體驗。",
+    },
   },
-  { title: "Product Thinking. ", slogan: "From problem to working prototype." },
   {
-    title: "AI-Powered Tools.",
-    slogan: "Built with Claude. Shipped to users.",
+    title: {
+      en: "Technical Product Thinking.",
+      zh: "Technical Product Thinking.",
+    },
+    slogan: {
+      en: "From ambiguous requirements to demo-ready prototypes.",
+      zh: "從模糊需求，到可以展示與驗證的產品原型。",
+    },
   },
-  { title: "Startup Mindset.", slogan: "Agile Driven, Rapid Prototyping." },
+  {
+    title: {
+      en: "Solutions + Implementation.",
+      zh: "Solutions + Implementation.",
+    },
+    slogan: {
+      en: "Bridging customers, design, and engineering.",
+      zh: "連接客戶需求、設計判斷與工程實作。",
+    },
+  },
+  {
+    title: { en: "AI-Powered Tools.", zh: "AI-Powered Tools." },
+    slogan: {
+      en: "Built with Claude. Shipped to users.",
+      zh: "使用 Claude 打造，並真正部署給使用者。",
+    },
+  },
 ];
 
 export default function SlideShow({ onComplete }) {
+  const { t } = useLanguage();
   const containerRef = useRef(null);
   const timeoutRef = useRef(null);
 
@@ -68,8 +97,8 @@ export default function SlideShow({ onComplete }) {
       {/* Fixed slide frame */}
       <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
         <Slide
-          title={currentSlide.title}
-          slogan={currentSlide.slogan}
+          title={t(currentSlide.title)}
+          slogan={t(currentSlide.slogan)}
           progress={progress}
         />
       </div>

@@ -1,10 +1,12 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { CONTACT } from "../data/contact";
+import { LANGUAGES, UI_COPY, tx, useLanguage } from "../i18n/LanguageContext";
 
 export default function Nav() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { language, toggleLanguage, t } = useLanguage();
   const [contactOpen, setContactOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [visible, setVisible] = useState(true);
@@ -69,6 +71,8 @@ export default function Nav() {
 
   const isProjectsActive = pathname === "/" || pathname.startsWith("/projects");
 
+  const languageLabel = language === "en" ? LANGUAGES.zh : LANGUAGES.en;
+
   return (
     <>
       <header
@@ -89,14 +93,14 @@ export default function Nav() {
             onClick={handleProjects}
             className={`nav-pill ${isProjectsActive ? "active" : ""}`}
           >
-            Projects
+            {t(UI_COPY.nav.projects)}
           </a>
 
           <Link
             to="/about"
             className={`nav-pill ${pathname === "/about" ? "active" : ""}`}
           >
-            About
+            {t(UI_COPY.nav.about)}
           </Link>
 
           <div ref={contactRef} className="relative">
@@ -104,7 +108,7 @@ export default function Nav() {
               onClick={() => setContactOpen(!contactOpen)}
               className="nav-pill"
             >
-              contact
+              {t(UI_COPY.nav.contact)}
             </button>
 
             <div
@@ -117,25 +121,34 @@ export default function Nav() {
             >
               {CONTACT.map((c) => (
                 <a
-                  key={c.label}
+                  key={tx(c.label, "en")}
                   href={c.href}
                   target={c.external ? "_blank" : undefined}
                   rel={c.external ? "noreferrer" : undefined}
                   download={c.download || undefined}
                   className="block px-4 py-2.5 text-sm text-ink hover:bg-gray-50 border-b border-ink/5 last:border-0 transition-colors"
                 >
-                  {c.label}
+                  {tx(c.label, language)}
                 </a>
               ))}
             </div>
           </div>
+          <button
+            onClick={toggleLanguage}
+            className="nav-pill uppercase"
+            aria-label="Toggle language"
+          >
+            {languageLabel}
+          </button>
         </nav>
 
         {/* Mobile hamburger */}
         <button
           className="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5"
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-label={
+            menuOpen ? t(UI_COPY.nav.closeMenu) : t(UI_COPY.nav.openMenu)
+          }
         >
           <span
             className="block w-5 h-px bg-ink transition-all duration-300 origin-center"
@@ -175,7 +188,7 @@ export default function Nav() {
             onClick={handleProjects}
             className="text-3xl font-medium text-ink py-4 border-b border-ink/8 hover:text-ink/50 transition-colors"
           >
-            Projects
+            {t(UI_COPY.nav.projects)}
           </a>
 
           <Link
@@ -183,13 +196,20 @@ export default function Nav() {
             onClick={() => setMenuOpen(false)}
             className="text-3xl font-medium text-ink py-4 border-b border-ink/8 hover:text-ink/50 transition-colors"
           >
-            About
+            {t(UI_COPY.nav.about)}
           </Link>
+
+          <button
+            onClick={toggleLanguage}
+            className="text-3xl font-medium text-ink py-4 border-b border-ink/8 hover:text-ink/50 transition-colors text-left"
+          >
+            {languageLabel}
+          </button>
 
           {/* Contact links expanded inline */}
           {CONTACT.map((c) => (
             <a
-              key={c.label}
+              key={tx(c.label, "en")}
               href={c.href}
               target={c.external ? "_blank" : undefined}
               rel={c.external ? "noreferrer" : undefined}
@@ -197,7 +217,7 @@ export default function Nav() {
               onClick={() => setMenuOpen(false)}
               className="text-3xl font-medium text-ink py-4 border-b border-ink/8 hover:text-ink/50 transition-colors flex items-center justify-between"
             >
-              {c.label}
+              {tx(c.label, language)}
               {c.external && (
                 <svg
                   width="20"
@@ -219,7 +239,7 @@ export default function Nav() {
 
         {/* Bottom wordmark */}
         <p className="text-xs text-muted" style={{ letterSpacing: "0.1em" }}>
-          Fan YiHsuan · Design Engineer
+          {t(UI_COPY.nav.wordmark)}
         </p>
       </div>
     </>

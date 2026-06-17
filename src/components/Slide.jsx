@@ -28,7 +28,7 @@ export default function Slide({ title, slogan, progress = 0 }) {
         {title}
       </h4>
       <p
-        className="text-xl text-muted mt-4 whitespace-nowrap"
+        className="text-lg md:text-xl text-muted mt-4 max-w-[34rem] leading-relaxed"
         style={{ willChange: "transform" }}
       >
         {slogan}
