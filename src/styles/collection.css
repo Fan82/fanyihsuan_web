@@ -25,6 +25,31 @@
   --focus-ring: 2px solid var(--c-cobalt);
 }
 
+/* ── Shared focus & skip link ─────────────── */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 60; /* above the header */
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--c-cobalt);
+  color: var(--c-paper);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  transform: translateY(calc(-100% - 1rem));
+}
+
+.skip-link:focus-visible {
+  transform: none;
+  outline-color: var(--c-ink);
+}
+
 /* ── Hero ─────────────────────────────────── */
 .home-hero {
   min-height: 88svh;

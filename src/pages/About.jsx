@@ -1,274 +1,342 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { tx, useLanguage } from "../i18n/LanguageContext.jsx";
+import "../styles/about.css";
 
+// ─── Content ──────────────────────────────────────────────────
+
+const HERO = {
+  intro: {
+    en: "I’m a front-end developer based in Taiwan. I started in UI/UX design and now build storefronts and membership experiences.",
+    zh: "我是在台灣的前端工程師，從 UI/UX 設計起步，現在負責打造電商店面與會員體驗。",
+  },
+  photoAlt: { en: "YiHsuan Fan", zh: "范翊萱" },
+};
+
+const QUESTION = {
+  before: { en: "What happens after someone clicks ", zh: "有人按下" },
+  em: { en: "submit?", zh: "送出" },
+  after: { en: "", zh: "之後，會發生什麼？" },
+  body: {
+    en: "When I build a membership form, I think about the person on the other side. If a field is invalid, can they find it? If the request fails, will they know what to do next?",
+    zh: "製作會員表單時，我會想到另一端的那個人。欄位填錯了，對方找得到是哪一欄嗎？送出失敗了，對方知道下一步該怎麼做嗎？",
+  },
+};
+
+// Matches the current résumé (public/FanYiH_resume.pdf).
+// The UK volunteer work is the One Sky Collective role.
 const EXPERIENCE = [
   {
-    role: {
-      en: "UI Design Volunteer",
-      zh: "UI設計志願者",
-    },
-    company: "One Sky Collective",
-    period: "Nov 2025 – Feb 2026",
-    tags: ["Figma", "UX", "Stakeholder Needs"],
+    period: { en: "Jul 2026 – Present", zh: "2026.07 – 至今" },
+    company: "BlueBell Co., Ltd.",
+    role: { en: "Front-End Developer", zh: "前端工程師" },
     details: [
       {
-        en: "Support product and content decisions by turning social-impact goals into clear user flows.",
-        zh: "協助把社會影響力目標轉化為清楚的使用流程，支援產品與內容決策。",
+        en: "Owned the front-end build of a new Singapore storefront for a luxury brand, from requirements through launch.",
+        zh: "負責精品品牌新加坡官網的前端建置，從需求到上線。",
       },
       {
-        en: "Visualized requirements into interface concepts that were easier for users to understand.",
-        zh: "將需求視覺化，讓所有使用者能理解的介面概念。",
+        en: "Built a gift-with-purchase campaign on native Shopify with automated gift limits; gift-set sales grew 3.7x in 15 days.",
+        zh: "以 Shopify 原生功能打造滿額贈活動，並自動控管贈品數量；禮盒銷售在 15 天內成長 3.7 倍。",
       },
+      {
+        en: "Built a member loyalty campaign flow in C# with a backend developer, covering survey, profile updates and points issuance, plus edge cases such as repeat submissions and expired campaigns.",
+        zh: "與後端工程師以 C# 建置會員活動流程，涵蓋問卷、會員資料更新與點數發放，並處理重複送出、活動過期等邊界情況。",
+      },
+      {
+        en: "Created self-serve tools for non-engineering teams, including theme settings for marketing to manage non-shipping dates and a browser-based translation tool for store localization.",
+        zh: "為非工程團隊打造自助工具，包括讓行銷自行管理不出貨日期的主題設定，以及用於商店在地化的瀏覽器翻譯工具。",
+      },
+      {
+        en: "Collaborate in English with teams in Japan, Hong Kong, Korea, Singapore and Malaysia on market-specific specs.",
+        zh: "以英文與日本、香港、韓國、新加坡和馬來西亞團隊協作，確認各市場的規格。",
+      },
+    ],
+    tags: ["Shopify", "C#", { en: "Front-End", zh: "前端" }],
+  },
+  {
+    period: { en: "Nov 2025 – Jan 2026", zh: "2025.11 – 2026.01" },
+    company: { en: "One Sky Collective (Social Enterprise)", zh: "One Sky Collective（社會企業）" },
+    role: { en: "Volunteer UI Designer", zh: "UI 設計志工" },
+    details: [
+      {
+        en: "Designed user flows, data visualization, and reward features for a sustainability app, collaborating remotely with international PMs and a React Native team.",
+        zh: "為一款永續 App 設計使用流程、數據視覺化與獎勵功能，並與國際 PM 及 React Native 團隊遠端協作。",
+      },
+    ],
+    tags: ["Figma", "UX", { en: "Remote Collaboration", zh: "遠端協作" }],
+  },
+  {
+    period: { en: "Feb 2022 – Feb 2025", zh: "2022.02 – 2025.02" },
+    company: "Neutec Co., Ltd.",
+    role: { en: "UI/UX Designer & Front-End Developer", zh: "UI/UX 設計師暨前端工程師" },
+    details: [
+      {
+        en: "Designed and developed interfaces for gaming platforms, working with PMs and engineers from concept to release.",
+        zh: "設計並開發遊戲平台介面，與 PM 和工程師合作，從概念到上線。",
+      },
+      {
+        en: "Simplified game lobby user flows and information architecture, cutting unnecessary steps and improving usability.",
+        zh: "簡化遊戲大廳的使用流程與資訊架構，減少不必要的步驟並提升易用性。",
+      },
+      {
+        en: "Created reusable design system components, improving UI consistency and reducing duplicate design and engineering work.",
+        zh: "建立可重複使用的 design system 元件，提升介面一致性，減少重複的設計與工程工作。",
+      },
+      {
+        en: "Identified product improvements through user research, usability testing and behavioral data analysis.",
+        zh: "透過使用者研究、易用性測試與行為數據分析，找出產品改善方向。",
+      },
+      {
+        en: "Contributed to +30% user retention, +25% engagement and 20% faster page loads through UX and performance work.",
+        zh: "透過 UX 與效能優化，協助使用者留存提升 30%、互動提升 25%，頁面載入加快 20%。",
+      },
+    ],
+    tags: [
+      { en: "Front-End", zh: "前端" },
+      "Figma",
+      { en: "Design Systems", zh: "設計系統" },
+      { en: "User Research", zh: "使用者研究" },
     ],
   },
   {
-    role: {
-      en: "Content Creator",
-      zh: "內容創作者",
-    },
-    company: "SharkTech",
-    period: "Jul 2025 – Feb 2026",
-    tags: ["Technical Writing", "Product Communication"],
+    period: { en: "Apr 2021 – Feb 2022", zh: "2021.04 – 2022.02" },
+    company: "Gotrust Co., Ltd.",
+    role: { en: "UI Designer", zh: "UI 設計師" },
     details: [
       {
-        en: "Write technical content that explains product value, use cases, and implementation context clearly.",
-        zh: "撰寫技術內容，清楚說明產品價值、使用情境與導入脈絡。",
+        en: "Redesigned the mobile purchase flow for security products, lifting conversion 10% and cutting cart abandonment 12%.",
+        zh: "重新設計資安產品的行動版購買流程，轉換率提升 10%，購物車放棄率降低 12%。",
       },
       {
-        en: "Practice turning complex technical topics into language that customers can understand.",
-        zh: "練習將複雜技術主題轉換成客戶能理解的產品語言。",
+        en: "Created wireframes, prototypes and UI specs in Figma, partnering with developers on responsive builds.",
+        zh: "以 Figma 製作 wireframe、原型與 UI 規格，並與工程師合作完成響應式開發。",
       },
     ],
-  },
-  {
-    role: "UX/UI Designer & Front-End Developer",
-    company: "NEUTEC Co., Ltd.",
-    period: "Feb 2022 – Feb 2025",
-    tags: ["Front-End", "Figma", "Design Systems", "Requirements"],
-    details: [
-      {
-        en: "Clarified product workflows with teammates, then translated them into UI specs and front-end implementation.",
-        zh: "與同事釐清產品流程，並轉化為 UI 規格與前端實作。",
-      },
-      {
-        en: "Bridged design and engineering decisions across prototypes, production screens, and design-system patterns.",
-        zh: "在原型、正式產品畫面與 design system 之間銜接設計與工程決策。",
-      },
-    ],
-  },
-  {
-    role: "UI Designer",
-    company: "GOTRUST Co., Ltd.",
-    period: "Apr 2021 – Feb 2022",
-    tags: ["UI", "Figma", "Product UX"],
-    details: [
-      {
-        en: "Designed product interfaces with attention to onboarding clarity, task flow, and user confidence.",
-        zh: "設計產品介面時重視 onboarding 清晰度、任務流程與使用者信任感。",
-      },
-    ],
-  },
-  {
-    role: "Web Designer",
-    company: "CBES Co., Ltd.",
-    period: "Feb 2019 – Mar 2021",
-    tags: ["Web Designer", "Graphic Design"],
-    details: [
-      {
-        en: "Built client-facing web experiences and learned to balance visual quality, delivery constraints, and business needs.",
-        zh: "建置面向客戶的網站體驗，並學習在視覺品質、交付限制與商業需求之間取得平衡。",
-      },
-    ],
+    tags: ["UI", "Figma", { en: "Product UX", zh: "產品 UX" }],
   },
 ];
 
 const SKILLS = [
   {
-    label: { en: "Product", zh: "產品" },
+    label: { en: "Front-End Development", zh: "前端開發" },
     items: [
-      { en: "Requirement Mapping", zh: "需求整理" },
-      { en: "User Stories", zh: "User Stories" },
-      { en: "Feature Prioritization", zh: "功能優先級" },
-      { en: "Workflow Analysis", zh: "流程分析" },
-      { en: "Product Demos", zh: "產品 Demo" },
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Vue.js",
+      "Next.js",
+      "HTML5",
+      "CSS3",
+      "Tailwind CSS",
+      "Vite",
     ],
   },
   {
-    label: { en: "Solutions", zh: "解決方案" },
+    label: { en: "Front-End Engineering", zh: "前端工程" },
     items: [
-      { en: "Discovery Questions", zh: "需求訪談問題" },
-      { en: "Proposal Support", zh: "提案支援" },
-      { en: "Technical Documentation", zh: "技術文件" },
-      { en: "Customer Onboarding", zh: "客戶導入" },
+      "RESTful APIs",
+      "GraphQL",
+      { en: "Responsive Web Design", zh: "響應式網頁設計" },
+      { en: "Accessibility", zh: "無障礙設計" },
+      { en: "Web Performance Optimization", zh: "網頁效能優化" },
     ],
   },
   {
-    label: { en: "Design", zh: "設計" },
+    label: { en: "UI/UX & Product", zh: "UI/UX 與產品" },
     items: [
-      "Figma",
-      "Adobe XD",
-      "Design Systems",
-      "Prototyping",
-      "User Research",
+      { en: "User Research", zh: "使用者研究" },
+      { en: "Usability Testing", zh: "易用性測試" },
+      { en: "Behavioral Data Analysis", zh: "行為數據分析" },
+      { en: "Design Systems", zh: "設計系統" },
+      { en: "Prototyping", zh: "原型設計" },
     ],
   },
   {
-    label: { en: "Front-End", zh: "前端" },
-    items: ["React", "Vue.js", "JavaScript", "Tailwind CSS", "HTML / CSS"],
+    label: { en: "E-commerce Development", zh: "電商開發" },
+    items: [
+      "Shopify Liquid",
+      "Shopify Functions",
+      { en: "Shopify App Development", zh: "Shopify App 開發" },
+      { en: "E-commerce Business Logic", zh: "電商商業邏輯" },
+    ],
   },
   {
-    label: { en: "Tooling", zh: "工具" },
-    items: ["Claude API", "Supabase", "Vite", "Git", "Vercel"],
+    label: { en: "Tools & Collaboration", zh: "工具與協作" },
+    items: ["Git", "GitHub", "npm", "Figma", "Vercel"],
   },
 ];
 
-const ROLE_DIRECTIONS = [
+const FOOTER_LINKS = [
   {
-    title: {
-      en: "Technical Product Specialist",
-      zh: "Technical Product Specialist",
-    },
-    body: {
-      en: "Use design and front-end fluency to explain product behavior, clarify requirements, and support technical product decisions.",
-      zh: "運用設計與前端能力說明產品行為、釐清需求，並支援技術產品決策。",
-    },
+    label: { en: "View résumé", zh: "查看履歷" },
+    href: { en: "/FanYiH_resume.pdf", zh: "/范翊萱_履歷.pdf" },
+    newTab: true,
   },
   {
-    title: {
-      en: "Solutions Consultant / Pre-sales",
-      zh: "Solutions Consultant / Pre-sales",
-    },
-    body: {
-      en: "Turn customer workflows into clear demos, discovery questions, and implementation-aware product recommendations.",
-      zh: "把客戶流程轉化為清楚 demo、需求訪談問題，以及考量導入可行性的產品建議。",
-    },
+    label: { en: "Get in touch", zh: "聯絡我" },
+    href: "mailto:fys840802@gmail.com",
   },
   {
-    title: {
-      en: "Customer Success / Implementation PM",
-      zh: "Customer Success / Implementation PM",
-    },
-    body: {
-      en: "Help teams adopt products by connecting user needs, onboarding flows, documentation, and engineering constraints.",
-      zh: "透過使用者需求、onboarding 流程、文件與工程限制的整合，協助團隊成功導入產品。",
-    },
-  },
-];
-
-const LINKS = [
-  {
-    label: "LinkedIn",
+    label: { en: "LinkedIn", zh: "LinkedIn" },
     href: "https://www.linkedin.com/in/fanyihsuan/",
-    external: true,
+    newTab: true,
   },
-  {
-    label: "Behance",
-    href: "https://www.behance.net/congee_88",
-    external: true,
-  },
-  { label: "Email", href: "mailto:fys840802@gmail.com" },
-  { label: "Resume EN", href: "/FanYiH_resume.pdf", download: true },
-  { label: "Resume 中文", href: "/范翊萱_履歷.pdf", download: true },
 ];
+
+const COPY = {
+  experience: { en: "Experience", zh: "經歷" },
+  skills: { en: "Skills", zh: "技能" },
+  contact: { en: "Résumé and contact", zh: "履歷與聯絡方式" },
+  tagsLabel: { en: "Skills used", zh: "使用技能" },
+  newTab: { en: "(opens in a new tab)", zh: "（在新分頁開啟）" },
+};
+
+// ─── Page ─────────────────────────────────────────────────────
 
 export default function About() {
   const { language, t } = useLanguage();
   const pageRef = useRef(null);
+  const nameRef = useRef(null);
+  const questionRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (prefersReducedMotion) return;
+  // Entrance motion: the name on load, the question the first time it
+  // enters the viewport (scrolling back doesn't replay it). Under reduced
+  // motion nothing is set, so the text is simply shown.
+  useLayoutEffect(() => {
+    const page = pageRef.current;
+    if (!page) return undefined;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return undefined;
+    }
 
-    const els = pageRef.current?.querySelectorAll("[data-reveal]");
-    if (!els) return;
-
-    els.forEach((el, i) => {
-      el.style.opacity = "0";
-      el.style.transform = "translateY(20px)";
-      el.style.transition = `opacity 0.8s cubic-bezier(0.19,1,0.22,1) ${i * 90}ms,
-                             transform 0.8s cubic-bezier(0.19,1,0.22,1) ${i * 90}ms`;
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          el.style.opacity = "1";
-          el.style.transform = "translateY(0)";
-        });
+    page.dataset.motion = "on";
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => {
+        nameRef.current.dataset.entered = "";
       });
     });
+
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        questionRef.current.dataset.entered = "";
+        io.disconnect();
+      }
+    });
+    io.observe(questionRef.current);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      io.disconnect();
+    };
   }, []);
 
   return (
-    <main
-      ref={pageRef}
-      className="pb-40 max-w-[1200px] mx-auto px-8 lg:px-16 text-ink"
-    >
-      {/* Right: photo */}
-      <div className="absolute right-0 top-0 -z-10 w-full max-h-[70vh] overflow-hidden md:-top-1/3">
-        <img
-          src="/profolio.webp"
-          alt="Fan Yi Hsuan"
-          className="w-full h-full object-cover object-bottom"
-        />
-      </div>
-      {/* ── Hero ── */}
-      <section data-reveal className="pt-36 pb-10 md:pt-24">
-        <p className="uppercase text-muted text-zinc-100 mb-6 font-medium">
-          Product-minded UI Engineer · Technical Product · Solutions
-        </p>
-
-        {/* Name */}
-        <h1
-          className="font-bold text-zinc-100 leading-none m-0 mb-6"
-          style={{
-            fontSize: "clamp(4rem, 10vw, 7.5rem)",
-          }}
-        >
-          {t({
-            en: "Fan",
-            zh: "范",
-          })}
-          <br />
-
-          {t({
-            en: "Yi Hsuan",
-            zh: "翊萱",
-          })}
+    <main id="main" tabIndex={-1} ref={pageRef} className="about">
+      {/* ── Name and photo ── */}
+      <section className="about-hero" aria-labelledby="about-name">
+        <h1 id="about-name" ref={nameRef} className="about-hero__name" data-enter="">
+          YiHsuan <span className="about-hero__accent">Fan.</span>
         </h1>
+        <picture className="about-hero__photo">
+          <source
+            srcSet="/portrait-still.webp"
+            media="(prefers-reduced-motion: reduce)"
+          />
+          <img
+            src="/portrait.webp"
+            width="720"
+            height="552"
+            alt={t(HERO.photoAlt)}
+            decoding="async"
+          />
+        </picture>
+        <p className="about-hero__intro">{t(HERO.intro)}</p>
+      </section>
 
-        <p
-          className="leading-relaxed text-ink/60"
-          style={{
-            fontSize: "clamp(0.95rem, 1.4vw, 1.1rem)",
-          }}
+      {/* ── Form design question ── */}
+      <section className="about-question" aria-labelledby="about-question">
+        <h2
+          id="about-question"
+          ref={questionRef}
+          className="about-question__title"
+          data-enter=""
         >
-          {t({
-            en: "I translate user needs and business workflows into clear product demos, prototypes, and implementation-ready interfaces. With 5+ years across UX, UI, and front-end development, I'm now focused on technical product, solutions consulting, and implementation roles where design judgment, customer communication, and engineering fluency can work together.",
-            zh: "我擅長把使用者需求與商業流程轉化為清楚的產品 demo、原型與可交付工程實作的介面。累積 5 年以上 UX、UI 與前端開發經驗後，我現在希望往 technical product、solutions consulting 與 implementation 相關角色發展，讓設計判斷、客戶溝通與工程理解能一起發揮價值。",
-          })}
-        </p>
+          {t(QUESTION.before)}
+          <em className="about-question__em">{t(QUESTION.em)}</em>
+          {t(QUESTION.after)}
+        </h2>
+        <p className="about-question__body">{t(QUESTION.body)}</p>
+      </section>
 
-        {/* Links */}
-        <div className="flex flex-wrap gap-3 mt-8">
-          {LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              download={link.download || undefined}
-              target={link.external ? "_blank" : undefined}
-              rel={link.external ? "noreferrer" : undefined}
-              className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded-full border border-ink/12 text-ink hover:bg-red-500 hover:text-chalk hover:border-ink/0 transition-all duration-200"
-            >
-              {tx(link.label, language)}
-              {link.external && (
+      {/* ── Experience ── */}
+      <section className="about-exp" aria-labelledby="about-exp-title">
+        <h2 id="about-exp-title" className="about-section-title">
+          {t(COPY.experience)}
+        </h2>
+        <ol className="about-timeline">
+          {EXPERIENCE.map((job) => (
+            <li key={`${tx(job.company, "en")}-${tx(job.period, "en")}`} className="about-job">
+              <p className="about-job__date">{t(job.period)}</p>
+              <div className="about-job__body">
+                <h3 className="about-job__role">{t(job.role)}</h3>
+                <p className="about-job__company">{t(job.company)}</p>
+                <ul className="about-job__details">
+                  {job.details.map((detail) => (
+                    <li key={tx(detail, "en")}>{t(detail)}</li>
+                  ))}
+                </ul>
+                <ul className="about-job__tags" aria-label={t(COPY.tagsLabel)}>
+                  {job.tags.map((tag) => (
+                    <li key={tx(tag, "en")}>{t(tag)}</li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* ── Skills ── */}
+      <section className="about-skills" aria-labelledby="about-skills-title">
+        <h2 id="about-skills-title" className="about-section-title">
+          {t(COPY.skills)}
+        </h2>
+        <dl className="about-skills__list">
+          {SKILLS.map(({ label, items }) => (
+            <div key={tx(label, "en")} className="about-skills__group">
+              <dt>{t(label)}</dt>
+              {items.map((item) => (
+                <dd key={tx(item, "en")}>{t(item)}</dd>
+              ))}
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      {/* ── Résumé and contact ── */}
+      <footer className="about-footer" aria-labelledby="about-contact-title">
+        <h2 id="about-contact-title" className="sr-only">
+          {t(COPY.contact)}
+        </h2>
+        <ul className="about-footer__links">
+          {FOOTER_LINKS.map((link) => (
+            <li key={tx(link.label, "en")}>
+              <a
+                href={tx(link.href, language)}
+                className="about-footer__link"
+                target={link.newTab ? "_blank" : undefined}
+                rel={link.newTab ? "noreferrer" : undefined}
+              >
+                {t(link.label)}
+                {link.newTab && <span className="sr-only"> {t(COPY.newTab)}</span>}
                 <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 10 10"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="1.5"
@@ -276,166 +344,13 @@ export default function About() {
                   strokeLinejoin="round"
                   aria-hidden="true"
                 >
-                  <path d="M2 8L8 2M4 2h4v4" />
+                  <path d="M3 11L11 3M5 3h6v6" />
                 </svg>
-              )}
-            </a>
+              </a>
+            </li>
           ))}
-        </div>
-      </section>
-
-      {/* ── Direction ── */}
-      <section
-        data-reveal
-        className="py-16 border-b border-ink/8"
-        aria-label="Target roles"
-      >
-        <div className="flex gap-16 flex-wrap flex-col md:flex-row">
-          <div style={{ minWidth: 80, paddingTop: 6 }}>
-            <p className="text-xs uppercase tracking-[0.18em] text-muted font-medium whitespace-nowrap">
-              {t({ en: "Direction", zh: "方向" })}
-            </p>
-          </div>
-          <div className="flex-1 grid gap-4 md:grid-cols-3">
-            {ROLE_DIRECTIONS.map((role) => (
-              <div
-                key={role.title.en}
-                className="border border-ink/10 rounded-lg p-5 bg-white/70"
-              >
-                <h3 className="text-base font-medium mb-3 text-ink">
-                  {t(role.title)}
-                </h3>
-                <p className="text-sm leading-relaxed text-ink/55">
-                  {t(role.body)}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Skills ── */}
-      <section
-        data-reveal
-        className="py-16 border-b border-ink/8"
-        aria-label="Skills"
-      >
-        <div className="flex gap-16 flex-wrap flex-col md:flex-row">
-          <div style={{ minWidth: 80, paddingTop: 2 }}>
-            <p className="text-xs uppercase tracking-[0.18em] text-muted font-medium whitespace-nowrap">
-              {t({ en: "Skills", zh: "技能" })}
-            </p>
-          </div>
-          <div className="flex-1 flex flex-col gap-10">
-            {SKILLS.map(({ label, items }) => (
-              <div key={tx(label, "en")}>
-                <p
-                  className="text-xs uppercase tracking-[0.14em] mb-3 font-medium"
-                  style={{ color: "rgba(5,2,6,0.3)" }}
-                >
-                  {t(label)}
-                </p>
-                <ul className="flex flex-wrap gap-2" role="list">
-                  {items.map((s) => (
-                    <li key={tx(s, "en")}>
-                      <span className="inline-block text-sm px-3.5 py-1.5 rounded-full border border-ink/10 text-ink/80 hover:border-ink/30 hover:text-ink transition-colors cursor-default">
-                        {tx(s, language)}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Experience ── */}
-      <section data-reveal className="py-16" aria-label="Experience">
-        <div className="flex gap-16 flex-wrap flex-col md:flex-row">
-          {/* Label */}
-          <div style={{ minWidth: 80, paddingTop: 6 }}>
-            <p className="text-xs uppercase tracking-[0.18em] text-muted font-medium whitespace-nowrap">
-              {t({ en: "Experience", zh: "經歷" })}
-            </p>
-          </div>
-
-          {/* Timeline */}
-          <ul className="flex-1 min-w-0" role="list" style={{ marginLeft: 0 }}>
-            {EXPERIENCE.map((job, i) => (
-              <li
-                key={`${job.company}-${job.period}`}
-                className="group relative flex gap-6 pb-10 last:pb-0"
-              >
-                {/* Vertical line */}
-                {i < EXPERIENCE.length - 1 && (
-                  <div
-                    className="absolute left-[5px] top-5 bottom-0 w-px bg-ink/10 group-last:hidden"
-                    aria-hidden="true"
-                  />
-                )}
-
-                {/* Dot */}
-                <div
-                  className="relative z-10 mt-1.5 rounded-full border-2 border-chalk bg-ink/20 group-hover:bg-ink transition-colors flex-shrink-0"
-                  style={{ width: 11, height: 11 }}
-                  aria-hidden="true"
-                />
-
-                {/* Content */}
-                <div className="flex-1 min-w-0 -mt-0.5">
-                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 mb-1">
-                    <h4 className="text-base font-medium text-ink">
-                      {t(job.role)}
-                    </h4>
-                    <span className="text-xs text-muted flex-shrink-0 tabular-nums">
-                      {job.period}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted mb-2">
-                    {job.company}
-                    {job.type && (
-                      <>
-                        <span className="mx-2 opacity-30">·</span>
-                        <span className="opacity-60">{t(job.type)}</span>
-                      </>
-                    )}
-                  </p>
-                  {job.tags && (
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      {job.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="inline-block text-xs px-2.5 py-0.5 rounded-full"
-                          style={{
-                            background: "rgba(5,2,6,0.04)",
-                            color: "rgba(5,2,6,0.5)",
-                            border: "1px solid rgba(5,2,6,0.07)",
-                          }}
-                        >
-                          {tx(t, language)}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                  {job.details && (
-                    <ul className="space-y-1.5" role="list">
-                      {job.details.map((detail) => (
-                        <li
-                          key={tx(detail, "en")}
-                          className="text-sm leading-relaxed text-ink/55"
-                        >
-                          {t(detail)}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+        </ul>
+      </footer>
     </main>
   );
 }

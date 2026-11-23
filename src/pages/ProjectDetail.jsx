@@ -201,7 +201,7 @@ function HeroSection({ project }) {
 
         <img
           src={`/projects/${project.id}/hero-mockup.png`}
-          alt={`${project.name} mockup`}
+          alt={`${project.name} ${t(UI_COPY.home.keyVisual)}`}
           className="w-full object-contain drop-shadow-2xl rounded-2xl"
         />
       </div>
@@ -492,7 +492,7 @@ function UserFlowSection({ project }) {
             <img
               key={pageNum}
               src={`/projects/${project.id}/screen/${pageNum}.png`}
-              alt={`${project.name} screen ${pageNum}`}
+              alt={`${project.name} ${t(UI_COPY.project.screen)} ${pageNum}`}
               className="w-full max-w-48 rounded-2xl mb-4"
             />
           );
@@ -526,8 +526,10 @@ export default function ProjectDetail() {
   }
 
   return (
-    <div
-      className={project.theme}
+    <main
+      id="main"
+      tabIndex={-1}
+      className={`${project.theme} focus:outline-none`}
       style={{
         background: "var(--project-bg)",
         color: "var(--accent-text)",
@@ -550,7 +552,7 @@ export default function ProjectDetail() {
       <UserFlowSection project={project} />
 
       <NextProject currentId={id} />
-    </div>
+    </main>
   );
 }
 

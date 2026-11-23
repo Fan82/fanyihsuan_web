@@ -126,12 +126,12 @@ export default function Work({ projects }) {
 }
 
 function Visual({ project, layout, eager }) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const image = project.work?.image;
   const src = image?.src ?? `/projects/${project.id}/hero-mockup.png`;
   const alt = image?.alt
     ? tx(image.alt, language)
-    : `${project.name} key visual`;
+    : `${project.name} ${t(UI_COPY.home.keyVisual)}`;
 
   return (
     <figure className="work-article__visual">

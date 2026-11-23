@@ -10,8 +10,8 @@ export const projects = [
     work: {
       layout: "comparison",
       comparison: {
-        source: { lang: "en", label: "English · source" },
-        target: { lang: "zh-Hant", label: "繁體中文 · translation" },
+        source: { lang: "en", label: { en: "English · source", zh: "英文 · 原文" } },
+        target: { lang: "zh-Hant", label: { en: "繁體中文 · translation", zh: "繁體中文 · 譯文" } },
         fields: [
           // { label: "Product title", source: "", target: "" },
           // { label: "Description", source: "", target: "" },

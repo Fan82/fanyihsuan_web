@@ -85,7 +85,7 @@ export default function Home() {
   }, [location]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <main>
+    <main id="main" tabIndex={-1} className="focus:outline-none">
       <header className="home-hero">
         <div className="home-hero__inner">
           <p className="home-hero__eyebrow">{t(UI_COPY.home.eyebrow)}</p>

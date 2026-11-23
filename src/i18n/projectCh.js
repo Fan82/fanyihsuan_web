@@ -7,12 +7,14 @@ const lensLabelsZh = {
 
 const PROJECT_ZH = {
   shopifyTranslation: {
+    tags: ["流程設計", "UX 設計", "HTML / JavaScript"],
     name: "Shopify 翻譯流程工具",
     tagline: "一步步引導，把商店重建成另一種語言。",
     desc: "為了把 海外奢侈品牌客戶的新加坡站重建成台灣繁體中文站，我把一長串匯出、整理、合併與匯入的工作，做成八個步驟的瀏覽器工具。",
     focus: "流程設計 · 問題解決",
     meta: {
       Role: "前端工程師 · 唯一的設計、開發與使用者",
+      Stack: "HTML · JavaScript · 瀏覽器 API",
       Status: "使用中",
     },
     story: [
@@ -65,6 +67,7 @@ const PROJECT_ZH = {
     ],
   },
   roleFitAnalyzer: {
+    tags: ["Claude API", "React", "產品工具"],
     tagline: "投遞前先判斷是否值得。",
     desc: "從真實求職痛點出發的決策輔助工具：貼上工作內容，幾秒內得到匹配分數、強項與技能落差。",
     focus: "AI 產品策略 · 決策輔助",
@@ -116,6 +119,7 @@ const PROJECT_ZH = {
     ],
   },
   runApp: {
+    tags: ["React", "Supabase", "產品流程"],
     tagline: "零時差的一起跑步。",
     desc: "設計並打造完整跑步產品：包含登入、即時 GPS 追蹤與社群回饋循環，幫助使用者維持動力。",
     focus: "完整產品流程 · 社群回饋循環",
@@ -143,7 +147,7 @@ const PROJECT_ZH = {
         desc: "透過瀏覽器 geolocation API 串接 Leaflet.js，並處理權限拒絕、GPS 飄移等邊界情境。",
       },
       {
-        title: "Mobile-first",
+        title: "手機優先",
         desc: "跑步時使用者多半拿手機，所以開始跑步、發文與互動都以單手操作為優先。",
       },
     ],
@@ -155,6 +159,7 @@ const PROJECT_ZH = {
     ],
   },
   planify: {
+    tags: ["Vue", "生產力工具"],
     tagline: "計畫真正有用的時候，是它能告訴你下一步該做什麼。",
     desc: "一個 workspace planning 工具，將目標拆成可執行步驟，並把團隊任務、負責人、期限與個人 focus work 放在同一個工作區。",
     focus: "目標規劃 · 團隊執行",
@@ -172,19 +177,19 @@ const PROJECT_ZH = {
     inspiration: "各就各位！！我們要下一步啦！",
     process: [
       {
-        title: "Goal-first task creation",
+        title: "以目標為起點建立任務",
         desc: "設計從 outcome 開始的建立流程，讓使用者先定義目標，再產出第一批執行步驟，而不是手動從空白任務開始。",
       },
       {
-        title: "Workspace-level structure",
+        title: "工作區層級的架構",
         desc: "建立 project selection、members、owners、priorities 與 statuses，讓看板能支援團隊規劃，而不只是個人 task tracking。",
       },
       {
-        title: "Focus view for personal execution",
+        title: "個人執行的 Focus 視圖",
         desc: "新增 My Tasks view，根據 status、priority 與 due date 推薦下一個任務，並區分 due today、upcoming、review 與 completed work。",
       },
       {
-        title: "Delivery views beyond the board",
+        title: "看板之外的交付視圖",
         desc: "串接 board、list、timeline 與 settings views，讓使用者能用不同角度檢視工作，但不需要重複建立任務資料。",
       },
     ],
@@ -196,6 +201,7 @@ const PROJECT_ZH = {
     ],
   },
   easyBank: {
+    tags: ["React", "CSS", "信任感 UX"],
     tagline: "用精準前端打造值得信任的銀行體驗。",
     desc: "研究銀行產品如何透過資訊層級、回饋與一致實作傳達信任感的介面練習。",
     focus: "信任感 UX · Design system",
@@ -216,11 +222,11 @@ const PROJECT_ZH = {
         desc: "分析多個銀行 app，理解視覺模式如何建立可信感，而不只是看起來像什麼。",
       },
       {
-        title: "Design token system",
+        title: "Design token 系統",
         desc: "用 CSS variables 管理顏色、間距與字級，讓一致性不需要靠手動記憶。",
       },
       {
-        title: "Component architecture",
+        title: "元件架構",
         desc: "餘額卡、交易列表、匯率模組與轉帳表單都以可重用元件拆分。",
       },
     ],
@@ -232,6 +238,7 @@ const PROJECT_ZH = {
     ],
   },
   bookFlight: {
+    tags: ["React", "表單 UX", "錯誤預防"],
     tagline: "訂好機票，提早請假，出發吧！",
     desc: "一個訂票流程原型，透過驗證規則與條件式介面狀態預防常見錯誤。",
     focus: "商業規則 · 錯誤預防",
@@ -267,6 +274,7 @@ const PROJECT_ZH = {
     ],
   },
   goTravel: {
+    tags: ["HTML/CSS", "內容策略", "版面設計"],
     tagline: "感同身受的旅行家",
     desc: "研究如何透過圖片、內容層級與畫面排版引導旅遊探索的介面練習。",
     focus: "內容層級 · 探索體驗",
@@ -282,15 +290,15 @@ const PROJECT_ZH = {
     inspiration: "我嚮往的永遠是下一站要去哪！",
     process: [
       {
-        title: "Visual-first constraint",
+        title: "以視覺為優先的限制",
         desc: "設定規則：每個區塊都要先透過圖片傳達目的，再由文字補充。",
       },
       {
-        title: "CSS Grid as structure",
+        title: "以 CSS Grid 作為結構",
         desc: "用 Grid 安排目的地卡片，讓版面本身呈現多樣與豐富感。",
       },
       {
-        title: "Mobile-first",
+        title: "手機優先",
         desc: "手機上卡片堆疊、桌機展開成 grid，符合旅行中用手機瀏覽的情境。",
       },
     ],
@@ -302,6 +310,7 @@ const PROJECT_ZH = {
     ],
   },
   publicTransp: {
+    tags: ["UI 設計", "資訊架構", "行動裝置"],
     tagline: "搞清楚自己在哪裡。",
     desc: "由台灣與倫敦的跨城市觀察發展出的交通產品概念：在決策瞬間呈現正確即時資訊，好的交通設計不是顯示更多資料，而是在正確時間顯示正確資料。",
     focus: "資訊架構 · 即時資訊 UX",
@@ -360,6 +369,7 @@ export function localizeProject(project, language) {
   return {
     ...project,
     name: copy.name ?? project.name,
+    tags: copy.tags ?? project.tags,
     tagline: copy.tagline ?? project.tagline,
     desc: copy.desc ?? project.desc,
     focus: copy.focus ?? project.focus,
