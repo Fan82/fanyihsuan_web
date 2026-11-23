@@ -11,8 +11,9 @@ export const LANGUAGES = {
 
 export const UI_COPY = {
   nav: {
-    projects: { en: "Projects", zh: "作品" },
-    about: { en: "About", zh: "關於" },
+    work: { en: "Work", zh: "作品" },
+    about: { en: "About me", zh: "關於我" },
+    main: { en: "Main", zh: "主選單" },
     contact: { en: "Contact", zh: "聯絡" },
     openMenu: { en: "Open menu", zh: "開啟選單" },
     closeMenu: { en: "Close menu", zh: "關閉選單" },
@@ -31,7 +32,8 @@ export const UI_COPY = {
     inspiration: { en: "Inspiration", zh: "靈感" },
     process: { en: "Process", zh: "流程" },
     screens: { en: "Screens", zh: "畫面" },
-    back: { en: "Back", zh: "返回" },
+    back: { en: "Back to Work", zh: "回到作品" },
+    outcome: { en: "Outcome", zh: "成果" },
     nextProject: { en: "Next project", zh: "下一個作品" },
     notFound: { en: "Project not found.", zh: "找不到這個作品。" },
     backHome: { en: "Back home", zh: "回首頁" },
@@ -43,38 +45,19 @@ export const UI_COPY = {
     },
   },
   home: {
-    portfolioFocus: { en: "Portfolio Positioning", zh: "作品集定位" },
-    focusHeading: {
-      en: "Product-minded work, built from design and front-end depth.",
-      zh: "以設計與前端能力為基礎，延伸到產品與解決方案思維。",
+    eyebrow: {
+      en: "From UI/UX design to front-end development",
+      zh: "從 UI/UX 設計走向前端開發",
     },
-    focusBody: {
-      en: "These projects show how I move from user problems to product decisions, demos, and implementation-ready interfaces. The goal is not just polished UI, but clearer workflows that customers, stakeholders, and engineering teams can align around.",
-      zh: "這些作品呈現我如何從使用者問題出發，整理成產品判斷、可展示的 demo，以及可交付給工程實作的介面。重點不只是漂亮 UI，而是讓客戶、利害關係人與工程團隊都能對齊的清楚流程。",
+    role: { en: "Product-minded UI Engineer.", zh: "產品思維 UI Engineer." },
+    intro: {
+      en: "With 5+ years across UX, UI, and front-end development, I turn user needs and business workflows into clear product flows and implementation-ready interfaces.",
+      zh: "累積 5 年以上 UX、UI 與前端開發經驗，我把使用者需求與商業流程轉化為清楚的產品流程，以及可交付工程實作的介面。",
     },
-    focusAreas: [
-      {
-        title: { en: "Technical Product", zh: "Technical Product" },
-        body: {
-          en: "Clarify ambiguous requirements, map workflows, and turn product questions into testable prototypes.",
-          zh: "釐清模糊需求、整理工作流程，並把產品問題轉成可以測試的原型。",
-        },
-      },
-      {
-        title: { en: "Solutions Consulting", zh: "Solutions Consulting" },
-        body: {
-          en: "Explain product value through demos, customer scenarios, and implementation-aware recommendations.",
-          zh: "透過 demo、客戶情境與導入可行性，說明產品價值與建議方案。",
-        },
-      },
-      {
-        title: { en: "Implementation PM", zh: "Implementation PM" },
-        body: {
-          en: "Bridge design, engineering, and users with practical specs, delivery context, and adoption-focused UX.",
-          zh: "用清楚規格、交付脈絡與導入體驗，連接設計、工程與使用者。",
-        },
-      },
-    ],
+    viewProjects: { en: "View projects", zh: "查看作品" },
+    readCaseStudy: { en: "Read case study", zh: "閱讀案例" },
+    workLabel: { en: "Work", zh: "作品" },
+    indexLabel: { en: "Projects", zh: "作品目錄" },
   },
 };
 

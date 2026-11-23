@@ -3,10 +3,25 @@ export default {
   content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
     extend: {
+      // ── Breakpoints ─────────────────────────────────────────
+      // Case study pages go single-column below 54rem (see collection.css)
+      screens: {
+        case: "54rem",
+      },
+
       // ── Typography ──────────────────────────────────────────
       fontFamily: {
-        sans: ["DM Sans", "system-ui", "sans-serif"],
-        serif: ["Instrument Serif", "Georgia", "serif"],
+        sans: [
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "PingFang TC",
+          "Microsoft JhengHei",
+          "sans-serif",
+        ],
       },
       fontSize: {
         // display sizes used in slides & hero
@@ -24,8 +39,8 @@ export default {
       // All project accent colours live here — swap per-project via CSS var
       colors: {
         // Global neutrals
-        ink: "#050206",
-        chalk: "#fafafa",
+        ink: "#141414",
+        chalk: "#ffffff",
         muted: "#9d9d9d",
         dim: "#3a3a3a",
 

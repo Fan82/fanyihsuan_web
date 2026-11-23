@@ -1,8 +1,145 @@
 export const projects = [
+  // ─── Shopify Translation Workflow Tool (latest) ───────────────
+  {
+    id: "shopifyTranslation",
+    theme: "theme-shopifyTranslation",
+    // Work section layout (see components/Work.jsx).
+    // Fill `fields` with one real product from the Taiwan store rebuild:
+    // same field, English source and the Traditional Chinese translation.
+    // Until every field has both sides, the section uses the wide layout.
+    work: {
+      layout: "comparison",
+      comparison: {
+        source: { lang: "en", label: "English · source" },
+        target: { lang: "zh-Hant", label: "繁體中文 · translation" },
+        fields: [
+          // { label: "Product title", source: "", target: "" },
+          // { label: "Description", source: "", target: "" },
+        ],
+      },
+    },
+    accent: "#3f51d6",
+    name: "Shopify Translation Workflow Tool",
+    tagline: "A guided tool for rebuilding a store in another language.",
+    tags: ["Workflow Design", "UX Design", "HTML / JavaScript"],
+    meta: {
+      Role: "Frontend Engineer · Sole designer, developer and user",
+      Stack: "HTML · JavaScript · Browser APIs",
+      Year: "2026",
+      Status: "In use",
+    },
+    desc: "To rebuild an overseas luxury brand client's Singapore store as a Traditional Chinese store for Taiwan, I turned a long chain of exports, cleanup, merges and imports into an eight-step browser tool.",
+    focus: "Workflow design · Problem solving",
+    demoUrl: "https://fan82.github.io/shopify-translation-demo/",
+    demoMode: "desktop",
+
+    story: [
+      {
+        label: "Background",
+        heading: "It looked like a translation task. It was a chain of different jobs.",
+        body: "My job at an HK e-commerce company included rebuilding existing Shopify stores in another language. The first was an overseas luxury brand client: its English Singapore store, rebuilt as a separate Traditional Chinese store for Taiwan. That meant exporting translation data, sorting what actually needed translating, merging the translations, then handling the theme, products and images, each with its own file format and its own corner of the Shopify admin. I had joined in July 2026 and had never used Shopify before.",
+      },
+      {
+        label: "Problem",
+        heading: "The difficulty wasn't any single step. It was how much I had to remember and re-check.",
+        body: "Each step's output fed the next, so one wrong file broke everything after it. The export mixed real copy with handles, URLs, JSON and the same sentence repeated across products, all of which had to be sorted before marketing could translate. And the details lived in my memory: Excel turning IDs into 8.1E+12, translations dropping HTML tags, theme images found only by exact file name, and content types with no CSV import at all.",
+      },
+      {
+        label: "Approach",
+        heading: "Turn the know-how in my head into a process I can simply follow.",
+        body: "Writing the workflow down, a fixed order appeared, in four stages: prepare the data, translate, migrate the content, then check the new store. Eight steps in all. If the order never changes, it can live in one interface that shows which step I'm on, which files it needs and where to find them in the admin, and hands back files already named for the next step.",
+      },
+      {
+        label: "Solution",
+        heading: "Guidance instead of memory, and checks where mistakes happen.",
+        body: "Steps unlock only when the previous one is done. The translator file shows each sentence once, turns numbers into {1} and HTML into markers like 〔1〕text〔/1〕, and skips handles, URLs, theme sample text and customer fields, logging every skipped row with its reason. At merge, a translation that breaks a marker keeps the original text and is flagged in the report, so broken HTML never reaches the store.",
+      },
+      {
+        label: "Trade-off",
+        heading: "One HTML file with no libraries, because my work computer can't run a terminal.",
+        body: "Python and Node scripts were out, and custom apps aren't allowed on this store. So I wrote the ZIP, XLSX and CSV handling on native browser APIs (CompressionStream, DOMParser, Blob). It means more code to maintain, but it runs anywhere with a double-click, and every file stays on my computer.",
+      },
+      {
+        label: "Reflection",
+        heading: "Design can start from a daily work problem, not only a product idea.",
+        body: "Being the requester, the designer and the user at once meant asking which problems were real and which were just my own habits. If the marketing team or colleagues running other markets start using the tool, I'll test the flow and guidance again with them.",
+      },
+    ],
+
+    process: [
+      {
+        num: "01",
+        title: "Source store data",
+        desc: "Load the translation CSV and theme zip from the current store, and catch wrong or Excel-damaged files before any work starts.",
+      },
+      {
+        num: "02",
+        title: "Translation scope",
+        desc: "Confirm what needs translating. Default rules leave out text that never appears on the site.",
+      },
+      {
+        num: "03",
+        title: "Translation worksheet",
+        desc: "Create the Excel worksheet for translators: each sentence once, with HTML turned into markers they can move but not break.",
+      },
+      {
+        num: "04",
+        title: "Import translations",
+        desc: "Upload the completed worksheet. The tool checks every marker and applies the translations to the source store data.",
+      },
+      {
+        num: "05",
+        title: "Theme & images",
+        desc: "Prepare the translated theme zip and collect the images the theme uses from the source store.",
+      },
+      {
+        num: "06",
+        title: "Products",
+        desc: "Fill the translations into the source store's product CSV, ready to import, with a partial re-import for products that fail.",
+      },
+      {
+        num: "07",
+        title: "Manual content",
+        desc: "List the collections, pages, blogs, policies and menus that have to be created by hand, with their translations.",
+      },
+      {
+        num: "08",
+        title: "Check the result",
+        desc: "Check the new store item by item: products, theme, collections, pages, menus, both screen sizes and the publishing settings.",
+      },
+    ],
+
+    productLens: [
+      {
+        label: "User",
+        value:
+          "Me, as the engineer rebuilding the store, and the marketing team, who should only ever see clean text to translate.",
+      },
+      {
+        label: "Product Goal",
+        value:
+          "Make a long, order-dependent workflow easy to follow, and catch errors before they reach a live store.",
+      },
+      {
+        label: "Key Decision",
+        value:
+          "Guide the whole workflow step by step, instead of speeding up any single step.",
+      },
+      {
+        label: "Measure",
+        value:
+          "Rows sent to translators, marker errors caught at merge, and products filled without manual edits.",
+      },
+    ],
+
+    screenCount: 0,
+  },
+
   // ─── 01 Role Fit Analyzer ─────────────────────────────────────
   {
     id: "roleFitAnalyzer",
     theme: "theme-rfa",
+    work: { layout: "wide" },
     accent: "#05df72",
     name: "Role Fit Analyzer",
     tagline: "Know before you apply.",
@@ -92,6 +229,14 @@ export const projects = [
   {
     id: "runApp",
     theme: "theme-runApp",
+    work: {
+      layout: "detail",
+      image: {
+        src: "/projects/runApp/screen/07.png",
+        alt: { en: "Live run screen: timer, distance, pace and calories", zh: "跑步進行中畫面：計時、距離、配速與卡路里" },
+        focusY: "15%",
+      },
+    },
     accent: "#05df72",
     name: "Running App",
     screenCount: 10,
@@ -173,6 +318,7 @@ export const projects = [
   {
     id: "planify",
     theme: "theme-planify",
+    work: { layout: "wide" },
     accent: "#FFAE00",
     name: "Planify",
     tagline: "Turn goals into action.",
@@ -254,6 +400,7 @@ export const projects = [
   {
     id: "easyBank",
     theme: "theme-easyBank",
+    work: { layout: "wide" },
     accent: "#2563eb",
     name: "Easy Bank",
     tagline: "Precise front-end for a banking experience people can trust.",
@@ -326,6 +473,14 @@ export const projects = [
   {
     id: "bookFlight",
     theme: "theme-bookFlight",
+    work: {
+      layout: "detail",
+      image: {
+        src: "/projects/bookFlight/screen/10.png",
+        alt: { en: "Add Extras step: optional services with toggles and prices", zh: "加購步驟：可開關的加購服務與價格" },
+        focusY: "34%",
+      },
+    },
     accent: "#2563EB",
     name: "Flight Booking",
     tagline: "Book the flight, take the leave, and go.",
@@ -398,6 +553,7 @@ export const projects = [
   {
     id: "goTravel",
     theme: "theme-goTravel",
+    work: { layout: "wide" },
     accent: "#ff6000",
     name: "Let's Travel",
     tagline: "Travel that feels close enough to imagine.",
@@ -468,6 +624,14 @@ export const projects = [
   {
     id: "publicTransp",
     theme: "theme-publicTransp",
+    work: {
+      layout: "detail",
+      image: {
+        src: "/projects/publicTransp/screen/07.png",
+        alt: { en: "Live Map: MRT and bus lines with nearby stops", zh: "即時地圖：捷運與公車路線及附近站點" },
+        focusY: "26%",
+      },
+    },
     accent: "#dc2626",
     name: "Zei Qia",
     tagline: "Know exactly where you are.",

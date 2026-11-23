@@ -1,11 +1,10 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { CONTACT } from "../data/contact";
 import { LANGUAGES, UI_COPY, tx, useLanguage } from "../i18n/LanguageContext";
 
 export default function Nav() {
   const { pathname } = useLocation();
-  const navigate = useNavigate();
   const { language, toggleLanguage, t } = useLanguage();
   const [contactOpen, setContactOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -44,7 +43,7 @@ export default function Nav() {
     if (menuOpen) {
       document.body.style.overflow = "hidden";
     } else {
-      // Only reset if Nav itself set it — don't interfere with SlideShow's lock
+      // Only reset if Nav itself set it
       if (document.body.style.overflow === "hidden") {
         document.body.style.overflow = "";
       }
@@ -59,17 +58,7 @@ export default function Nav() {
     setMenuOpen(false);
   }, [pathname]);
 
-  function handleProjects(e) {
-    e.preventDefault();
-    setMenuOpen(false);
-    if (pathname === "/") {
-      window.dispatchEvent(new Event("skipSlideshow"));
-    } else {
-      navigate("/?scroll=projects");
-    }
-  }
-
-  const isProjectsActive = pathname === "/" || pathname.startsWith("/projects");
+  const isWorkActive = pathname === "/" || pathname.startsWith("/projects");
 
   const languageLabel = language === "en" ? LANGUAGES.zh : LANGUAGES.en;
 
@@ -87,14 +76,16 @@ export default function Nav() {
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-2">
-          <a
-            href="/#projects"
-            onClick={handleProjects}
-            className={`nav-pill ${isProjectsActive ? "active" : ""}`}
+        <nav
+          className="hidden md:flex items-center gap-2"
+          aria-label={t(UI_COPY.nav.main)}
+        >
+          <Link
+            to={{ pathname: "/", hash: "#work" }}
+            className={`nav-pill ${isWorkActive ? "active" : ""}`}
           >
-            {t(UI_COPY.nav.projects)}
-          </a>
+            {t(UI_COPY.nav.work)}
+          </Link>
 
           <Link
             to="/about"
@@ -182,14 +173,17 @@ export default function Nav() {
         }}
       >
         {/* Nav links */}
-        <nav className="flex flex-col gap-1 flex-1">
-          <a
-            href="/#projects"
-            onClick={handleProjects}
+        <nav
+          className="flex flex-col gap-1 flex-1"
+          aria-label={t(UI_COPY.nav.main)}
+        >
+          <Link
+            to={{ pathname: "/", hash: "#work" }}
+            onClick={() => setMenuOpen(false)}
             className="text-3xl font-medium text-ink py-4 border-b border-ink/8 hover:text-ink/50 transition-colors"
           >
-            {t(UI_COPY.nav.projects)}
-          </a>
+            {t(UI_COPY.nav.work)}
+          </Link>
 
           <Link
             to="/about"

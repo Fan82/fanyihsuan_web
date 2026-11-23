@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getProject, projects } from "../data/projects";
+import { getOutcome } from "../data/outcomes";
 import { useScrollLock } from "../hooks/useScrollLock";
 import { UI_COPY, useLanguage } from "../i18n/LanguageContext";
 import { localizeProject } from "../i18n/projectCh";
@@ -110,8 +111,9 @@ function HeroSection({ project }) {
         <PhoneModal url={project.demoUrl} onClose={() => setShowDemo(false)} />
       )}
 
-      <div className="px-6 pt-24 pb-8 mx-auto max-w-[1200px] grid items-center gap-16 relative overflow-hidden lg:grid-cols-2 lg:px-12">
-        <div className="pt-5 lg:pt-0">
+      <div className="px-6 pt-24 pb-8 mx-auto max-w-[1200px] grid items-center gap-16 relative overflow-hidden case:grid-cols-2 lg:px-12">
+        <div className="pt-5 case:pt-0 min-w-0">
+          <BackToWork id={project.id} className="mb-8" />
           <div className="flex flex-wrap gap-2 mb-8">
             {project.tags.map((tag) => (
               <span key={tag} className="accent-pill">
@@ -123,8 +125,9 @@ function HeroSection({ project }) {
           <h1
             className="mb-3"
             style={{
-              fontSize: "clamp(3rem, 6vw, 5rem)",
-              lineHeight: 1.25,
+              fontSize: "clamp(2.5rem, 6vw, 5rem)",
+              lineHeight: 1.1,
+              overflowWrap: "anywhere",
               color: "var(--accent-text)",
             }}
           >
@@ -184,7 +187,7 @@ function HeroSection({ project }) {
               </a>
             ))}
 
-          <div className="flex gap-8 mt-12">
+          <div className="flex flex-wrap gap-x-8 gap-y-4 mt-12">
             {Object.entries(project.meta).map(([key, val]) => (
               <div key={key}>
                 <small className="block key-title mb-1">
@@ -216,13 +219,13 @@ function StorySection({ project }) {
       {project.story.map((beat, i) => (
         <div
           key={beat.label}
-          className="grid lg:grid-cols-[200px_1fr] gap-4 lg:gap-16 py-12"
+          className="grid case:grid-cols-[200px_1fr] gap-4 case:gap-16 py-12"
           style={{
             borderTop: "1px solid rgba(255,255,255,0.07)",
           }}
         >
           {/* Left: label + number */}
-          <div className="flex lg:flex-col items-baseline lg:items-start gap-3 lg:gap-2 pt-1">
+          <div className="flex case:flex-col items-baseline case:items-start gap-3 case:gap-2 pt-1">
             <span
               className="tabular-nums"
               style={{
@@ -324,14 +327,69 @@ function ProductLensSection({ project }) {
   );
 }
 
+// ─── Outcome (editable in src/data/outcomes.js) ───────────────
+
+function OutcomeSection({ project }) {
+  const { language, t } = useLanguage();
+  const outcome = getOutcome(project.id, language);
+  if (!outcome) return null;
+
+  return (
+    <section className="px-6 lg:px-12 mx-auto max-w-[1200px] pt-12 pb-8">
+      <h2 className="key-title">{t(UI_COPY.project.outcome)}</h2>
+      <p
+        className="leading-relaxed"
+        style={{
+          fontSize: "clamp(1.125rem, 2vw, 1.5rem)",
+          color: "var(--accent-text)",
+          maxWidth: "48ch",
+          whiteSpace: "pre-line",
+        }}
+      >
+        {outcome}
+      </p>
+    </section>
+  );
+}
+
+// ─── Back to Work ─────────────────────────────────────────────
+
+function BackToWork({ id, className = "" }) {
+  const { t } = useLanguage();
+  return (
+    <Link
+      to={{ pathname: "/", hash: `#${id}` }}
+      className={`text-sm inline-flex items-center gap-2 min-h-[2.75rem] group ${className}`}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+        className="group-hover:-translate-x-1 transition-transform"
+      >
+        <path d="M6 8L2 12L6 16" />
+        <path d="M2 12H22" />
+      </svg>
+      {t(UI_COPY.project.back)}
+    </Link>
+  );
+}
+
 // ─── Legacy sections (kept for older projects) ────────────────
 
 function OverviewSection({ project }) {
   const { t } = useLanguage();
   if (project.story?.length) return null; // replaced by StorySection
   return (
-    <section className="px-6 pt-12 pb-8 max-w-[1200px] flex gap-6 lg:px-12 mx-auto">
-      <div className="flex-1">
+    <section className="px-6 pt-12 pb-8 max-w-[1200px] grid gap-10 case:grid-cols-2 case:gap-6 lg:px-12 mx-auto">
+      <div className="min-w-0">
         <p className="key-title">{t(UI_COPY.project.problem)}</p>
         <h2
           className="text-xl font-medium leading-snug mb-5"
@@ -347,7 +405,7 @@ function OverviewSection({ project }) {
           {project.overview.problem}
         </p>
       </div>
-      <div className="flex-1">
+      <div className="min-w-0">
         <p className="key-title">{t(UI_COPY.project.solution)}</p>
         <h2
           className="text-xl font-medium leading-snug mb-5"
@@ -389,7 +447,7 @@ function InspirationSection({ project }) {
 
 function ProcessSection({ project }) {
   const { t } = useLanguage();
-  if (project.story?.length || !project.process?.length) return null;
+  if (!project.process?.length) return null;
   return (
     <section className="px-6 pt-12 pb-8 max-w-[1200px] gap-6 lg:px-12 mx-auto">
       <p className="key-title">{t(UI_COPY.project.process)}</p>
@@ -486,6 +544,8 @@ export default function ProjectDetail() {
       <InspirationSection project={project} />
       <ProcessSection project={project} />
 
+      <OutcomeSection project={project} />
+
       {/* Screens — shown for both formats if screenCount > 0 */}
       <UserFlowSection project={project} />
 
@@ -506,24 +566,7 @@ function NextProject({ currentId }) {
       className="border-t px-6 lg:px-12 py-2 flex justify-between items-center"
       style={{ borderColor: "rgba(250,250,250,0.07)" }}
     >
-      <Link to="/" className="text-sm flex items-center gap-2 group">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="group-hover:-translate-x-1 transition-transform"
-        >
-          <path d="M6 8L2 12L6 16" />
-          <path d="M2 12H22" />
-        </svg>
-        <span className="text-sm inline">{t(UI_COPY.project.back)}</span>
-      </Link>
+      <BackToWork id={currentId} />
       {next && (
         <Link
           to={`/projects/${next.id}`}

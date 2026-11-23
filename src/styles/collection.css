@@ -1,0 +1,488 @@
+/* ─────────────────────────────────────────────
+   Collection (Home → hero, Work, anchor index)
+
+   Breakpoints (CSS vars can't be used in @media):
+     48rem  Work sections switch to one column
+     54rem  Case study hero switches to one column (ProjectDetail)
+───────────────────────────────────────────── */
+:root {
+  /* Interface palette — limited to these three */
+  --c-ink: #141414;
+  --c-paper: #ffffff;
+  --c-cobalt: #233dcc;
+
+  --work-gutter: clamp(1rem, 4vw, 3rem);
+  --work-header-offset: 5rem; /* clears the fixed site header */
+  --work-section-min: 100svh;
+
+  /* Anchor index: each link is a 2.75rem (≈44px) square hit area */
+  --index-hit: 2.75rem;
+  --index-edge: calc(0.25rem + env(safe-area-inset-right, 0px));
+  --index-max: 54svh;
+  /* Space reserved on the right of Work content so dots never cover it */
+  --index-corridor: calc(var(--index-hit) + var(--index-edge) + 0.75rem);
+
+  --focus-ring: 2px solid var(--c-cobalt);
+}
+
+/* ── Hero ─────────────────────────────────── */
+.home-hero {
+  min-height: 88svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: calc(var(--work-header-offset) + 2rem) var(--work-gutter) 4rem;
+  background: var(--c-paper);
+  color: var(--c-ink);
+}
+
+.home-hero__inner {
+  max-width: 52rem;
+}
+
+.home-hero__eyebrow {
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 1.5rem;
+}
+
+.home-hero__name {
+  font-size: clamp(3rem, 10vw, 7.5rem);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.home-hero__role {
+  font-size: clamp(1.375rem, 3vw, 2.25rem);
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 1.25rem 0 0;
+}
+
+.home-hero__intro {
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  line-height: 1.65;
+  max-width: 40rem;
+  margin: 1.5rem 0 0;
+}
+
+.home-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2.5rem;
+}
+
+/* ── Shared buttons ───────────────────────── */
+.c-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--c-cobalt);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: transform 0.2s ease;
+}
+
+.c-btn--primary {
+  background: var(--c-cobalt);
+  color: var(--c-paper);
+}
+
+.c-btn--ghost {
+  background: transparent;
+  color: var(--c-ink);
+  border-color: var(--c-ink);
+}
+
+.c-btn:hover {
+  transform: translateY(-2px);
+}
+
+.c-btn:focus-visible,
+.work-article a:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* ── Work ─────────────────────────────────── */
+.work {
+  position: relative;
+  background: var(--c-paper);
+  color: var(--c-ink);
+}
+
+.work-alias {
+  position: absolute;
+  top: 0;
+}
+
+/* Shared article frame. Layouts below only change grid areas/proportions;
+   DOM order stays text → visual. */
+.work-article {
+  min-height: var(--work-section-min);
+  display: grid;
+  grid-template-areas: "text" "visual";
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+  gap: clamp(2rem, 4vw, 3rem);
+  padding: var(--work-header-offset) var(--index-corridor) 3rem
+    var(--work-gutter);
+}
+
+.work-article + .work-article {
+  border-top: 1px solid color-mix(in srgb, var(--c-ink) 10%, transparent);
+}
+
+.work-article__text {
+  grid-area: text;
+  max-width: 40rem;
+  min-width: 0;
+}
+
+.work-article__category {
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0 0 1.25rem;
+}
+
+.work-article__title {
+  font-size: clamp(2rem, 4.5vw, 4rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin: 0;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.work-article__summary {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  max-width: 42ch;
+  margin: 1.25rem 0 2rem;
+}
+
+.work-article__visual {
+  grid-area: visual;
+  margin: 0;
+  min-width: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--project-mainbg, var(--c-ink));
+}
+
+.work-article__visual picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.work-article__visual img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* wide (default): text on top, a wide screen below. The title sits beside
+   the summary + button so the whole section fits one desktop screen. */
+.work-article[data-layout="wide"] .work-article__text {
+  max-width: none;
+  display: grid;
+  grid-template-areas: "cat ." "title more";
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: clamp(2rem, 5vw, 5rem);
+  align-items: end;
+}
+
+.work-article[data-layout="wide"] .work-article__category {
+  grid-area: cat;
+}
+
+.work-article[data-layout="wide"] .work-article__title {
+  grid-area: title;
+}
+
+.work-article[data-layout="wide"] .work-article__more {
+  grid-area: more;
+}
+
+.work-article[data-layout="wide"] .work-article__summary {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.work-article[data-layout="wide"] .work-article__visual {
+  width: 100%;
+  height: clamp(16rem, 52svh, 40rem);
+}
+
+/* detail: one enlarged screen detail on the left, narrow text on the right,
+   both bottom-aligned */
+.work-article[data-layout="detail"] {
+  grid-template-areas: "visual text";
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  align-items: end;
+}
+
+.work-article[data-layout="detail"] .work-article__visual {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  max-height: 72svh;
+  padding: clamp(1rem, 3vw, 2.5rem);
+}
+
+/* Screens are ~395px wide: cap the crop so they aren't upscaled much */
+.work-article[data-layout="detail"] .work-article__visual picture {
+  width: min(100%, 30rem);
+  height: auto;
+  aspect-ratio: 4 / 3;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.25);
+}
+
+.work-article[data-layout="detail"] .work-article__visual img {
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+/* comparison: text ⅓ | source and translation side by side, fields aligned */
+.work-article[data-layout="comparison"] {
+  grid-template-areas: "text visual";
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  align-items: center;
+}
+
+.work-compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(var(--compare-rows), auto);
+  grid-auto-flow: column;
+  column-gap: 1.5rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: var(--c-paper);
+  border: 1px solid color-mix(in srgb, var(--c-ink) 14%, transparent);
+}
+
+.work-compare__col {
+  display: contents;
+}
+
+.work-compare__lang {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--c-cobalt);
+}
+
+.work-compare__field {
+  padding: 0.875rem 0;
+  border-top: 1px solid color-mix(in srgb, var(--c-ink) 10%, transparent);
+  min-width: 0;
+}
+
+.work-compare__label {
+  margin: 0 0 0.375rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.work-compare__value {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 48rem) {
+  .home-hero {
+    min-height: 72svh;
+  }
+
+  .work-article,
+  .work-article[data-layout] {
+    grid-template-areas: "text" "visual";
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+    align-content: center;
+    gap: 2rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .work-article__summary {
+    margin-bottom: 1.5rem;
+  }
+
+  .work-article[data-layout="wide"] .work-article__text {
+    display: block;
+  }
+
+  .work-article[data-layout="wide"] .work-article__summary {
+    margin-top: 1.25rem;
+  }
+
+  .work-article[data-layout="wide"] .work-article__visual {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  /* Source block, then translation block, labels kept */
+  .work-compare {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-auto-flow: row;
+  }
+
+  .work-compare__field + .work-compare__lang {
+    margin-top: 1.5rem;
+  }
+}
+
+/* ── Entrance motion ──────────────────────── */
+/* JS adds data-motion (never under reduced motion) and marks each article
+   data-seen once it reaches 6% above the viewport bottom. Content is never
+   hidden: the start state is only 0.72 opacity. */
+:root {
+  --enter-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --enter-shift: 18px;
+  --enter-duration: 420ms;
+}
+
+.work[data-motion] .work-article:not([data-seen]) .work-article__text,
+.work[data-motion] .work-article:not([data-seen]) .work-article__visual {
+  opacity: 0.72;
+  transform: translateY(var(--enter-shift));
+}
+
+/* Transitions only on the way in, so the start state applies instantly */
+.work[data-motion] .work-article[data-seen] .work-article__text,
+.work[data-motion] .work-article[data-seen] .work-article__visual {
+  transition:
+    opacity var(--enter-duration) var(--enter-ease),
+    transform var(--enter-duration) var(--enter-ease);
+}
+
+.work[data-motion] .work-article[data-seen] .work-article__visual {
+  transition-delay: 60ms;
+}
+
+@media (max-width: 48rem) {
+  :root {
+    --enter-shift: 10px;
+    --enter-duration: 320ms;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .work[data-motion] .work-article .work-article__text,
+  .work[data-motion] .work-article .work-article__visual {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ── Anchor index ─────────────────────────── */
+.work-index {
+  position: fixed;
+  top: 50%;
+  right: var(--index-edge);
+  z-index: 30; /* below the header (50) and mobile menu (40) */
+  transform: translateY(-50%);
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+}
+
+.work-index[data-visible="false"] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.work-index__list {
+  position: relative;
+  max-height: var(--index-max);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.work-index__list::-webkit-scrollbar {
+  display: none;
+}
+
+.work-index__link {
+  display: grid;
+  place-items: center;
+  width: var(--index-hit);
+  height: var(--index-hit);
+  border-radius: 50%;
+  color: var(--c-ink);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.work-index__link:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: -4px; /* stay inside the scroll box so it isn't clipped */
+}
+
+.work-index__mark {
+  display: block;
+  width: 0.625rem;
+  height: 0.625rem;
+  border: 1.5px solid var(--c-ink);
+  border-radius: 50%;
+  background: var(--c-paper);
+  transition:
+    width 160ms ease-out,
+    height 160ms ease-out,
+    border-width 160ms ease-out,
+    border-radius 160ms ease-out,
+    background-color 160ms ease-out;
+}
+
+.work-index__link:hover .work-index__mark {
+  border-color: var(--c-cobalt);
+}
+
+.work-index__link[aria-current="location"] .work-index__mark {
+  width: 1.25rem;
+  height: 0.25rem;
+  border: 0;
+  border-radius: 2px;
+  background: var(--c-cobalt);
+}
+
+.work-index__tooltip {
+  position: absolute;
+  right: calc(100% + 0.25rem);
+  transform: translateY(-50%);
+  width: max-content;
+  max-width: min(16rem, 60vw);
+  padding: 0.375rem 0.625rem;
+  border-radius: 0.375rem;
+  background: var(--c-ink);
+  color: var(--c-paper);
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+}
