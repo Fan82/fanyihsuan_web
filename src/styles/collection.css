@@ -51,8 +51,10 @@
 }
 
 /* ── Hero ─────────────────────────────────── */
+/* A full screen, so the first project starts below the fold and eases in
+   when you scroll to it (see Entrance motion). */
 .home-hero {
-  min-height: 88svh;
+  min-height: 100svh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -336,7 +338,7 @@
 
 @media (max-width: 48rem) {
   .home-hero {
-    min-height: 72svh;
+    justify-content: center;
   }
 
   .work-article,
@@ -419,6 +421,28 @@
     opacity: 1;
     transform: none;
     transition: none;
+  }
+}
+
+/* ── Section snapping (home page only) ───── */
+/* Native CSS scroll snap: the browser still owns wheel and touch.
+   Desktop sections are exactly one screen tall, so every scroll settles on
+   one. On narrow screens sections can be taller than the screen, so it only
+   snaps near a section start. Off under reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html:has(#work) {
+    scroll-snap-type: y mandatory;
+  }
+
+  html:has(#work) .home-hero,
+  html:has(#work) .work-article {
+    scroll-snap-align: start;
+  }
+
+  @media (max-width: 48rem) {
+    html:has(#work) {
+      scroll-snap-type: y proximity;
+    }
   }
 }
 

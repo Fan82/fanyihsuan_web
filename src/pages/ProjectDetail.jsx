@@ -511,7 +511,7 @@ export default function ProjectDetail() {
   const project = baseProject ? localizeProject(baseProject, language) : null;
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [id]);
 
   if (!project) {

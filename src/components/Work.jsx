@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import { UI_COPY, tx, useLanguage } from "../i18n/LanguageContext";
 
 const LAYOUTS = ["wide", "detail", "comparison"];
-const SEEN_KEY = "work-seen";
+// Sections already shown during this page load. Kept in memory so Back from
+// a case study doesn't replay them, while a reload or new visit does.
+const seenThisLoad = new Set();
 
 /**
  * Work — one full-bleed <article> per project.
@@ -33,7 +35,7 @@ export default function Work({ projects }) {
       return undefined;
     }
 
-    const seen = readSeen();
+    const seen = seenThisLoad;
     const line = window.innerHeight * 0.94;
     const articles = [...section.querySelectorAll(":scope > article")];
     for (const el of articles) {
@@ -42,7 +44,6 @@ export default function Work({ projects }) {
         seen.add(el.id);
       }
     }
-    writeSeen(seen);
     section.dataset.motion = "on";
 
     const io = new IntersectionObserver(
@@ -53,7 +54,6 @@ export default function Work({ projects }) {
           seen.add(entry.target.id);
           io.unobserve(entry.target);
         }
-        writeSeen(seen);
       },
       { rootMargin: "0px 0px -6% 0px" },
     );
@@ -198,20 +198,4 @@ function hasComparison(c) {
     c?.fields?.length &&
       c.fields.every((f) => f.source?.trim() && f.target?.trim()),
   );
-}
-
-function readSeen() {
-  try {
-    return new Set(JSON.parse(sessionStorage.getItem(SEEN_KEY) || "[]"));
-  } catch {
-    return new Set();
-  }
-}
-
-function writeSeen(seen) {
-  try {
-    sessionStorage.setItem(SEEN_KEY, JSON.stringify([...seen]));
-  } catch {
-    /* storage unavailable: motion just replays */
-  }
 }
