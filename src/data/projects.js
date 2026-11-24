@@ -10,8 +10,14 @@ export const projects = [
     work: {
       layout: "comparison",
       comparison: {
-        source: { lang: "en", label: { en: "English · source", zh: "英文 · 原文" } },
-        target: { lang: "zh-Hant", label: { en: "繁體中文 · translation", zh: "繁體中文 · 譯文" } },
+        source: {
+          lang: "en",
+          label: { en: "English · source", zh: "英文 · 原文" },
+        },
+        target: {
+          lang: "zh-Hant",
+          label: { en: "繁體中文 · translation", zh: "繁體中文 · 譯文" },
+        },
         fields: [
           // { label: "Product title", source: "", target: "" },
           // { label: "Description", source: "", target: "" },
@@ -36,32 +42,38 @@ export const projects = [
     story: [
       {
         label: "Background",
-        heading: "It looked like a translation task. It was a chain of different jobs.",
+        heading:
+          "It looked like a translation task. It was a chain of different jobs.",
         body: "My job at an HK e-commerce company included rebuilding existing Shopify stores in another language. The first was an overseas luxury brand client: its English Singapore store, rebuilt as a separate Traditional Chinese store for Taiwan. That meant exporting translation data, sorting what actually needed translating, merging the translations, then handling the theme, products and images, each with its own file format and its own corner of the Shopify admin. I had joined in July 2026 and had never used Shopify before.",
       },
       {
         label: "Problem",
-        heading: "The difficulty wasn't any single step. It was how much I had to remember and re-check.",
+        heading:
+          "The difficulty wasn't any single step. It was how much I had to remember and re-check.",
         body: "Each step's output fed the next, so one wrong file broke everything after it. The export mixed real copy with handles, URLs, JSON and the same sentence repeated across products, all of which had to be sorted before marketing could translate. And the details lived in my memory: Excel turning IDs into 8.1E+12, translations dropping HTML tags, theme images found only by exact file name, and content types with no CSV import at all.",
       },
       {
         label: "Approach",
-        heading: "Turn the know-how in my head into a process I can simply follow.",
+        heading:
+          "Turn the know-how in my head into a process I can simply follow.",
         body: "Writing the workflow down, a fixed order appeared, in four stages: prepare the data, translate, migrate the content, then check the new store. Eight steps in all. If the order never changes, it can live in one interface that shows which step I'm on, which files it needs and where to find them in the admin, and hands back files already named for the next step.",
       },
       {
         label: "Solution",
-        heading: "Guidance instead of memory, and checks where mistakes happen.",
+        heading:
+          "Guidance instead of memory, and checks where mistakes happen.",
         body: "Steps unlock only when the previous one is done. The translator file shows each sentence once, turns numbers into {1} and HTML into markers like 〔1〕text〔/1〕, and skips handles, URLs, theme sample text and customer fields, logging every skipped row with its reason. At merge, a translation that breaks a marker keeps the original text and is flagged in the report, so broken HTML never reaches the store.",
       },
       {
         label: "Trade-off",
-        heading: "One HTML file with no libraries, because my work computer can't run a terminal.",
+        heading:
+          "One HTML file with no libraries, because my work computer can't run a terminal.",
         body: "Python and Node scripts were out, and custom apps aren't allowed on this store. So I wrote the ZIP, XLSX and CSV handling on native browser APIs (CompressionStream, DOMParser, Blob). It means more code to maintain, but it runs anywhere with a double-click, and every file stays on my computer.",
       },
       {
         label: "Reflection",
-        heading: "Design can start from a daily work problem, not only a product idea.",
+        heading:
+          "Design can start from a daily work problem, not only a product idea.",
         body: "Being the requester, the designer and the user at once meant asking which problems were real and which were just my own habits. If the marketing team or colleagues running other markets start using the tool, I'll test the flow and guidance again with them.",
       },
     ],
@@ -233,7 +245,10 @@ export const projects = [
       layout: "detail",
       image: {
         src: "/projects/runApp/screen/07.png",
-        alt: { en: "Live run screen: timer, distance, pace and calories", zh: "跑步進行中畫面：計時、距離、配速與卡路里" },
+        alt: {
+          en: "Live run screen: timer, distance, pace and calories",
+          zh: "跑步進行中畫面：計時、距離、配速與卡路里",
+        },
         focusY: "15%",
       },
     },
@@ -468,158 +483,6 @@ export const projects = [
 
     screenCount: 5,
   },
-
-  // ─── 05 Flight Booking ────────────────────────────────────────
-  {
-    id: "bookFlight",
-    theme: "theme-bookFlight",
-    work: {
-      layout: "detail",
-      image: {
-        src: "/projects/bookFlight/screen/10.png",
-        alt: { en: "Add Extras step: optional services with toggles and prices", zh: "加購步驟：可開關的加購服務與價格" },
-        focusY: "34%",
-      },
-    },
-    accent: "#2563EB",
-    name: "Flight Booking",
-    tagline: "Book the flight, take the leave, and go.",
-    tags: ["React", "Form UX", "Error Prevention"],
-    meta: { Role: "UI/UX + Front-End", Year: "2024" },
-    desc: "A booking-flow prototype focused on preventing common user errors through validation rules and conditional interface states.",
-    focus: "Business rules · Error prevention",
-    demoUrl: "./bookFlight/flight_booking_app.html",
-    demoMobile: true,
-
-    overview: {
-      problemSummary:
-        "Flight forms are full of errors users shouldn't be able to make.",
-      problem:
-        "As a frequent traveller I'd felt the frustration firsthand — wrong return dates, confusing one-way vs return states, submit buttons that activate before the form is actually valid. These aren't edge cases, they're the default experience.",
-      solutionSummary:
-        "A form system where the UI does the validation work so the user doesn't have to.",
-      solution:
-        "Return date locks before departure date. One-way mode hides irrelevant fields. Submit only activates when the form is genuinely complete. Each component — Date Picker, City Picker, Passenger Counter — is self-contained with its own state and validation.",
-    },
-
-    inspiration:
-      '"Endless waiting for the next long weekend. I want to go now."',
-
-    process: [
-      {
-        num: "01",
-        title: "Map the failure modes",
-        desc: "Listed every booking error I'd personally made or seen. Wrong dates, wrong passenger counts, unclear one-way states. Each became a design constraint.",
-      },
-      {
-        num: "02",
-        title: "Smart date validation",
-        desc: "Return date can never precede departure — enforced in the component, with instant visual feedback. Eliminates the most common booking error.",
-      },
-      {
-        num: "03",
-        title: "Conditional UI",
-        desc: "One-way mode removes the return date section entirely. Showing only what's relevant at each step reduces errors and cognitive load simultaneously.",
-      },
-    ],
-
-    productLens: [
-      {
-        label: "User",
-        value:
-          "Travelers who need to complete a booking flow quickly without making date, route, or passenger mistakes.",
-      },
-      {
-        label: "Product Goal",
-        value:
-          "Lower booking friction by preventing invalid inputs before the user reaches submission.",
-      },
-      {
-        label: "Key Decision",
-        value:
-          "Encode business rules directly into UI states, including one-way trips, date order, and completion requirements.",
-      },
-      {
-        label: "Measure",
-        value:
-          "Form completion rate, validation errors avoided, time to booking readiness, and field correction frequency.",
-      },
-    ],
-
-    screenCount: 5,
-  },
-
-  // ─── 06 Let's Travel ──────────────────────────────────────────
-  {
-    id: "goTravel",
-    theme: "theme-goTravel",
-    work: { layout: "wide" },
-    accent: "#ff6000",
-    name: "Let's Travel",
-    tagline: "Travel that feels close enough to imagine.",
-    tags: ["HTML/CSS", "Content Strategy", "Layout"],
-    meta: { Role: "UI/UX + Design System", Year: "2024" },
-    desc: "A travel interface study on how imagery, content hierarchy, and screen layout can guide exploration.",
-    focus: "Content hierarchy · Exploration UX",
-    demoUrl: "./goTravel/go_travel_app.html",
-    demoMobile: true,
-
-    overview: {
-      problemSummary: "Travel sites bury the feeling under information.",
-      problem:
-        "When you arrive somewhere new, the last thing you want is walls of text. Most travel sites prioritise completeness over experience — they tell you everything and make you feel nothing.",
-      solutionSummary:
-        "A visual-first layout where destinations speak before text does.",
-      solution:
-        "Card-based layout built with CSS Grid and Flexbox. Images lead. Text supports. Mobile-first so it works wherever you actually are.",
-    },
-
-    inspiration: '"The place I long for is always the next stop."',
-
-    process: [
-      {
-        num: "01",
-        title: "Visual-first constraint",
-        desc: "Set a rule: every section should communicate its purpose through imagery before the user reads a word. Forced every layout decision to serve that goal.",
-      },
-      {
-        num: "02",
-        title: "CSS Grid as structure",
-        desc: "Used Grid for the destination cards and Flexbox for everything else. The layout itself communicates variety and abundance — core feelings for a travel product.",
-      },
-      {
-        num: "03",
-        title: "Mobile-first",
-        desc: "Cards stack on phones, expand to grid on desktop. Designed for someone who's already travelling — phone in hand, looking for what to do next.",
-      },
-    ],
-
-    productLens: [
-      {
-        label: "User",
-        value:
-          "Travelers browsing destinations who need quick emotional and practical signals before reading details.",
-      },
-      {
-        label: "Product Goal",
-        value:
-          "Help users scan destination options by letting imagery lead and content support decision-making.",
-      },
-      {
-        label: "Key Decision",
-        value:
-          "Use a visual-first grid so destination variety is understood at a glance across desktop and mobile.",
-      },
-      {
-        label: "Measure",
-        value:
-          "Destination click-through, scroll depth, saved destinations, and whether users can compare options quickly.",
-      },
-    ],
-
-    screenCount: 5,
-  },
-
   // ─── 07 Zei Qia ───────────────────────────────────────────────
   {
     id: "publicTransp",
@@ -628,7 +491,10 @@ export const projects = [
       layout: "detail",
       image: {
         src: "/projects/publicTransp/screen/07.png",
-        alt: { en: "Live Map: MRT and bus lines with nearby stops", zh: "即時地圖：捷運與公車路線及附近站點" },
+        alt: {
+          en: "Live Map: MRT and bus lines with nearby stops",
+          zh: "即時地圖：捷運與公車路線及附近站點",
+        },
         focusY: "26%",
       },
     },
