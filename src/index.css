@@ -22,65 +22,13 @@
   --project-bg: #050206;
 }
 
-/* ─────────────────────────────────────────────
-   Per-project colour tokens
-   Apply class="theme-planify" on the project
-   page wrapper to activate the right palette.
-───────────────────────────────────────────── */
-.theme-planify {
-  --accent: #FFAE00;
-  --accent-btn: #0e0f1c;
-  --accent-dim: rgba(255, 174, 0, 0.12);
-  --accent-text: #fff;
-  --project-bg: #0e0f1c;
-  --project-mainbg: #161A31;
-}
-
-.theme-bookFlight {
-  --accent: #2563EB;
-  --accent-btn: #f0f0f0;
-  --accent-dim: rgba(37, 99, 235, 0.12);
-  --accent-text: #ffffff;
-  --project-bg: #0a0f1e;
-  --project-mainbg: #092460;
-}
-
-.theme-easyBank {
-  --accent: #2563eb;
-  --accent-btn: #f0f0f0;
-  --accent-dim: #2563eb1f;
-  --accent-text: #0f172a;
-  --project-bg: linear-gradient(180deg, #ffffff 0%, #fff5e6 100%);
-  --project-mainbg: #fffefc;
-}
-
-.theme-goTravel {
-  --accent: #ff6000;
-  --accent-btn: #f0f0f0;
-  --accent-dim: rgba(255, 98, 0, 0.37);
-  --accent-text: #170f06;
-  --project-bg: #f0f0f0;
-  --project-mainbg: #f0f0f0;
-}
-
-.theme-publicTransp {
-  --accent: #dc2626;
-  --accent-btn: #f0f0f0;
-  --accent-dim: rgba(124, 58, 237, 0.12);
-  --accent-text: #18181b;
-  --project-bg: #f2f1ee;
-  --project-mainbg: #f2f1ee;
-
-}
-
-.theme-runApp {
-  --accent: #05df72;
-  --accent-btn: #f0f0f0;
-  --accent-dim: rgb(5, 223, 114, 0.12);
-  --accent-text: #ffffff;
-  --project-bg: #0a1912;
-  --project-mainbg: #0a1912;
-
+.theme-shuppatsu {
+  --accent: #f3e29a;
+  --accent-btn: #161403;
+  --accent-dim: #f3e29a;
+  --accent-text: #161403;
+  --project-bg: #ffffff;
+  --project-mainbg: #f3e29a;
 }
 
 .theme-shopifyTranslation {

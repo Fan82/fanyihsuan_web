@@ -61,7 +61,7 @@ export default function Nav() {
       <header
         // Keyboard users never land on links inside a hidden header
         onFocus={() => setVisible(true)}
-        className={`fixed top-0 left-0 right-0 z-50 bg-white flex items-center justify-between px-6 lg:px-12 py-4 transition-transform duration-300 ease-in-out
+        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 lg:px-12 py-4 transition-transform duration-300 ease-in-out
           ${visible || menuOpen ? "translate-y-0" : "-translate-y-full"}`}
       >
         <Link

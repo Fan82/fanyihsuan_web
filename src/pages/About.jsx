@@ -20,21 +20,21 @@ const TRAITS = {
       word: { en: "Organized", zh: "有條理" },
       line: {
         en: "I plan the big things early, then stay flexible on the rest.",
-        zh: "重要的事先規劃好，其他保留彈性。",
+        zh: "重要的事先規劃好",
       },
     },
     {
       word: { en: "Honest", zh: "坦誠" },
       line: {
-        en: "If I don't know, I say so. If I don't agree, I say it kindly.",
-        zh: "不知道就說不知道，不同意也會好好說。",
+        en: "If I don't know, then I don't know",
+        zh: "不知道就說不知道",
       },
     },
     {
-      word: { en: "Adventurous", zh: "勇於嘗試" },
+      word: { en: "Adventurous", zh: "范大膽" },
       line: {
-        en: "I went to the UK alone for a working holiday. It made me more confident.",
-        zh: "一個人去英國打工度假，讓我更有自信。",
+        en: "Just do it",
+        zh: "先走再說",
       },
     },
   ],
@@ -73,7 +73,10 @@ const EXPERIENCE = [
   },
   {
     period: { en: "Nov 2025 – Jan 2026", zh: "2025.11 – 2026.01" },
-    company: { en: "One Sky Collective (Social Enterprise)", zh: "One Sky Collective（社會企業）" },
+    company: {
+      en: "One Sky Collective (Social Enterprise)",
+      zh: "One Sky Collective（社會企業）",
+    },
     role: { en: "Volunteer UI Designer", zh: "UI 設計志工" },
     details: [
       {
@@ -86,7 +89,10 @@ const EXPERIENCE = [
   {
     period: { en: "Feb 2022 – Feb 2025", zh: "2022.02 – 2025.02" },
     company: "Neutec Co., Ltd.",
-    role: { en: "UI/UX Designer & Front-End Developer", zh: "UI/UX 設計師暨前端工程師" },
+    role: {
+      en: "UI/UX Designer & Front-End Developer",
+      zh: "UI/UX 設計師暨前端工程師",
+    },
     details: [
       {
         en: "Designed and developed interfaces for gaming platforms, working with PMs and engineers from concept to release.",
@@ -256,7 +262,12 @@ export default function About() {
     <main id="main" tabIndex={-1} ref={pageRef} className="about">
       {/* ── Name and photo ── */}
       <section className="about-hero" aria-labelledby="about-name">
-        <h1 id="about-name" ref={nameRef} className="about-hero__name" data-enter="">
+        <h1
+          id="about-name"
+          ref={nameRef}
+          className="about-hero__name"
+          data-enter=""
+        >
           YiHsuan <span className="about-hero__last">Fan.</span>
         </h1>
         <picture className="about-hero__photo">
@@ -273,6 +284,36 @@ export default function About() {
           />
         </picture>
         <p className="about-hero__intro">{t(HERO.intro)}</p>
+        <ul className="about-footer__links">
+          {FOOTER_LINKS.map((link) => (
+            <li key={tx(link.label, "en")}>
+              <a
+                href={tx(link.href, language)}
+                className="about-footer__link"
+                target={link.newTab ? "_blank" : undefined}
+                rel={link.newTab ? "noreferrer" : undefined}
+              >
+                {t(link.label)}
+                {link.newTab && (
+                  <span className="sr-only"> {t(COPY.newTab)}</span>
+                )}
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M3 11L11 3M5 3h6v6" />
+                </svg>
+              </a>
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* ── Strengths ── */}
@@ -297,7 +338,10 @@ export default function About() {
         </h2>
         <ol className="about-timeline">
           {EXPERIENCE.map((job) => (
-            <li key={`${tx(job.company, "en")}-${tx(job.period, "en")}`} className="about-job">
+            <li
+              key={`${tx(job.company, "en")}-${tx(job.period, "en")}`}
+              className="about-job"
+            >
               <p className="about-job__date">{t(job.period)}</p>
               <div className="about-job__body">
                 <h3 className="about-job__role">{t(job.role)}</h3>
@@ -336,7 +380,7 @@ export default function About() {
       </section>
 
       {/* ── Résumé and contact ── */}
-      <footer className="about-footer" aria-labelledby="about-contact-title">
+      {/* <footer className="about-footer" aria-labelledby="about-contact-title">
         <h2 id="about-contact-title" className="sr-only">
           {t(COPY.contact)}
         </h2>
@@ -368,7 +412,7 @@ export default function About() {
             </li>
           ))}
         </ul>
-      </footer>
+      </footer> */}
     </main>
   );
 }
