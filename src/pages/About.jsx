@@ -12,41 +12,30 @@ const HERO = {
   photoAlt: { en: "YiHsuan Fan", zh: "范翊萱" },
 };
 
-// Strengths and weaknesses, told through how I travel.
+// Strengths: one word each, plus a line or two of proof.
 const TRAITS = {
-  before: { en: "I book the hotel first. The rest I leave ", zh: "我會先訂好飯店，其他的就" },
-  em: { en: "open.", zh: "留白" },
-  after: { en: "", zh: "。" },
-  groups: [
+  title: { en: "What I'm like", zh: "我是怎樣的人" },
+  items: [
     {
-      label: { en: "What I'm good at", zh: "我擅長的" },
-      items: [
-        {
-          en: "I plan the big things early, then stay flexible, so plans can change on the way.",
-          zh: "重要的事我會先規劃好，其他保留彈性，路上隨時可以調整。",
-        },
-        {
-          en: "If I don't know something, I say so. If I don't agree, I say that too, kindly, and then we decide together.",
-          zh: "不知道就說不知道。不同意也會說出來，但說得客氣，然後一起決定。",
-        },
-        {
-          en: "I moved to the UK alone for a working holiday. It wasn't easy at first, but it made me more confident.",
-          zh: "我一個人去英國打工度假。一開始不容易，但讓我更有自信。",
-        },
-      ],
+      word: { en: "Organized", zh: "有條理" },
+      line: {
+        en: "I plan the big things early, then stay flexible on the rest.",
+        zh: "重要的事先規劃好，其他保留彈性。",
+      },
     },
     {
-      label: { en: "What I'm working on", zh: "我還在練習的" },
-      items: [
-        {
-          en: "I used to wait until I felt ready. I didn't feel ready for the UK either, but I went anyway. Now I start first and improve along the way.",
-          zh: "我以前常等到覺得準備好才開始。去英國前我也沒準備好，但還是去了。現在我會先開始，邊做邊改進。",
-        },
-        {
-          en: "I can compare hotels for hours. Now I decide what matters most first, and let the rest go.",
-          zh: "我可以比較飯店比好幾個小時。現在我會先決定什麼最重要，其他就放下。",
-        },
-      ],
+      word: { en: "Honest", zh: "坦誠" },
+      line: {
+        en: "If I don't know, I say so. If I don't agree, I say it kindly.",
+        zh: "不知道就說不知道，不同意也會好好說。",
+      },
+    },
+    {
+      word: { en: "Adventurous", zh: "勇於嘗試" },
+      line: {
+        en: "I went to the UK alone for a working holiday. It made me more confident.",
+        zh: "一個人去英國打工度假，讓我更有自信。",
+      },
     },
   ],
 };
@@ -232,7 +221,7 @@ export default function About() {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
-  // Entrance motion: the name on load, the traits title the first time it
+  // Entrance motion: the name on load, the traits the first time they
   // enters the viewport (scrolling back doesn't replay it). Under reduced
   // motion nothing is set, so the text is simply shown.
   useLayoutEffect(() => {
@@ -286,30 +275,19 @@ export default function About() {
         <p className="about-hero__intro">{t(HERO.intro)}</p>
       </section>
 
-      {/* ── Strengths and weaknesses ── */}
+      {/* ── Strengths ── */}
       <section className="about-traits" aria-labelledby="about-traits">
-        <h2
-          id="about-traits"
-          ref={traitsRef}
-          className="about-traits__title"
-          data-enter=""
-        >
-          {t(TRAITS.before)}
-          <em className="about-traits__em">{t(TRAITS.em)}</em>
-          {t(TRAITS.after)}
+        <h2 id="about-traits" className="sr-only">
+          {t(TRAITS.title)}
         </h2>
-        <div className="about-traits__groups">
-          {TRAITS.groups.map((group) => (
-            <div key={tx(group.label, "en")} className="about-traits__group">
-              <h3 className="about-traits__label">{t(group.label)}</h3>
-              <ul className="about-traits__list">
-                {group.items.map((item) => (
-                  <li key={tx(item, "en")}>{t(item)}</li>
-                ))}
-              </ul>
-            </div>
+        <ul ref={traitsRef} className="about-traits__list" data-enter="">
+          {TRAITS.items.map(({ word, line }) => (
+            <li key={tx(word, "en")} className="about-traits__item">
+              <h3 className="about-traits__word">{t(word)}</h3>
+              <p className="about-traits__line">{t(line)}</p>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
       {/* ── Experience ── */}

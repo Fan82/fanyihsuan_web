@@ -73,58 +73,35 @@
   border-radius: 1rem;
 }
 
-/* ── Strengths and weaknesses ─────────────── */
+/* ── Strengths ────────────────────────────── */
 .about-traits {
-  display: grid;
-  gap: clamp(2.5rem, 5vw, 4rem);
   padding-block: clamp(4rem, 10vw, 8rem);
   background: var(--c-accent);
   color: var(--c-paper);
 }
 
-.about-traits__title {
-  max-width: 18ch;
+.about-traits__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(2.5rem, 5vw, 5rem);
   margin: 0;
-  font-size: clamp(2.25rem, 6vw, 5rem);
+  padding: 0;
+  list-style: none;
+}
+
+.about-traits__word {
+  margin: 0;
+  font-size: clamp(2.25rem, 3.4vw, 3.5rem);
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.02em;
 }
 
-.about-traits__em {
-  font-family: Georgia, "Times New Roman", serif;
-  font-style: italic;
-  font-weight: 400;
-}
-
-.about-traits__groups {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: clamp(2rem, 5vw, 5rem);
-  row-gap: 2.5rem;
-}
-
-.about-traits__label {
-  margin: 0 0 1rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.about-traits__list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
-  font-weight: 500;
+.about-traits__line {
+  max-width: 28ch;
+  margin: 1rem 0 0;
+  font-size: clamp(1.0625rem, 1.4vw, 1.1875rem);
   line-height: 1.55;
-}
-
-.about-traits__list li + li {
-  margin-top: 1.25rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid color-mix(in srgb, var(--c-paper) 35%, transparent);
 }
 
 /* Red section: an ink ring stays visible where the accent wouldn't */
@@ -306,6 +283,10 @@
 
 /* ── Breakpoints ──────────────────────────── */
 @media (max-width: 64rem) {
+  .about-traits__list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .about-exp {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -327,10 +308,6 @@
 
   .about-hero__intro {
     margin-top: 0;
-  }
-
-  .about-traits__groups {
-    grid-template-columns: minmax(0, 1fr);
   }
 
   .about-job {

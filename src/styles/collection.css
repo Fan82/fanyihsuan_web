@@ -9,7 +9,7 @@
   /* Interface palette — limited to these three */
   --c-ink: #141414;
   --c-paper: #ffffff;
-  --c-accent: #f84040;
+  --c-accent: #d92d2d;
 
   --work-gutter: clamp(1rem, 4vw, 3rem);
   --work-header-offset: 5rem; /* clears the fixed site header */
