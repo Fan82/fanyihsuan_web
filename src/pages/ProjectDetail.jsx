@@ -269,7 +269,6 @@ function StorySection({ project }) {
                 fontSize: "0.9375rem",
                 color: "var(--accent-text)",
                 opacity: 0.6,
-                maxWidth: "64ch",
               }}
             >
               {beat.body}
@@ -342,7 +341,6 @@ function OutcomeSection({ project }) {
         style={{
           fontSize: "clamp(1.125rem, 2vw, 1.5rem)",
           color: "var(--accent-text)",
-          maxWidth: "48ch",
           whiteSpace: "pre-line",
         }}
       >

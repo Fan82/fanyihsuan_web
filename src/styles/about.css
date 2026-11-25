@@ -46,9 +46,8 @@
 }
 
 /* Two lines: "YiHsuan" / "Fan." */
-.about-hero__accent {
+.about-hero__last {
   display: block;
-  color: var(--c-cobalt);
 }
 
 .about-hero__intro {
@@ -74,17 +73,17 @@
   border-radius: 1rem;
 }
 
-/* ── Form design question ─────────────────── */
-.about-question {
+/* ── Strengths and weaknesses ─────────────── */
+.about-traits {
   display: grid;
-  gap: 2.5rem;
+  gap: clamp(2.5rem, 5vw, 4rem);
   padding-block: clamp(4rem, 10vw, 8rem);
-  background: var(--c-cobalt);
+  background: var(--c-accent);
   color: var(--c-paper);
 }
 
-.about-question__title {
-  max-width: 16ch;
+.about-traits__title {
+  max-width: 18ch;
   margin: 0;
   font-size: clamp(2.25rem, 6vw, 5rem);
   font-weight: 700;
@@ -92,18 +91,45 @@
   letter-spacing: -0.02em;
 }
 
-.about-question__em {
+.about-traits__em {
   font-family: Georgia, "Times New Roman", serif;
   font-style: italic;
   font-weight: 400;
 }
 
-.about-question__body {
-  justify-self: end;
-  max-width: 43ch;
+.about-traits__groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(2rem, 5vw, 5rem);
+  row-gap: 2.5rem;
+}
+
+.about-traits__label {
+  margin: 0 0 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.about-traits__list {
   margin: 0;
+  padding: 0;
+  list-style: none;
   font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
-  line-height: 1.6;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.about-traits__list li + li {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid color-mix(in srgb, var(--c-paper) 35%, transparent);
+}
+
+/* Red section: an ink ring stays visible where the accent wouldn't */
+.about-traits :focus-visible {
+  outline-color: var(--c-ink);
 }
 
 /* ── Experience ───────────────────────────── */
@@ -220,7 +246,7 @@
   line-height: 1.5;
 }
 
-/* Dark section: a white ring stays visible where cobalt wouldn't */
+/* Dark section: a white ring stays visible where the accent wouldn't */
 .about-skills :focus-visible {
   outline-color: var(--c-paper);
 }
@@ -252,8 +278,8 @@
 }
 
 .about-footer__link:hover {
-  border-color: var(--c-cobalt);
-  color: var(--c-cobalt);
+  border-color: var(--c-accent);
+  color: var(--c-accent);
 }
 
 /* ── Entrance motion ──────────────────────── */
@@ -303,8 +329,8 @@
     margin-top: 0;
   }
 
-  .about-question__body {
-    justify-self: start;
+  .about-traits__groups {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .about-job {

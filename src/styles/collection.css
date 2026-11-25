@@ -9,7 +9,7 @@
   /* Interface palette — limited to these three */
   --c-ink: #141414;
   --c-paper: #ffffff;
-  --c-cobalt: #233dcc;
+  --c-accent: #f84040;
 
   --work-gutter: clamp(1rem, 4vw, 3rem);
   --work-header-offset: 5rem; /* clears the fixed site header */
@@ -22,7 +22,7 @@
   /* Space reserved on the right of Work content so dots never cover it */
   --index-corridor: calc(var(--index-hit) + var(--index-edge) + 0.75rem);
 
-  --focus-ring: 2px solid var(--c-cobalt);
+  --focus-ring: 2px solid var(--c-accent);
 }
 
 /* ── Shared focus & skip link ─────────────── */
@@ -38,7 +38,7 @@
   z-index: 60; /* above the header */
   padding: 0.625rem 1rem;
   border-radius: 0.5rem;
-  background: var(--c-cobalt);
+  background: var(--c-accent);
   color: var(--c-paper);
   font-size: 0.9375rem;
   font-weight: 500;
@@ -112,7 +112,7 @@
   min-height: 2.75rem;
   padding: 0 1.25rem;
   border-radius: 999px;
-  border: 1.5px solid var(--c-cobalt);
+  border: 1.5px solid var(--c-accent);
   font-size: 0.9375rem;
   font-weight: 500;
   line-height: 1.2;
@@ -120,7 +120,7 @@
 }
 
 .c-btn--primary {
-  background: var(--c-cobalt);
+  background: var(--c-accent);
   color: var(--c-paper);
 }
 
@@ -313,7 +313,7 @@
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--c-cobalt);
+  color: var(--c-accent);
 }
 
 .work-compare__field {
@@ -509,7 +509,7 @@
 }
 
 .work-index__link:hover .work-index__mark {
-  border-color: var(--c-cobalt);
+  border-color: var(--c-accent);
 }
 
 .work-index__link[aria-current="location"] .work-index__mark {
@@ -517,7 +517,7 @@
   height: 0.25rem;
   border: 0;
   border-radius: 2px;
-  background: var(--c-cobalt);
+  background: var(--c-accent);
 }
 
 .work-index__tooltip {
