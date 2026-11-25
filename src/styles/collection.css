@@ -8,11 +8,12 @@
 :root {
   /* Interface palette — limited to these three */
   --c-ink: #141414;
-  --c-paper: #ffffff;
-  --c-accent: #d92d2d;
+  --c-paper: #f7f6f6;
+  --c-accent: #0f2091;
 
   --work-gutter: clamp(1rem, 4vw, 3rem);
-  --work-header-offset: 5rem; /* clears the fixed site header */
+  --work-header-offset: 5rem;
+  /* clears the fixed site header */
   --work-section-min: 100svh;
 
   /* Anchor index: each link is a 2.75rem (≈44px) square hit area */
@@ -35,7 +36,8 @@
   position: fixed;
   top: 0.75rem;
   left: 0.75rem;
-  z-index: 60; /* above the header */
+  z-index: 60;
+  /* above the header */
   padding: 0.625rem 1rem;
   border-radius: 0.5rem;
   background: var(--c-accent);
@@ -55,53 +57,121 @@
    when you scroll to it (see Entrance motion). */
 .home-hero {
   min-height: 100svh;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: calc(var(--work-header-offset) + 2rem) var(--work-gutter) 4rem;
+  justify-content: space-between;
+  gap: 3.5rem;
+  padding: calc(var(--work-header-offset) + 2rem) var(--work-gutter) 3.5rem;
   background: var(--c-paper);
   color: var(--c-ink);
 }
 
-.home-hero__inner {
-  max-width: 52rem;
+.home-hero__top {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
 }
 
-.home-hero__eyebrow {
+/* Eyebrow left, year right; stacks when there's no room */
+.home-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem 2rem;
   font-size: 0.875rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin: 0 0 1.5rem;
 }
 
+.home-hero__eyebrow,
+.home-hero__tag {
+  margin: 0;
+}
+
+.home-hero__tag {
+  color: #5c5c5c;
+}
+
+/* Fills the width on desktop; capped by height so it never pushes the
+   intro below the fold on short screens. */
 .home-hero__name {
-  font-size: clamp(3rem, 10vw, 7.5rem);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
+  font-size: clamp(3.5rem, min(15.5vw, 26svh), 15rem);
+  font-weight: 800;
+  line-height: 0.86;
+  letter-spacing: -0.045em;
   margin: 0;
   overflow-wrap: anywhere;
 }
 
+.home-hero__dot {
+  color: var(--c-accent);
+}
+
+/* The period becomes a small square a dash runs around, one side every
+   0.5s. Reduced motion keeps the plain period. */
+.home-hero__loader {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home-hero__dot-static {
+    display: none;
+  }
+
+  .home-hero__loader {
+    display: inline-block;
+    width: 0.2em;
+    height: 0.2em;
+    margin-left: 0.06em;
+    vertical-align: baseline;
+    overflow: visible;
+  }
+
+  /* Square perimeter is 72: a 12-long dash, then a gap to fill the rest */
+  .home-hero__loader path {
+    stroke-dasharray: 12 60;
+    animation: hero-dot-trace 2s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+  }
+}
+
+@keyframes hero-dot-trace {
+  0% { stroke-dashoffset: 0; }
+  25% { stroke-dashoffset: -18; }
+  50% { stroke-dashoffset: -36; }
+  75% { stroke-dashoffset: -54; }
+  100% { stroke-dashoffset: -72; }
+}
+
+.home-hero__inner {
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
 .home-hero__role {
-  font-size: clamp(1.375rem, 3vw, 2.25rem);
-  font-weight: 500;
-  line-height: 1.2;
-  margin: 1.25rem 0 0;
+  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0;
 }
 
 .home-hero__intro {
-  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  font-size: clamp(1rem, 1.4vw, 1.0625rem);
   line-height: 1.65;
-  max-width: 40rem;
-  margin: 1.5rem 0 0;
+  max-width: 34rem;
+  color: #2b2b2b;
+  margin: 0;
 }
 
 .home-hero__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-top: 2.5rem;
+  margin-top: 0.75rem;
 }
 
 /* ── Shared buttons ───────────────────────── */
@@ -119,9 +189,20 @@
   transition: transform 0.2s ease;
 }
 
+.c-btn__icon {
+  flex: none;
+}
+
 .c-btn--primary {
   background: var(--c-accent);
   color: var(--c-paper);
+}
+
+/* Shuppatsu: primary button takes the project's soft yellow */
+.theme-shuppatsu .c-btn--primary {
+  background: var(--project-mainbg);
+  border-color: var(--project-mainbg);
+  color: var(--accent-text);
 }
 
 .c-btn--ghost {
@@ -161,11 +242,10 @@
   grid-template-columns: minmax(0, 1fr);
   align-content: center;
   gap: clamp(2rem, 4vw, 3rem);
-  padding: var(--work-header-offset) var(--index-corridor) 3rem
-    var(--work-gutter);
+  padding: var(--work-header-offset) var(--index-corridor) 3rem var(--work-gutter);
 }
 
-.work-article + .work-article {
+.work-article+.work-article {
   border-top: 1px solid color-mix(in srgb, var(--c-ink) 10%, transparent);
 }
 
@@ -338,7 +418,12 @@
 
 @media (max-width: 48rem) {
   .home-hero {
-    justify-content: center;
+    gap: 2.5rem;
+  }
+
+  /* Height doesn't limit a phone; let the name fill the width */
+  .home-hero__name {
+    font-size: clamp(3.5rem, 19vw, 9rem);
   }
 
   .work-article,
@@ -375,7 +460,7 @@
     grid-auto-flow: row;
   }
 
-  .work-compare__field + .work-compare__lang {
+  .work-compare__field+.work-compare__lang {
     margin-top: 1.5rem;
   }
 }
@@ -416,6 +501,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .work[data-motion] .work-article .work-article__text,
   .work[data-motion] .work-article .work-article__visual {
     opacity: 1;
@@ -451,7 +537,8 @@
   position: fixed;
   top: 50%;
   right: var(--index-edge);
-  z-index: 30; /* below the header (50) and mobile menu (40) */
+  z-index: 30;
+  /* below the header (50) and mobile menu (40) */
   transform: translateY(-50%);
   transition:
     opacity 0.2s ease,
@@ -490,7 +577,8 @@
 
 .work-index__link:focus-visible {
   outline: var(--focus-ring);
-  outline-offset: -4px; /* stay inside the scroll box so it isn't clipped */
+  outline-offset: -4px;
+  /* stay inside the scroll box so it isn't clipped */
 }
 
 .work-index__mark {

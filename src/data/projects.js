@@ -237,69 +237,59 @@ export const projects = [
     screenCount: 0,
   },
 
-  // ─── 02 Running App ───────────────────────────────────────────
   {
-    id: "runApp",
-    theme: "theme-runApp",
-    work: {
-      layout: "detail",
-      image: {
-        src: "/projects/runApp/screen/07.png",
-        alt: {
-          en: "Live run screen: timer, distance, pace and calories",
-          zh: "跑步進行中畫面：計時、距離、配速與卡路里",
-        },
-        focusY: "15%",
-      },
-    },
-    accent: "#05df72",
-    name: "Running App",
-    screenCount: 10,
-    tagline: "Run together, even from different places.",
-    tags: ["React", "Supabase", "Product Flow"],
+    id: "shuppatsu",
+    theme: "theme-shuppatsu",
+    work: { layout: "wide" },
+    accent: "#F5CF2E",
+    name: "Shuppatsu!",
+    tagline: "Know when to go.",
+    tags: ["iOS", "Productivity", "Multisensory Design"],
     meta: {
-      Role: "Product Design + Front-End",
-      Stack: "React · Supabase · Leaflet.js",
+      Role: "Product UX + Development",
+      Stack: "React Native · Expo · TypeScript",
       Year: "2026",
     },
-    desc: "Designed and built an end-to-end running product with authentication, live GPS tracking, and a social loop to support motivation.",
-    focus: "End-to-end product flow · Social loop",
-    demoUrl: "https://fan82.github.io/runnnnn/",
+    desc: "A widget-first iOS app that helps people know when to leave through glanceable countdowns, playful illustrations, and progressively urgent sound and haptic feedback.",
+    focus: "Glanceable UX · Multisensory interaction",
+    demoUrl: "/projects/shuppatsu/demo.html",
+    demoMode: "mobile",
     demoMobile: true,
 
     overview: {
       problemSummary:
-        "Running apps track numbers well. They're bad at making you want to run tomorrow.",
+        "Knowing the current time is different from knowing how much time you have left.",
       problem:
-        "I started running and kept trying apps that gave me great data but no reason to come back. The motivation to keep going came from friends, not metrics — but none of the apps made sharing a run feel natural.",
+        "Getting ready to leave often involves repeatedly checking the clock and mentally calculating how much time remains. Traditional alarms signal when time is up, but offer limited awareness of the time leading up to departure. The challenge is to communicate remaining time without demanding constant visual attention.",
       solutionSummary:
-        "A full-stack running app that combines GPS tracking with a social feed — built from scratch, no UI kit.",
+        "Shuppatsu makes departure time visible, audible, and tangible through a widget-first experience.",
       solution:
-        "Real Supabase authentication, live GPS tracking via Leaflet.js, and a social feed where you can post runs, react, and follow friends. Designed and built solo — from Figma to deployed app.",
+        "Users can schedule a departure or start a countdown with customizable presets. Home Screen widgets provide glanceable time awareness, while expressive penguin illustrations communicate countdown states. Progressive sound, haptic feedback, and local notifications signal increasing urgency as departure approaches.",
     },
 
-    inspiration: '"One message: want to go for a run together?"',
+    inspiration:
+      '"What if you could feel time passing without constantly looking at a screen?"',
 
     process: [
       {
         num: "01",
-        title: "Design first, then build",
-        desc: "Started in Figma with the full user flow — tracking, posting, browsing — before writing a line of code. The design constraints shaped the component architecture.",
+        title: "Widget-first experience",
+        desc: "Designed the Home Screen widget as the primary information surface, allowing users to check remaining time without repeatedly opening the app. Small and Medium widgets share the same departure time and countdown state.",
       },
       {
         num: "02",
-        title: "Real backend, not mock data",
-        desc: "Supabase for auth and database. Every run is actually stored, every user is real. Made the social features feel genuine rather than simulated.",
+        title: "State-driven interaction",
+        desc: "Defined three distinct states: idle, active, and overdue. Each state pairs clear time information with an expressive penguin illustration. Instead of stopping at zero, the countdown continues to show how much time has elapsed.",
       },
       {
         num: "03",
-        title: "Live GPS via Leaflet.js",
-        desc: "Browser geolocation API feeding into Leaflet.js for real-time map tracking. Had to handle the edge cases: permissions denied, GPS drift, background tracking.",
+        title: "Personalized departure routines",
+        desc: "Designed scheduled departures and customizable Quick Start presets to accommodate different daily routines. Users can start a countdown instantly or adjust their preferred durations without navigating a complex settings system.",
       },
       {
         num: "04",
-        title: "Mobile-first throughout",
-        desc: "You're on your phone when you run. Every interaction — starting a run, posting, reacting — was designed for one hand, on the move.",
+        title: "A rhythm of urgency",
+        desc: "Developed three woodblock-inspired sound patterns with progressively faster rhythms, higher pitches, and synchronized haptic feedback. Local notifications extend departure awareness to background and locked-screen contexts.",
       },
     ],
 
@@ -307,267 +297,26 @@ export const projects = [
       {
         label: "User",
         value:
-          "Casual runners who track progress but need social motivation to keep the habit going.",
+          "People who manage daily departure routines and want to stay aware of remaining time while getting ready, without constantly checking their phones.",
       },
       {
         label: "Product Goal",
         value:
-          "Move beyond tracking metrics by creating a lightweight feedback loop between running, posting, and encouragement.",
+          "Reduce the cognitive effort of tracking time before departure through glanceable information and context-aware sensory feedback.",
       },
       {
         label: "Key Decision",
         value:
-          "Prioritize real auth, saved runs, and a social feed so the demo behaves like a real product, not a static prototype.",
+          "Treat the Home Screen widget as the primary information surface, supported by state-based illustrations, progressive sound, and haptic feedback.",
       },
       {
         label: "Measure",
         value:
-          "Run completion, post creation, return visits, and how often users interact with friends' activity.",
-      },
-    ],
-
-    screenCount: 10,
-  },
-
-  // ─── 03 Planify ───────────────────────────────────────────────
-  {
-    id: "planify",
-    theme: "theme-planify",
-    work: { layout: "wide" },
-    accent: "#FFAE00",
-    name: "Planify",
-    tagline: "Turn goals into action.",
-    tags: ["Vue", "Productivity"],
-    meta: {
-      Role: "Product UX + Front-End",
-      Stack: "Vue · Vite",
-      Year: "2026",
-    },
-    desc: "A workspace planning tool that turns goals into execution steps, then keeps team tasks, owners, deadlines, and focus work in one place.",
-    focus: "Goal planning · Team execution",
-    demoUrl: "https://planify-gilt-theta.vercel.app/",
-    demoMode: "desktop",
-    demoMobile: false,
-
-    overview: {
-      problemSummary:
-        "Team task tools often track work, but they do not always help people decide what to do next.",
-      problem:
-        "When goals, project boards, owners, due dates, and personal priorities live in separate mental spaces, planning becomes another task. The real issue is not only tracking work, but turning a goal into clear steps and helping each person focus on the next useful action.",
-      solutionSummary:
-        "Planify connects goal planning, kanban execution, personal focus, and calendar timing in one workspace.",
-      solution:
-        "Users can create a goal plan, and Planify breaks it into success criteria, first milestone, next action, and review tasks. The same work then appears across project boards, personal focus lists, and timeline views so teams can move from planning to execution without losing context.",
-    },
-
-    inspiration: '"A plan is only useful when it tells you what to do next."',
-
-    process: [
-      {
-        num: "01",
-        title: "Goal-first task creation",
-        desc: "Designed a creation flow that lets users start with an outcome, then generates the first execution steps instead of asking them to manually invent every task.",
-      },
-      {
-        num: "02",
-        title: "Workspace-level structure",
-        desc: "Built project selection, members, owners, priorities, and statuses so the board can support team planning rather than only personal task tracking.",
-      },
-      {
-        num: "03",
-        title: "Focus view for personal execution",
-        desc: "Added a My Tasks view that recommends the next task based on status, priority, and due date, then separates due today, upcoming, review, and completed work.",
-      },
-      {
-        num: "04",
-        title: "Delivery views beyond the board",
-        desc: "Connected board, list, timeline, and settings views so work can be reviewed from different planning angles without duplicating task data.",
-      },
-    ],
-
-    productLens: [
-      {
-        label: "User",
-        value:
-          "Small teams and solo builders who need to turn goals into visible tasks, ownership, and next actions.",
-      },
-      {
-        label: "Product Goal",
-        value:
-          "Reduce the gap between planning and execution by keeping goals, team boards, and personal focus in one system.",
-      },
-      {
-        label: "Key Decision",
-        value:
-          "Make goal planning the starting point, then distribute generated work into board, personal, and timeline contexts.",
-      },
-      {
-        label: "Measure",
-        value:
-          "Time from goal creation to first action, open task progress, overdue tasks, and whether users can identify their next task quickly.",
+          "Frequency of manual time checks, time required to start a countdown, recognition of sensory cues, and whether users perceive the feedback as helpful rather than disruptive.",
       },
     ],
 
     screenCount: 0,
-  },
-
-  // ─── 04 Easy Bank ─────────────────────────────────────────────
-  {
-    id: "easyBank",
-    theme: "theme-easyBank",
-    work: { layout: "wide" },
-    accent: "#2563eb",
-    name: "Easy Bank",
-    tagline: "Precise front-end for a banking experience people can trust.",
-    tags: ["React", "CSS", "Trust UX"],
-    meta: { Role: "UI Strategy + Front-End", Year: "2025" },
-    desc: "A product-interface study on how banking apps communicate trust through hierarchy, feedback, and consistent implementation.",
-    focus: "Trust UX · Design systems",
-    demoUrl: "./easyBank/easy_bank_app.html",
-    demoMobile: true,
-
-    overview: {
-      problemSummary:
-        "Banking has to feel secure and trustworthy, without feeling distant.",
-      problem:
-        "Digital banking interfaces must communicate trustworthiness through visual language alone. Studying real apps revealed how much work colour, hierarchy, and micro-interactions are quietly doing.",
-      solutionSummary:
-        "A modular React component system with a strict design token structure.",
-      solution:
-        "I did not copy existing banking apps directly. Instead, I started from what I would want to improve as a user, then used CSS variables to keep every component consistent.",
-    },
-
-    inspiration:
-      '"Good front-end implementation makes prosperity feel unstoppable."',
-
-    process: [
-      {
-        num: "01",
-        title: "Study before building",
-        desc: "Analysed multiple banking apps to understand how visual patterns create perceived trustworthiness — not just how they look, but why they work.",
-      },
-      {
-        num: "02",
-        title: "Design token system",
-        desc: "CSS variables for every colour, spacing step, and typography size. Enforced consistency without fighting the cascade.",
-      },
-      {
-        num: "03",
-        title: "Component architecture",
-        desc: "Balance cards, transaction lists, exchange modules, transfer forms — each self-contained, each reusable, each testable in isolation.",
-      },
-    ],
-
-    productLens: [
-      {
-        label: "User",
-        value:
-          "Banking customers who need to understand account status, transactions, and actions without second-guessing the interface.",
-      },
-      {
-        label: "Product Goal",
-        value:
-          "Make financial actions feel clear, consistent, and trustworthy through visual hierarchy and interaction feedback.",
-      },
-      {
-        label: "Key Decision",
-        value:
-          "Build a token-based component system so trust signals stay consistent across cards, lists, and transaction flows.",
-      },
-      {
-        label: "Measure",
-        value:
-          "Task clarity, error prevention, perceived trust, and speed of locating key account information.",
-      },
-    ],
-
-    screenCount: 5,
-  },
-  // ─── 07 Zei Qia ───────────────────────────────────────────────
-  {
-    id: "publicTransp",
-    theme: "theme-publicTransp",
-    work: {
-      layout: "detail",
-      image: {
-        src: "/projects/publicTransp/screen/07.png",
-        alt: {
-          en: "Live Map: MRT and bus lines with nearby stops",
-          zh: "即時地圖：捷運與公車路線及附近站點",
-        },
-        focusY: "26%",
-      },
-    },
-    accent: "#dc2626",
-    name: "Zei Qia",
-    tagline: "Know exactly where you are.",
-    tags: ["UI Design", "Information Architecture", "Mobile"],
-    meta: { Role: "Product UI/UX + Design System", Year: "2025" },
-    desc: "A transit product concept shaped by cross-city observation: show the right real-time information at the moment of decision. Good transit design is not about showing more data, but showing the right data at the right time.",
-    focus: "Information architecture · Real-time UX",
-    demoUrl: "./publicTransp/public_transport_app.html",
-    demoMobile: true,
-
-    overview: {
-      problemSummary:
-        "Transit apps show too much. The problem is filtering, not fetching.",
-      problem:
-        "Living in Taiwan gave me daily exposure to a complex but reliable transit system. Moving to London made the same problem feel bigger — incredible network, overwhelming experience. The issue isn't missing data, it's that apps don't know what to hide.",
-      solutionSummary:
-        "A transit interface that prioritises information rather than displaying it all.",
-      solution:
-        "Clear hierarchy, real-time updates, and responsive search that distil complex transport data into a calm, easy-to-navigate experience — designed for someone on the move, not sitting at a desk.",
-    },
-
-    inspiration: '"Please stop striking. I just want to get home."',
-
-    process: [
-      {
-        num: "01",
-        title: "Cross-cultural observation",
-        desc: "Observed transit UX daily in Taiwan, then moved to London and immediately noticed the same pain points at a larger scale. The problem was universal.",
-      },
-      {
-        num: "02",
-        title: "Information hierarchy",
-        desc: "Structured multiple transport types — bus, train, metro, high-speed rail — into a consistent hierarchy that supports fast scanning without overwhelming.",
-      },
-      {
-        num: "03",
-        title: "Designing for real-time behaviour",
-        desc: "Mapped how live data should behave — updates that feel reliable rather than disruptive. Stability matters more than speed when you're trying to catch a train.",
-      },
-      {
-        num: "04",
-        title: "Instant search and filtering",
-        desc: "Responds immediately to input, reducing friction for fast decisions. The interaction model is built around someone who already knows where they want to go.",
-      },
-    ],
-
-    productLens: [
-      {
-        label: "User",
-        value:
-          "Commuters and travelers navigating dense transit systems under time pressure.",
-      },
-      {
-        label: "Product Goal",
-        value:
-          "Make real-time transit information easier to trust and act on by filtering what the user sees.",
-      },
-      {
-        label: "Key Decision",
-        value:
-          "Design around information priority instead of data volume, especially for search, live updates, and route scanning.",
-      },
-      {
-        label: "Measure",
-        value:
-          "Time to route decision, search success, missed-transfer reduction, and confidence in live status updates.",
-      },
-    ],
-
-    screenCount: 5,
   },
 ];
 

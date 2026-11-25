@@ -87,14 +87,51 @@ export default function Home() {
   return (
     <main id="main" tabIndex={-1} className="focus:outline-none">
       <header className="home-hero">
+        <div className="home-hero__top">
+          <div className="home-hero__meta">
+            <p className="home-hero__eyebrow">{t(UI_COPY.home.eyebrow)}</p>
+            <p className="home-hero__tag">{t(UI_COPY.home.portfolioYear)}</p>
+          </div>
+          <h1 className="home-hero__name">
+            {t(UI_COPY.home.greeting)}
+            <span className="home-hero__dot" aria-hidden="true">
+              <span className="home-hero__dot-static">.</span>
+              {/* A dash tracing a square, after useanimations "loading-v3" (MIT) */}
+              <svg className="home-hero__loader" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M3 3V21H21V3Z"
+                  stroke="currentColor"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          </h1>
+        </div>
+
         <div className="home-hero__inner">
-          <p className="home-hero__eyebrow">{t(UI_COPY.home.eyebrow)}</p>
-          <h1 className="home-hero__name">Fan YiHsuan</h1>
           <p className="home-hero__role">{t(UI_COPY.home.role)}</p>
           <p className="home-hero__intro">{t(UI_COPY.home.intro)}</p>
           <div className="home-hero__actions">
             <a href="#work" className="c-btn c-btn--primary">
               {t(UI_COPY.home.viewProjects)}
+              <svg
+                className="c-btn__icon"
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M8 3v10M3.5 8.5 8 13l4.5-4.5"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </a>
             <Link to="/about" className="c-btn c-btn--ghost">
               {t(UI_COPY.nav.about)}
