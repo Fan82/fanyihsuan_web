@@ -12,14 +12,43 @@ const HERO = {
   photoAlt: { en: "YiHsuan Fan", zh: "范翊萱" },
 };
 
-const QUESTION = {
-  before: { en: "What happens after someone clicks ", zh: "有人按下" },
-  em: { en: "submit?", zh: "送出" },
-  after: { en: "", zh: "之後，會發生什麼？" },
-  body: {
-    en: "When I build a membership form, I think about the person on the other side. If a field is invalid, can they find it? If the request fails, will they know what to do next?",
-    zh: "製作會員表單時，我會想到另一端的那個人。欄位填錯了，對方找得到是哪一欄嗎？送出失敗了，對方知道下一步該怎麼做嗎？",
-  },
+// Strengths and weaknesses, told through how I travel.
+const TRAITS = {
+  before: { en: "I book the hotel first. The rest I leave ", zh: "我會先訂好飯店，其他的就" },
+  em: { en: "open.", zh: "留白" },
+  after: { en: "", zh: "。" },
+  groups: [
+    {
+      label: { en: "What I'm good at", zh: "我擅長的" },
+      items: [
+        {
+          en: "I plan the big things early, then stay flexible, so plans can change on the way.",
+          zh: "重要的事我會先規劃好，其他保留彈性，路上隨時可以調整。",
+        },
+        {
+          en: "If I don't know something, I say so. If I don't agree, I say that too, kindly, and then we decide together.",
+          zh: "不知道就說不知道。不同意也會說出來，但說得客氣，然後一起決定。",
+        },
+        {
+          en: "I moved to the UK alone for a working holiday. It wasn't easy at first, but it made me more confident.",
+          zh: "我一個人去英國打工度假。一開始不容易，但讓我更有自信。",
+        },
+      ],
+    },
+    {
+      label: { en: "What I'm working on", zh: "我還在練習的" },
+      items: [
+        {
+          en: "I used to wait until I felt ready. I didn't feel ready for the UK either, but I went anyway. Now I start first and improve along the way.",
+          zh: "我以前常等到覺得準備好才開始。去英國前我也沒準備好，但還是去了。現在我會先開始，邊做邊改進。",
+        },
+        {
+          en: "I can compare hotels for hours. Now I decide what matters most first, and let the rest go.",
+          zh: "我可以比較飯店比好幾個小時。現在我會先決定什麼最重要，其他就放下。",
+        },
+      ],
+    },
+  ],
 };
 
 // Matches the current résumé (public/FanYiH_resume.pdf).
@@ -197,13 +226,13 @@ export default function About() {
   const { language, t } = useLanguage();
   const pageRef = useRef(null);
   const nameRef = useRef(null);
-  const questionRef = useRef(null);
+  const traitsRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
-  // Entrance motion: the name on load, the question the first time it
+  // Entrance motion: the name on load, the traits title the first time it
   // enters the viewport (scrolling back doesn't replay it). Under reduced
   // motion nothing is set, so the text is simply shown.
   useLayoutEffect(() => {
@@ -222,11 +251,11 @@ export default function About() {
 
     const io = new IntersectionObserver((entries) => {
       if (entries.some((e) => e.isIntersecting)) {
-        questionRef.current.dataset.entered = "";
+        traitsRef.current.dataset.entered = "";
         io.disconnect();
       }
     });
-    io.observe(questionRef.current);
+    io.observe(traitsRef.current);
 
     return () => {
       cancelAnimationFrame(frame);
@@ -239,7 +268,7 @@ export default function About() {
       {/* ── Name and photo ── */}
       <section className="about-hero" aria-labelledby="about-name">
         <h1 id="about-name" ref={nameRef} className="about-hero__name" data-enter="">
-          YiHsuan <span className="about-hero__accent">Fan.</span>
+          YiHsuan <span className="about-hero__last">Fan.</span>
         </h1>
         <picture className="about-hero__photo">
           <source
@@ -257,19 +286,30 @@ export default function About() {
         <p className="about-hero__intro">{t(HERO.intro)}</p>
       </section>
 
-      {/* ── Form design question ── */}
-      <section className="about-question" aria-labelledby="about-question">
+      {/* ── Strengths and weaknesses ── */}
+      <section className="about-traits" aria-labelledby="about-traits">
         <h2
-          id="about-question"
-          ref={questionRef}
-          className="about-question__title"
+          id="about-traits"
+          ref={traitsRef}
+          className="about-traits__title"
           data-enter=""
         >
-          {t(QUESTION.before)}
-          <em className="about-question__em">{t(QUESTION.em)}</em>
-          {t(QUESTION.after)}
+          {t(TRAITS.before)}
+          <em className="about-traits__em">{t(TRAITS.em)}</em>
+          {t(TRAITS.after)}
         </h2>
-        <p className="about-question__body">{t(QUESTION.body)}</p>
+        <div className="about-traits__groups">
+          {TRAITS.groups.map((group) => (
+            <div key={tx(group.label, "en")} className="about-traits__group">
+              <h3 className="about-traits__label">{t(group.label)}</h3>
+              <ul className="about-traits__list">
+                {group.items.map((item) => (
+                  <li key={tx(item, "en")}>{t(item)}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* ── Experience ── */}
